@@ -375,19 +375,30 @@ function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
 
 function getTireLots(tire,vehicleLastKm,records){
   if(!tire.units||tire.units.length<2)return null;
-  const grp={};
-  tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!grp[k])grp[k]={addedKm:u.addedKm||0,isOrig:!!u.isOriginal,units:[]};grp[k].units.push({idx:i,u})});
-  const lots=Object.values(grp);
-  if(lots.length<2)return null;
-  lots.sort((a,b)=>a.addedKm-b.addedKm);
-  lots.forEach(lot=>{
-    lot.km=Math.max(...lot.units.map(x=>calcTireUnitKm(tire,x.idx,vehicleLastKm||0)));
-    lot.qty=lot.units.length;
-    lot.label=lot.isOrig?'Originali':(lot.units[0].u.label||'Sostituzione');
+  // Group by addedKm
+  const byAdded={};
+  tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!byAdded[k])byAdded[k]={addedKm:u.addedKm||0,isOrig:!!u.isOriginal,units:[]};byAdded[k].units.push({idx:i,u})});
+  // Sub-split each addedKm group by individual unit km
+  const lots=[];
+  Object.values(byAdded).sort((a,b)=>a.addedKm-b.addedKm).forEach(grp=>{
+    const byKm={};
+    grp.units.forEach(x=>{const km=calcTireUnitKm(tire,x.idx,vehicleLastKm||0);const k=''+km;if(!byKm[k])byKm[k]={addedKm:grp.addedKm,isOrig:grp.isOrig,units:[],km};byKm[k].units.push(x)});
+    Object.values(byKm).sort((a,b)=>b.km-a.km).forEach(sub=>{
+      sub.qty=sub.units.length;
+      sub.label=sub.isOrig?'Originali':(sub.units[0].u.label||'Sostituzione');
+      sub.allDisposed=sub.units.every(x=>x.u.status==='disposed');
+      lots.push(sub);
+    });
   });
+  if(lots.length<2)return null;
+  // Costs from GA records, distributed proportionally within each addedKm group
   if(records){
     const gaRecs=records.filter(r=>r.tireId===tire.id&&r.type==='GA');
-    lots.forEach(lot=>{const ga=gaRecs.find(r=>(r.km||0)===lot.addedKm);lot.cost=ga?(ga.total||0):0});
+    [...new Set(lots.map(l=>l.addedKm))].forEach(akm=>{
+      const ga=gaRecs.find(r=>(r.km||0)===akm);const tc=ga?(ga.total||0):0;
+      const grpLots=lots.filter(l=>l.addedKm===akm);const tq=grpLots.reduce((s,l)=>s+l.qty,0);
+      grpLots.forEach(l=>{l.cost=tq>0?tc*l.qty/tq:0});
+    });
   }
   return lots;
 }
@@ -695,8 +706,10 @@ function rTireList(v){
       html+='<div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600;margin-bottom:6px">Dettaglio lotti</div>';
       lots.forEach(lot=>{
         const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
-        html+='<div style="padding:3px 0;color:var(--text3)">└ <b style="color:var(--text2)">'+esc(lot.label)+' ×'+lot.qty+'</b>';
+        const disp=lot.allDisposed&&t.status!=='disposed';
+        html+='<div style="padding:3px 0;color:var(--text3)'+(disp?';opacity:.5':'')+'">└ <b style="color:var(--text2)">'+esc(lot.label)+' ×'+lot.qty+'</b>';
         if(lot.addedKm>0)html+=' <span style="opacity:.5">(da '+fk(lot.addedKm)+' km)</span>';
+        if(disp)html+=' <span style="color:#e84c4a;opacity:1">smaltite</span>';
         html+=' — <span style="color:var(--accent)">'+fk(lot.km)+' km</span>';
         if(lot.cost>0)html+=' · <span style="color:var(--yellow)">€'+fmt(lot.cost)+'</span>';
         if(lCpk>0)html+=' · <span style="color:var(--blue)">€'+lCpk.toFixed(3)+'/km</span>';
@@ -772,7 +785,11 @@ function rTireStats(v){
     html+='<td class="tr mono" style="color:var(--blue)">'+(cpk>0?cpk.toFixed(3):'—')+'</td></tr>';
     if(lots){lots.forEach(lot=>{
       const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
-      html+='<tr style="font-size:11px;color:var(--text4)"><td style="padding-left:28px">└ '+esc(lot.label)+' ×'+lot.qty+(lot.addedKm>0?' <span style="opacity:.6">(da '+fk(lot.addedKm)+' km)</span>':'')+'</td>';
+      const disp=lot.allDisposed&&t.status!=='disposed';
+      html+='<tr style="font-size:11px;color:var(--text4)'+(disp?';opacity:.55':'')+'"><td style="padding-left:28px">└ '+esc(lot.label)+' ×'+lot.qty;
+      if(lot.addedKm>0)html+=' <span style="opacity:.6">(da '+fk(lot.addedKm)+' km)</span>';
+      if(disp)html+=' <span style="color:#e84c4a;opacity:1">smaltite</span>';
+      html+='</td>';
       html+='<td></td><td></td>';
       html+='<td class="tr mono">€'+fmt(lot.cost||0)+'</td><td></td>';
       html+='<td class="tr mono" style="color:var(--yellow)">€'+fmt(lot.cost||0)+'</td>';
@@ -788,12 +805,16 @@ function rTireStats(v){
     const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const color=SEASON_COLORS[t.season]||'#888';
     const lots=getTireLots(t,vLk,v.records);
     if(lots){lots.forEach(lot=>{
-      const lbl=lot.label+' ×'+lot.qty+(lot.addedKm>0?' (da '+(lot.addedKm/1000).toFixed(0)+'k)':'');
-      chKm.push({name:lbl,km:lot.km,color});
-      chCpk.push({name:lbl,cpk:lot.km>0?(lot.cost||0)/lot.km:0,color});
+      const disp=lot.allDisposed&&t.status!=='disposed';
+      let lbl=lot.label+' ×'+lot.qty;
+      if(lot.addedKm>0)lbl+=' (da '+(lot.addedKm/1000).toFixed(0)+'k)';
+      if(disp)lbl+=' ✕';
+      const bg=disp?color+'44':color+'99',bd=disp?color+'66':color;
+      chKm.push({name:lbl,km:lot.km,bg,bd});
+      chCpk.push({name:lbl,cpk:lot.km>0?(lot.cost||0)/lot.km:0,bg:disp?color+'66':color,bd:color});
     })}else{
-      chKm.push({name:t.brand+' '+t.model,km:tk,color});
-      chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,color});
+      chKm.push({name:t.brand+' '+t.model,km:tk,bg:color+'99',bd:color});
+      chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,bg:color,bd:color});
     }
   });
   const chH=Math.max(280,Math.max(chKm.length,chCpk.length)*52);
@@ -803,10 +824,10 @@ function rTireStats(v){
   html+='</div>';
   document.getElementById("tiresContent").innerHTML=html;
   if(chKm.length){
-    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chKm.map(d=>d.name),datasets:[{data:chKm.map(d=>d.km),backgroundColor:chKm.map(d=>d.color+'99'),borderColor:chKm.map(d=>d.color),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chKm.map(d=>d.name),datasets:[{data:chKm.map(d=>d.km),backgroundColor:chKm.map(d=>d.bg),borderColor:chKm.map(d=>d.bd),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
   }
   if(chCpk.length){
-    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chCpk.map(d=>d.name),datasets:[{data:chCpk.map(d=>d.cpk),backgroundColor:chCpk.map(d=>d.color),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chCpk.map(d=>d.name),datasets:[{data:chCpk.map(d=>d.cpk),backgroundColor:chCpk.map(d=>d.bg),borderColor:chCpk.map(d=>d.bd),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
   }
 }
 
