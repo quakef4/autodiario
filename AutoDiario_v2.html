@@ -373,9 +373,32 @@ function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
   return total;
 }
 
+function getTireLots(tire,vehicleLastKm){
+  if(!tire.units||tire.units.length<2)return null;
+  const grp={};
+  tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!grp[k])grp[k]={addedKm:u.addedKm||0,isOrig:!!u.isOriginal,units:[]};grp[k].units.push({idx:i,u})});
+  const lots=Object.values(grp);
+  if(lots.length<2)return null;
+  lots.sort((a,b)=>a.addedKm-b.addedKm);
+  lots.forEach(lot=>{
+    lot.km=Math.max(...lot.units.map(x=>calcTireUnitKm(tire,x.idx,vehicleLastKm||0)));
+    lot.qty=lot.units.length;
+    lot.label=lot.isOrig?'Originali':(lot.units[0].u.label||'Sostituzione');
+  });
+  return lots;
+}
+
 function calcTireKm(tire,vehicleLastKm){
-  // Use tire-level events (set mount/unmount) for accurate total km,
-  // especially when partial disposal + replacement occurred
+  // Multi-lot tires (partial disposal + replacement): max km among lot maximums
+  if(tire.units&&tire.units.length>1){
+    const addedSet=new Set(tire.units.map(u=>(u.addedKm||0)));
+    if(addedSet.size>1){
+      const grp={};
+      tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!grp[k])grp[k]=[];grp[k].push(i)});
+      return Math.max(...Object.values(grp).map(ii=>Math.max(...ii.map(i=>calcTireUnitKm(tire,i,vehicleLastKm||0)))));
+    }
+  }
+  // Single lot: use tire-level events
   const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   if(evts.length){
     let total=0,mountKm=null;
@@ -383,7 +406,7 @@ function calcTireKm(tire,vehicleLastKm){
     if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
     return total;
   }
-  // Fallback: use unit-level events if no tire-level events exist
+  // Fallback: unit-level events
   if(tire.units&&tire.units.length){
     const activeIdx=tire.units.map((_,i)=>i).filter(i=>tire.units[i].status!=='disposed');
     const indices=activeIdx.length?activeIdx:tire.units.map((_,i)=>i);
@@ -719,6 +742,7 @@ function rTireStats(v){
   html+='<div class="card"><div class="card-title">Dettaglio per treno</div><div class="table-wrap"><table><thead><tr><th class="ns">Treno</th><th class="ns">Stagione</th><th class="ns">Stato</th><th class="ns tr">Costo acq.</th><th class="ns tr">Costi mont.</th><th class="ns tr">Totale</th><th class="ns tr">Km percorsi</th><th class="ns tr">€/km</th></tr></thead><tbody>';
   tires.forEach(t=>{
     const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const cpk=tk>0?tot/tk:0;
+    const lots=getTireLots(t,vLk);
     html+='<tr><td style="font-weight:600">'+(SEASON_ICONS[t.season]||'')+' '+esc(t.brand)+' '+esc(t.model)+'<div style="font-size:11px;color:var(--text4)">'+esc(t.size)+'</div></td>';
     html+='<td style="color:'+(SEASON_COLORS[t.season]||'#888')+'">'+(SEASONS[t.season]||'')+'</td>';
     html+='<td><span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'18;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+';border:1px solid '+(TIRE_STATUS_COLORS[t.status]||'#888')+'30">'+(TIRE_STATUS[t.status]||'')+'</span></td>';
@@ -726,19 +750,37 @@ function rTireStats(v){
     html+='<td class="tr mono" style="font-weight:700;color:var(--yellow)">€'+fmt(tot)+'</td>';
     html+='<td class="tr mono" style="color:var(--accent)">'+fk(tk)+'</td>';
     html+='<td class="tr mono" style="color:var(--blue)">'+(cpk>0?cpk.toFixed(3):'—')+'</td></tr>';
+    if(lots){lots.forEach(lot=>{
+      html+='<tr style="font-size:11px;color:var(--text4)"><td style="padding-left:28px">└ '+esc(lot.label)+' ×'+lot.qty+(lot.addedKm>0?' <span style="opacity:.6">(da '+fk(lot.addedKm)+' km)</span>':'')+'</td>';
+      html+='<td></td><td></td><td></td><td></td><td></td>';
+      html+='<td class="tr mono" style="color:var(--accent)">'+fk(lot.km)+'</td>';
+      html+='<td></td></tr>';
+    })}
   });
   html+='</tbody></table></div></div>';
-  // Charts
+  // Charts — build data first so we can size the km chart dynamically
+  const activeT=tires.filter(t=>(t._cachedKm||calcTireKm(t,vLk))>0);
+  const chKm=[],chCpk=[];
+  activeT.forEach(t=>{
+    const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const color=SEASON_COLORS[t.season]||'#888';
+    const lots=getTireLots(t,vLk);
+    if(lots){lots.forEach(lot=>{
+      const lbl=lot.label+' ×'+lot.qty+(lot.addedKm>0?' (da '+(lot.addedKm/1000).toFixed(0)+'k)':'');
+      chKm.push({name:lbl,km:lot.km,color});
+    })}else{chKm.push({name:t.brand+' '+t.model,km:tk,color})}
+    chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,color});
+  });
+  const kmH=Math.max(280,chKm.length*52);
   html+='<div class="grid-2" style="margin-top:16px">';
-  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:280px"><canvas id="tireKmChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:'+kmH+'px"><canvas id="tireKmChart"></canvas></div></div>';
   html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:280px"><canvas id="tireCpkChart"></canvas></div></div>';
   html+='</div>';
   document.getElementById("tiresContent").innerHTML=html;
-  const activeT=tires.filter(t=>(t._cachedKm||calcTireKm(t,vLk))>0);
-  const chData=activeT.map(t=>{const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);return{name:t.brand+' '+t.model,km:tk,cpk:(t.purchaseCost+mc)/tk,color:SEASON_COLORS[t.season]||'#888'}});
-  if(chData.length){
-    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.km),backgroundColor:chData.map(d=>d.color+'99'),borderColor:chData.map(d=>d.color),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
-    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.cpk),backgroundColor:chData.map(d=>d.color),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+  if(chKm.length){
+    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chKm.map(d=>d.name),datasets:[{data:chKm.map(d=>d.km),backgroundColor:chKm.map(d=>d.color+'99'),borderColor:chKm.map(d=>d.color),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+  }
+  if(chCpk.length){
+    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chCpk.map(d=>d.name),datasets:[{data:chCpk.map(d=>d.cpk),backgroundColor:chCpk.map(d=>d.color),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
   }
 }
 
