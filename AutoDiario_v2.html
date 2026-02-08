@@ -284,14 +284,23 @@ function syncAllTiresFromRecords(v){
       });
       gdRecs.forEach(dr=>{
         const qty=dr.qty||0;
+        const addedKms=dr.tireDisposeAddedKm||[];
+        const reason=(dr.description||'').indexOf('Usura')>=0?'worn':'other';
         for(let i=0;i<qty;i++){
-          // Dispose oldest non-disposed unit
-          const u=t.units.find(u=>u.status!=='disposed');
+          let u;
+          if(addedKms.length>i){
+            // Match by addedKm from metadata (precise matching)
+            u=t.units.find(x=>x.status!=='disposed'&&(x.addedKm||0)===addedKms[i]);
+          }
+          if(!u){
+            // Fallback: dispose oldest non-disposed unit
+            u=t.units.find(x=>x.status!=='disposed');
+          }
           if(u){
             u.status='disposed';
             u.disposeDate=dr.date;
             u.disposeKm=dr.km||0;
-            u.disposeReason=(dr.description||'').indexOf('Usura')>=0?'worn':'other';
+            u.disposeReason=reason;
           }
         }
       });
@@ -742,7 +751,15 @@ function rTireList(v){
 
 function rTireHistory(v){
   const allEvts=[];
-  (v.tires||[]).forEach(t=>{(t.events||[]).forEach(e=>{allEvts.push({...e,tireName:t.brand+' '+t.model,tireSize:t.size,season:t.season,tireId:t.id})})});
+  (v.tires||[]).forEach(t=>{
+    // Identify the implicit first mount (factory/purchase mount with no registry record)
+    const sorted=(t.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.km||0)-(b.km||0));
+    const firstImplicit=sorted.length&&sorted[0].type==='mount'&&!sorted[0].recordId?sorted[0].id:null;
+    (t.events||[]).forEach(e=>{
+      if(e.id===firstImplicit)return;// Skip implicit first mount (factory/purchase)
+      allEvts.push({...e,tireName:t.brand+' '+t.model,tireSize:t.size,season:t.season,tireId:t.id});
+    });
+  });
   allEvts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   let html='';
   if(allEvts.length){
@@ -1028,6 +1045,7 @@ function svDispose(tireId){
   }
 
   let disposedLabels=[];
+  const disposedAddedKms=[];
   checks.forEach(ck=>{
     const idx=parseInt(ck.value);
     const unit=t.units[idx];if(!unit)return;
@@ -1036,10 +1054,11 @@ function svDispose(tireId){
     unit.disposeReason=reason;
     unit.disposeKm=km;
     disposedLabels.push(POS_LABELS[idx]||'G'+(idx+1));
+    disposedAddedKms.push(unit.addedKm||0);
   });
   t.qty=t.units.filter(u=>u.status!=='disposed').length;
   t.status=computeTireStatus(t);
-  v.records.push({id:gid(),date:date,km:km,lot:'',description:'Smaltimento gomma '+disposedLabels.join(', ')+' ('+t.brand+' '+t.model+') – '+(reasons[reason]||reason)+(notes?' – '+notes:''),dealer:'',type:'GD',qty:disposedLabels.length,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:''});
+  v.records.push({id:gid(),date:date,km:km,lot:'',description:'Smaltimento gomma '+disposedLabels.join(', ')+' ('+t.brand+' '+t.model+') – '+(reasons[reason]||reason)+(notes?' – '+notes:''),dealer:'',type:'GD',qty:disposedLabels.length,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:'',tireDisposeAddedKm:disposedAddedKms});
   recalcAllTireKm(v);
   save();closeModal();render();
   showToast('⚠️ '+disposedLabels.length+' gomma/e smaltite');
@@ -1127,28 +1146,24 @@ function svTireEvt(tireId){
   getMountedTires(v).forEach(other=>{
     if(other.id===tireId)return;
     const unmId=gid();
-    const unmEvt={id:unmId,type:'unmount',date:evtDate,km:evtKm,cost:0,dealer:evtDealer,notes:'Smontaggio automatico (montate '+t.brand+' '+t.model+')',recordId:''};
-    other.events.push(unmEvt);
+    const unmRecId=gid();
+    other.events.push({id:unmId,type:'unmount',date:evtDate,km:evtKm,cost:0,dealer:evtDealer,notes:'Smontaggio automatico (montate '+t.brand+' '+t.model+')',recordId:unmRecId});
     other.status='stored';
     // Update per-unit events
     if(other.units){other.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:evtDate,km:evtKm})})}
     // Registro record
-    const unmRecId=gid();
     v.records.push({id:unmRecId,date:evtDate,km:evtKm,lot:'',description:'Smontaggio gomme '+other.brand+' '+other.model+' ('+(SEASONS[other.season]||'')+')',dealer:evtDealer,type:'GS',qty:1,cost:0,total:0,ownerId:'current',tireId:other.id,tireEvtId:unmId});
-    unmEvt.recordId=unmRecId;
   });
 
   // Mount the tire
   const evtId=gid();
-  const evt={id:evtId,type:'mount',date:evtDate,km:evtKm,cost:evtCost,dealer:evtDealer,notes:evtNotes};
-  t.events.push(evt);
+  const recId=gid();
+  t.events.push({id:evtId,type:'mount',date:evtDate,km:evtKm,cost:evtCost,dealer:evtDealer,notes:evtNotes,recordId:recId});
   t.status=computeTireStatus(t);
   // Update per-unit events
   if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'mount',date:evtDate,km:evtKm})})}
   // Registro record
-  const recId=gid();
   v.records.push({id:recId,date:evtDate,km:evtKm,lot:'',description:'Montaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:evtDealer,type:'GM',qty:1,cost:evtCost,total:evtCost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
-  evt.recordId=recId;
   recalcAllTireKm(v);
   save();closeModal();render();
 }
@@ -1177,13 +1192,11 @@ function svTireUnmount(tireId){
   const notes=document.getElementById('muNo').value;
   ensureDealer(dealer);
   const evtId=gid();
-  const evt={id:evtId,type:'unmount',date:date,km:km,cost:cost,dealer:dealer,notes:notes};
-  t.events.push(evt);
+  const recId=gid();
+  t.events.push({id:evtId,type:'unmount',date:date,km:km,cost:cost,dealer:dealer,notes:notes,recordId:recId});
   t.status=computeTireStatus(t);
   if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:date,km:km})})}
-  const recId=gid();
   v.records.push({id:recId,date:date,km:km,lot:'',description:'Smontaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:dealer,type:'GS',qty:1,cost:cost,total:cost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
-  evt.recordId=recId;
   recalcAllTireKm(v);
   save();closeModal();render();
 }
@@ -1460,7 +1473,8 @@ function dRecGA(id,deleteTire){
     const t=(v.tires||[]).find(x=>x.id===tireId);
     if(t&&t.units){
       const gaKm=rec.km||0;
-      t.units=t.units.filter(u=>!((!u.isOriginal)&&u.addedKm===gaKm));
+      const gaDate=rec.date||'';
+      t.units=t.units.filter(u=>!((!u.isOriginal)&&u.addedKm===gaKm&&(u.addedDate||'')===gaDate));
       t.qty=t.units.filter(u=>u.status!=='disposed').length;
       t.status=computeTireStatus(t);
     }
