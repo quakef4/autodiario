@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoDiario v2 – Gestionale Manutenzioni & Spese</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0c0c16;--bg2:#14141f;--bg3:#10101c;--card:#14141f;--border:#22223a;--border2:#2e2e44;--border3:#1e1e30;--text:#e0e0f0;--text1:#f0f0f8;--text2:#aaaacc;--text3:#8888aa;--text4:#6a6a88;--text5:#5a5a78;--text6:#4a4a68;--accent:#e8734a;--accent2:#e84a6a;--blue:#4a9fe8;--purple:#9b6fe8;--yellow:#e8c44a;--green:#4ae88a;--font:'DM Sans','Segoe UI',sans-serif;--mono:'JetBrains Mono',monospace}
+html{font-size:14px}body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.5}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2a2a44;border-radius:3px}
+input,select,textarea,button{font-family:inherit}input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.7)}textarea{resize:vertical}
+.container{max-width:1320px;margin:0 auto;padding:0 24px}
+header{background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--border3);padding:16px 0}
+.header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:12px}.logo-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:20px}
+.logo h1{font-size:18px;font-weight:700;letter-spacing:-0.02em}.logo small{font-size:11px;color:var(--text5)}
+.vtabs{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.vtab{padding:8px 16px;border-radius:8px;border:1px solid #2a2a3e;background:var(--bg2);color:#888;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.vtab.active{border-color:var(--accent);background:rgba(232,115,74,.12);color:var(--accent)}.vtab.archived{opacity:.5;border-style:dashed}
+.vtab-add{padding:8px 12px;border-radius:8px;border:1px dashed #3a3a50;background:none;color:var(--text4);font-size:16px;cursor:pointer}
+nav{display:flex;gap:4px;margin-top:16px;flex-wrap:wrap}
+.nav-btn{padding:8px 18px;border-radius:8px 8px 0 0;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--text4);font-size:13px;font-weight:600;cursor:pointer}
+.nav-btn.active{border-bottom-color:var(--accent);background:rgba(232,115,74,.08);color:var(--accent)}
+main{padding:24px 0 60px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px}
+.card-title{margin:0 0 16px;font-size:13px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.stat-cards{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.stat-card{flex:1 1 170px;min-width:155px;padding:18px 20px}
+.stat-label{font-size:11px;color:var(--text4);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:700;letter-spacing:-0.02em}.stat-sub{font-size:12px;color:var(--text5);margin-top:4px}
+.vbar{display:flex;align-items:center;gap:16px;margin-bottom:24px;padding:16px 20px;cursor:pointer;transition:border-color .2s}.vbar:hover{border-color:var(--accent)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.dc{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border3)}
+.table-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}thead tr{background:var(--bg2)}
+th{padding:12px 14px;text-align:left;color:var(--text3);font-weight:600;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+th.ns{cursor:default}td{padding:10px 14px;border-bottom:1px solid #1a1a2a}
+tbody tr:nth-child(even){background:var(--bg)}tbody tr:nth-child(odd){background:var(--bg3)}tbody tr:hover{background:#18182a!important}
+.mono{font-family:var(--mono);font-size:12px}.tr{text-align:right}.tc{text-align:center}
+.ell{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nw{white-space:nowrap}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-a{background:rgba(232,76,74,.12);color:#e84c4a;border:1px solid rgba(232,76,74,.25);font-size:10px;padding:2px 8px;margin-left:6px}
+.badge-p{background:rgba(155,111,232,.12);color:var(--purple);border:1px solid rgba(155,111,232,.25)}
+.toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center}.toolbar .sp{flex:1}
+.input{width:100%;padding:10px 12px;background:#12121c;border:1px solid var(--border2);border-radius:8px;color:#e8e8f0;font-size:14px;outline:none}.input:focus{border-color:var(--accent)}
+.label{display:block;margin-bottom:4px;color:var(--text3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.btn{padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-sm{padding:6px 14px;font-size:12px}.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}.btn-p:hover{filter:brightness(1.1)}
+.btn-s{background:#2a2a3e;border:1px solid #3a3a50;color:#ccc}.btn-d{background:linear-gradient(135deg,#e84a4a,#c03030);color:#fff}
+.btn-o{background:none;border:1px solid var(--border2);color:var(--text3);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer}.btn-o:hover{border-color:var(--accent);color:var(--accent)}
+.btn-i{background:none;border:none;cursor:pointer;padding:4px 6px;font-size:14px}.btn-i:hover{transform:scale(1.15)}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000}
+.modal{background:#1a1a28;border:1px solid var(--border2);border-radius:16px;padding:28px 32px;max-width:640px;width:92%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.mh h3{font-size:18px;color:#f0f0f5}
+.mc{background:none;border:none;color:#888;font-size:22px;cursor:pointer;padding:4px 8px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ff{grid-column:1/-1}.fa{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.fs{grid-column:1/-1;border-top:1px solid var(--border);padding-top:14px;margin-top:6px}
+.fst{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;grid-column:1/-1}
+.cb{width:100%;height:260px;position:relative}.cb canvas{width:100%!important;height:100%!important}
+.am{padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border3)}
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.ii{padding:14px;background:var(--bg);border-radius:10px;border:1px solid var(--border3)}
+.ii .l3{font-size:10px;color:var(--text4);text-transform:uppercase;font-weight:600;letter-spacing:.06em;margin-bottom:4px}.ii .vl{font-size:15px;font-weight:600}
+.ac{padding:16px;background:var(--bg);border:1px solid var(--border3);border-radius:12px;display:flex;align-items:center;gap:14px;transition:border-color .2s;margin-bottom:10px}.ac:hover{border-color:var(--accent)}
+.tp{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}.tpl{padding:6px 14px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--text4);font-size:12px;font-weight:600;cursor:pointer}
+.tpl.active{background:rgba(232,115,74,.12);border-color:var(--accent);color:var(--accent)}
+.ckr{display:flex;align-items:center;gap:8px;padding:6px 0}.ckr input[type="checkbox"]{accent-color:var(--accent);width:16px;height:16px}.ckr label{font-size:13px;color:var(--text2);cursor:pointer}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+@media(max-width:768px){.stat-cards{flex-direction:column}.vbar{flex-direction:column;text-align:center}.header-top{flex-direction:column;align-items:flex-start}.toolbar{flex-direction:column;align-items:stretch}.toolbar .sp{display:none}th,td{padding:8px 10px;font-size:12px}.ell{max-width:160px}.fg{grid-template-columns:1fr}.fg>*{grid-column:auto!important}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fi{animation:fadeIn .3s ease-out}
+.owner-card{padding:12px 16px;background:var(--bg);border:1px solid var(--border3);border-radius:10px;margin-bottom:8px}
+.tire-unit{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:11px;font-weight:600;background:var(--bg);border:1px solid var(--border3);margin:2px}
+.tire-unit.mounted{border-color:var(--green);color:var(--green)}
+</style>
+</head>
+<body>
+<header><div class="container">
+  <div class="header-top">
+    <div class="logo"><div class="logo-icon">🚗</div><div><h1>AutoDiario <span style="font-size:11px;color:var(--text5);font-weight:400">v2</span></h1><small>Gestionale Manutenzioni & Spese Auto</small></div></div>
+    <div class="vtabs" id="vt"></div>
+    <button id="saveBtn" class="btn-o btn-sm" style="display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:12px;border-color:#2a2a3e" onclick="downloadJSON(false)" title="Salva dati su file JSON"><span id="saveIcon">💾</span> <span id="saveTxt">Salva</span></button>
+  </div>
+  <nav id="nt"></nav>
+</div></header>
+<main><div class="container" id="C"></div></main>
+<div class="mo" id="MO" style="display:none" onclick="closeModal()"><div class="modal fi" onclick="event.stopPropagation()"><div class="mh"><h3 id="MT"></h3><button class="mc" onclick="closeModal()">✕</button></div><div id="MB"></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+"use strict";
+// ═══ CONSTANTS ═══
+const AR={"sold":"Venduta","scrapped":"Rottamata","other":"Altro"},AC={"sold":"#4a9fe8","scrapped":"#e84c4a","other":"#e8c44a"};
+const TABS=[["dashboard","📊 Dashboard"],["records","📋 Registro"],["analytics","📈 Analisi"],["tires","🛞 Gomme"],["vehicle","🚘 Veicolo"],["dealers","📒 Anagrafiche"],["archive","🗄️ Archivio"],["export","📤 Esportazione"]];
+const SEASONS={summer:"Estive",winter:"Invernali",allseason:"4 Stagioni"};
+const SEASON_ICONS={summer:"☀️",winter:"❄️",allseason:"🌤️"};
+const SEASON_COLORS={summer:"#e8c44a",winter:"#4a9fe8",allseason:"#4ae88a"};
+const TIRE_STATUS={active:"In uso",stored:"Deposito",worn:"Usura",sold:"Cedute",disposed:"Smaltite"};
+const TIRE_STATUS_COLORS={active:"#4ae88a",stored:"#4a9fe8",worn:"#e8c44a",sold:"#9b6fe8",disposed:"#e84c4a"};
+const POS_LABELS=["ASx","ADx","PSx","PDx","Sc1","Sc2","Sc3","Sc4"];
+const TIRE_TYPES=['GA','GM','GS','GD','GL'];
+const NORMAL_TYPES=['R','M','T','A'];
+const TYPE_GROUPS={manutenzione:{label:'Manutenzione',color:'#4a9fe8',icon:'🔧'},tasse:{label:'Tasse',color:'#9b6fe8',icon:'📋'},gomme:{label:'Gomme',color:'#e8c44a',icon:'🛞'},accessori:{label:'Accessori',color:'#4ae88a',icon:'🎨'},altro:{label:'Altro',color:'#888888',icon:'📁'}};
+function typeGroup(code){const t=S.types[code];if(t&&t.group&&TYPE_GROUPS[t.group])return t.group;if(TIRE_TYPES.indexOf(code)>=0)return'gomme';if(code==='R'||code==='M')return'manutenzione';if(code==='T')return'tasse';if(code==='A')return'accessori';return'altro'}
+function isTireRecord(r){return TIRE_TYPES.indexOf(r.type)>=0||!!(r.tireId||r.tireEvtId)}
+
+// ═══ STATE ═══
+let S={vehicles:[],dealers:[],types:{},av:"",tab:"dashboard",search:"",tf:"ALL",yf:"ALL",sc:"date",sd:"desc",pf:"all",ds:"dealers",ts:"list",autoSave:true,autoSaveMin:30,lastAutoSave:0,ownerFilter:"current"},ch={};
+
+// ═══ HELPERS ═══
+function gid(){return Math.random().toString(36).slice(2,10)}
+function fmt(n){return n.toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function eur(n,d){return"€"+n.toLocaleString("it-IT",{minimumFractionDigits:d||2,maximumFractionDigits:d||2})}
+function fk(n){return n.toLocaleString("it-IT")}
+function fd(d){if(!d)return"—";try{return new Date(d).toLocaleDateString("it-IT",{day:"2-digit",month:"short",year:"numeric"})}catch{return d}}
+function esc(s){const d=document.createElement("div");d.textContent=String(s);return d.innerHTML}
+function tl(t){return(S.types[t]||{}).label||t}
+function ti(t){return(S.types[t]||{}).icon||""}
+function tc(t){return(S.types[t]||{}).color||"#888"}
+
+// ═══ LOAD / SAVE / FILE I/O ═══
+function load(d){
+  if(d){
+    S.vehicles=d.vehicles||[];S.dealers=d.dealers||[];S.types=d.types||{};
+    // Migrate: assign group to types without one
+    Object.keys(S.types).forEach(k=>{if(!S.types[k].group)S.types[k].group=typeGroup(k)});
+    S.vehicles.forEach(v=>{
+      if(!v.tires)v.tires=[];
+      if(!v.owners)v.owners=[];
+      v.records.forEach(r=>{if(!r.id)r.id=gid()});
+    });
+    S._loaded=true;
+  } else {
+    S.vehicles=[];S.dealers=[];
+    S.types={R:{label:"Ricambio",icon:"⚙️",color:"#e8734a",group:"manutenzione"},M:{label:"Manutenzione",icon:"🔧",color:"#4a9fe8",group:"manutenzione"},T:{label:"Tassa",icon:"📋",color:"#9b6fe8",group:"tasse"},A:{label:"Accessorio",icon:"🎨",color:"#4ae88a",group:"accessori"},GA:{label:"Acquisto gomme",icon:"🛞",color:"#e8c44a",group:"gomme"},GM:{label:"Montaggio gomme",icon:"🔧",color:"#4ae88a",group:"gomme"},GS:{label:"Smontaggio gomme",icon:"📦",color:"#4a9fe8",group:"gomme"},GD:{label:"Smaltimento gomme",icon:"⚠️",color:"#e84c4a",group:"gomme"},GL:{label:"Servizio gomme",icon:"🔩",color:"#9b6fe8",group:"gomme"}};
+    S._loaded=false;
+  }
+}
+function save(){S._dirty=true;updSaveBtn()}
+function getFullData(){return{version:"autodiario_v2",exportDate:new Date().toISOString(),vehicles:S.vehicles,dealers:S.dealers,types:S.types}}
+function downloadJSON(auto){
+  const d=JSON.stringify(getFullData(),null,2);const b=new Blob([d],{type:'application/json'});const a=document.createElement('a');
+  const ts=new Date().toISOString().slice(0,16).replace(/[T:]/g,'-');
+  a.href=URL.createObjectURL(b);a.download=auto?'autodiario_backup_'+ts+'.json':'autodiario_data.json';
+  a.click();URL.revokeObjectURL(a.href);S._dirty=false;updSaveBtn();
+  showToast(auto?'💾 Backup automatico':'💾 Dati salvati');
+}
+function loadJSONFile(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json';
+  inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{
+    try{const d=JSON.parse(ev.target.result);if(!d.vehicles){showToast('❌ File non valido','err');return}
+    load(d);S.av=S.vehicles.filter(v=>v.status==='active')[0]?.id||S.vehicles[0]?.id||'';
+    S.tab='dashboard';render();showToast('✅ Caricati '+S.vehicles.length+' veicoli')}
+    catch(err){showToast('❌ '+err.message,'err')}};r.readAsText(f)};inp.click();
+}
+function ensureDealer(name){
+  if(!name||!name.trim())return;name=name.trim();
+  if(!S.dealers.find(d=>d.name.toLowerCase()===name.toLowerCase()))
+    S.dealers.push({id:gid(),name:name,city:'',phone:'',notes:''});
+}
+
+// ═══ DATA ACCESS ═══
+function V(){return S.vehicles.find(v=>v.id===S.av)||S.vehicles.filter(v=>v.status==="active")[0]||S.vehicles[0]}
+function actV(){return S.vehicles.filter(v=>v.status==="active")}
+function arcV(){return S.vehicles.filter(v=>v.status==="archived")}
+function aR(v){return(v||V())?.records||[]}
+
+// Owner-filtered records
+function filterByOwner(v,mode){
+  const recs=aR(v);
+  if(!v.owners||!v.owners.length)return recs;
+  if(mode==='all')return recs;
+  if(mode==='current')return recs.filter(r=>!r.ownerId||r.ownerId==='current');
+  return recs.filter(r=>r.ownerId===mode);
+}
+
+// Filtered records for current view
+function curRecs(v){return filterByOwner(v||V(),S.ownerFilter).filter(r=>!(r.type==='GA'&&r.km===0&&r.total===0))}
+
+function gF(){
+  let r=curRecs();
+  if(S._tireFilter)r=r.filter(x=>x.tireId===S._tireFilter);
+  if(S.tf!=="ALL")r=r.filter(x=>x.type===S.tf);
+  if(S.yf!=="ALL")r=r.filter(x=>x.date?.startsWith(S.yf));
+  if(S.search){const s=S.search.toLowerCase();r=r.filter(x=>(x.description||'').toLowerCase().includes(s)||(x.dealer||'').toLowerCase().includes(s))}
+  r.sort((a,b)=>{let va=a[S.sc],vb=b[S.sc];if(typeof va==="number"&&typeof vb==="number")return S.sd==="asc"?va-vb:vb-va;va=String(va||"");vb=String(vb||"");return S.sd==="asc"?va.localeCompare(vb):vb.localeCompare(va)});
+  return r;
+}
+
+function gS(v,mode){
+  const r=filterByOwner(v,mode||S.ownerFilter);
+  const t=r.reduce((s,x)=>s+x.total,0);
+  const byG={manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0};
+  r.forEach(x=>{const g=typeGroup(x.type);byG[g]=(byG[g]||0)+x.total});
+  const mkRecs=Math.max(...r.map(x=>x.km||0),0);
+  const mk=Math.max(mkRecs,v.purchaseKm||0);
+  // Km percorsi = ultimo km - km acquisto (o primo km registrato)
+  const firstKm=v.purchaseKm||Math.min(...r.filter(x=>x.km>0).map(x=>x.km),mk);
+  const driven=mk>firstKm?mk-firstKm:mk;
+  const ds=r.map(x=>x.date).filter(Boolean).sort();
+  const f=ds[0],l=ds[ds.length-1];
+  const sp=f&&l?Math.max(1,(new Date(l)-new Date(f))/(365.25*864e5)):1;
+  return{tot:t,mnt:byG.manutenzione,tax:byG.tasse,gom:byG.gomme,acc:byG.accessori,altro:byG.altro,mk,driven,f,l,avg:t/sp,cnt:r.length};
+}
+
+function gYD(v,mode){
+  const recs=filterByOwner(v,mode||S.ownerFilter);
+  const by={};recs.forEach(r=>{const y=r.date?.slice(0,4);if(!y)return;if(!by[y])by[y]={year:y,manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0,tot:0};
+  const g=typeGroup(r.type);by[y][g]=(by[y][g]||0)+r.total;by[y].tot+=r.total});
+  return Object.values(by).sort((a,b)=>a.year.localeCompare(b.year));
+}
+
+function gTD(v,mode){
+  const recs=filterByOwner(v,mode||S.ownerFilter);
+  const by={};recs.forEach(r=>{if(!r.dealer)return;if(!by[r.dealer])by[r.dealer]={n:r.dealer,t:0,c:0};by[r.dealer].t+=r.total;by[r.dealer].c++});
+  return Object.values(by).sort((a,b)=>b.t-a.t).slice(0,8);
+}
+
+// ═══ TIRE ENGINE: Single Source of Truth = Records ═══
+// tire.events e tire.units[].events vengono SEMPRE ricostruiti dal registro.
+
+function getVehicleLastKm(v){
+  if(!v)return 0;
+  const recs=(v.records||[]).filter(r=>r.km>0);
+  if(!recs.length)return 0;
+  return Math.max(...recs.map(r=>r.km));
+}
+
+// Ricostruisce tire.events, units status e tire.status per TUTTI i treni
+function syncAllTiresFromRecords(v){
+  (v.tires||[]).forEach(t=>{
+    const anyRec=(v.records||[]).some(r=>r.tireId===t.id);
+    if(!anyRec){t.status=computeTireStatus(t);return}
+
+    // 1. Rebuild events from GM/GS records
+    const evtRecs=(v.records||[]).filter(r=>r.tireId===t.id&&r.tireEvtId&&(r.type==='GM'||r.type==='GS'))
+      .sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    if(evtRecs.length){
+      // Preserve implicit/factory mount events (no GM record) — e.g. OEM tires
+      const existingFactory=(t.events||[]).filter(e=>e.type==='mount'&&!evtRecs.some(r=>r.tireEvtId===e.id));
+      t.events=existingFactory.concat(evtRecs.map(r=>({
+        id:r.tireEvtId,type:r.type==='GM'?'mount':'unmount',date:r.date,km:r.km,
+        cost:r.total||0,dealer:r.dealer||'',notes:'',recordId:r.id
+      })));
+      t.events.sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.km||0)-(b.km||0));
+    }
+
+    // 2. Rebuild units from GA and GD records
+    const gaRecs=(v.records||[]).filter(r=>r.tireId===t.id&&r.type==='GA').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    const gdRecs=(v.records||[]).filter(r=>r.tireId===t.id&&r.type==='GD').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+
+    // Determine total units from all GA purchases
+    let totalUnits=0;
+    const unitBatches=[];
+    gaRecs.forEach(ga=>{
+      const qty=ga.qty||0;
+      unitBatches.push({qty,date:ga.date,km:ga.km||0,isOriginal:unitBatches.length===0});
+      totalUnits+=qty;
+    });
+    // If no GA records, keep existing units
+    if(totalUnits>0){
+      // Ensure we have enough units
+      while((t.units||[]).length<totalUnits){
+        if(!t.units)t.units=[];
+        t.units.push({status:'active'});
+      }
+      // Assign addedDate/addedKm to each unit based on batch
+      let idx=0;
+      unitBatches.forEach(batch=>{
+        for(let i=0;i<batch.qty&&idx<t.units.length;i++,idx++){
+          t.units[idx].addedDate=batch.date;
+          t.units[idx].addedKm=batch.km;
+          t.units[idx].isOriginal=batch.isOriginal;
+        }
+      });
+    }
+
+    // 3. Apply GD disposals in order
+    if(t.units&&t.units.length){
+      // Reset disposals
+      t.units.forEach(u=>{
+        u.status='active';
+        delete u.disposeDate;delete u.disposeReason;delete u.disposeKm;
+      });
+      gdRecs.forEach(dr=>{
+        const qty=dr.qty||0;
+        for(let i=0;i<qty;i++){
+          // Dispose oldest non-disposed unit
+          const u=t.units.find(u=>u.status!=='disposed');
+          if(u){
+            u.status='disposed';
+            u.disposeDate=dr.date;
+            u.disposeKm=dr.km||0;
+            u.disposeReason=(dr.description||'').indexOf('Usura')>=0?'worn':'other';
+          }
+        }
+      });
+      t.qty=t.units.filter(u=>u.status!=='disposed').length;
+    }
+
+    // 4. Build per-unit events: each unit gets events only for its lifespan
+    if(t.units&&t.events){
+      t.units.forEach(u=>{
+        const addedKm=u.addedKm||0;
+        const dispKm=u.status==='disposed'?(u.disposeKm||Infinity):Infinity;
+        u.events=[];
+
+        if(!u.isOriginal&&addedKm>0){
+          // Replacement unit: check if tire was mounted when this unit was added
+          // by looking at tire events before addedKm
+          let wasMounted=false;
+          t.events.forEach(e=>{
+            if(e.km<=addedKm){
+              if(e.type==='mount')wasMounted=true;
+              else if(e.type==='unmount')wasMounted=false;
+            }
+          });
+          // If mounted at addedKm, create synthetic mount for this unit
+          if(wasMounted){
+            u.events.push({type:'mount',date:u.addedDate||'',km:addedKm});
+          }
+          // Add only events AFTER addedKm
+          t.events.forEach(e=>{
+            if(e.km<=addedKm)return;
+            if(u.status==='disposed'&&e.km>dispKm)return;
+            u.events.push({type:e.type,date:e.date,km:e.km});
+          });
+        } else {
+          // Original unit: all events up to disposeKm
+          t.events.forEach(e=>{
+            if(u.status==='disposed'&&e.km>dispKm)return;
+            u.events.push({type:e.type,date:e.date,km:e.km});
+          });
+        }
+      });
+    }
+
+    // 5. Tire status
+    t.status=computeTireStatus(t);
+  });
+}
+
+function computeTireStatus(t){
+  if(t.units&&t.units.length&&t.units.every(u=>u.status==='disposed'))return'disposed';
+  const last=(t.events||[]).slice(-1)[0];
+  if(last&&last.type==='mount')return'active';
+  return'stored';
+}
+
+function isTireMounted(tire){
+  const last=(tire.events||[]).slice(-1)[0];
+  return last&&last.type==='mount';
+}
+
+function getMountedTires(v){
+  return(v.tires||[]).filter(t=>isTireMounted(t));
+}
+
+function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
+  const unit=tire.units?tire.units[unitIdx]:null;
+  if(!unit)return 0;
+  const evts=(unit.events&&unit.events.length)?unit.events:(tire.events||[]);
+  let total=0,mountKm=null;
+  evts.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).forEach(e=>{
+    if(e.type==='mount')mountKm=e.km;
+    else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}
+  });
+  // If still mounted: use disposeKm for disposed, vehicleLastKm for active
+  if(mountKm!==null){
+    const endKm=unit.status==='disposed'?(unit.disposeKm||mountKm):vehicleLastKm;
+    if(endKm>mountKm)total+=endKm-mountKm;
+  }
+  return total;
+}
+
+function calcTireKm(tire,vehicleLastKm){
+  if(tire.units&&tire.units.length){
+    // Max km among active units (or all if none active)
+    const activeIdx=tire.units.map((_,i)=>i).filter(i=>tire.units[i].status!=='disposed');
+    const indices=activeIdx.length?activeIdx:tire.units.map((_,i)=>i);
+    const kms=indices.map(i=>calcTireUnitKm(tire,i,vehicleLastKm||0));
+    return kms.length?Math.max(...kms):0;
+  }
+  const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  let total=0,mountKm=null;
+  evts.forEach(e=>{if(e.type==='mount')mountKm=e.km;else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}});
+  if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
+  return total;
+}
+
+function recalcAllTireKm(v){
+  syncAllTiresFromRecords(v);
+  const lastKm=getVehicleLastKm(v);
+  (v.tires||[]).forEach(t=>{t._cachedKm=calcTireKm(t,lastKm)});
+}
+
+// ═══ TAGS ═══
+function tireTag(r){if(!r.tireId)return'';return'<span class="badge" style="background:#88888818;color:#aaa;border:1px solid #88888830;font-size:9px;padding:1px 6px;margin-right:4px;cursor:pointer" onclick="event.stopPropagation();S.tab=\'tires\';render()" title="Collegato a treno gomme">🛞</span>'}
+function ownerTag(r,v){
+  if(!r.ownerId||r.ownerId==='current'||!v.owners||!v.owners.length)return'';
+  const o=v.owners.find(x=>x.id===r.ownerId);
+  if(!o)return'';
+  return'<span class="badge badge-p" style="font-size:9px;padding:1px 6px;margin-right:4px" title="'+esc(o.name)+'">'+esc(o.name.slice(0,8))+'</span>';
+}
+
+function ownerFilterBtns(v){
+  if(!v.owners||!v.owners.length)return'';
+  let h='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">';
+  const mk=(id,label,color)=>{
+    const act=S.ownerFilter===id;
+    return '<button class="btn-o btn-sm" onclick="S.ownerFilter=\''+id+'\';render()" style="'+(act?'background:'+color+';color:#fff;border-color:'+color:'')+'">'+label+'</button>';
+  };
+  h+=mk('current','👤 Mie spese','var(--accent)');
+  v.owners.forEach(o=>{h+=mk(o.id,'👤 '+esc(o.name),'var(--purple)')});
+  h+=mk('all','📊 Tutti','var(--yellow)');
+  h+='</div>';
+  return h;
+}
+
+// ═══ RENDER ═══
+function dc(){Object.values(ch).forEach(c=>{try{c.destroy()}catch{}});ch={}}
+function render(){rVT();rNT();dc();const fn={dashboard:rDash,records:rRecs,analytics:rAna,tires:rTires,vehicle:rVeh,dealers:rDlr,archive:rArc,export:rExp}[S.tab];if(fn)fn()}
+function rVT(){document.getElementById("vt").innerHTML=actV().map(v=>'<button class="vtab '+(v.id===S.av?'active':'')+'" onclick="swV(\''+v.id+'\')">'+esc(v.name)+'</button>').join("")+(arcV().length?'<button class="vtab archived '+(S.tab==='archive'?'active':'')+'" onclick="S.tab=\'archive\';render()">🗄️ '+arcV().length+'</button>':'')+'<button class="vtab-add" onclick="showVF()" title="Aggiungi veicolo">＋</button>'}
+function rNT(){document.getElementById("nt").innerHTML=TABS.map(([k,l])=>'<button class="nav-btn '+(S.tab===k?'active':'')+'" onclick="S.tab=\''+k+'\';render()">'+l+'</button>').join("")}
+function swV(id){S.av=id;S.tab="dashboard";S._tireFilter=null;S.ownerFilter='current';render()}
+
+// ═══ DASHBOARD ═══
+function rDash(){
+  const v=V();if(!v)return;
+  const s=gS(v,'current');
+  const hasOwners=v.owners&&v.owners.length>0;
+  const purchasePrice=v.purchasePrice||0;
+  const salePrice=v.status==='archived'?(v.archivePrice||0):0;
+  const totalInvestment=purchasePrice+s.tot;
+
+  let html='<div class="fi">';
+  html+='<div class="card vbar" onclick="S.tab=\'vehicle\';render()" title="Dettagli veicolo">';
+  html+='<div style="font-size:36px">🚘</div><div style="flex:1"><div style="font-size:20px;font-weight:700">'+esc(v.name)+(v.status==='archived'?' <span class="badge-a">ARCHIVIATA</span>':'')+'</div>';
+  html+='<div style="color:var(--text4);font-size:13px">'+v.year+' · '+v.fuel+(v.plate?' · '+v.plate:'')+(v.engine?' · '+esc(v.engine):'')+'</div></div>';
+  html+='<div style="text-align:right"><div style="font-size:24px;font-weight:700;color:var(--accent);font-family:var(--mono)">'+fk(s.mk)+' km</div><div style="font-size:11px;color:var(--text5)">ultimo rilevamento</div></div></div>';
+
+  html+=ownerFilterBtns(v);
+
+  const ds=gS(v,S.ownerFilter);
+  html+='<div class="stat-cards">';
+  if(purchasePrice>0)html+='<div class="card stat-card"><div class="stat-label">🏷️ Acquisto auto</div><div class="stat-value" style="color:var(--text2)">€'+fmt(purchasePrice)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">💰 Spesa totale</div><div class="stat-value" style="color:var(--accent)">€'+fmt(ds.tot)+'</div><div class="stat-sub">'+ds.cnt+' operazioni</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">⚙️ Ricambi+Manut.</div><div class="stat-value" style="color:var(--blue)">€'+fmt(ds.mnt)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">🛞 Gomme</div><div class="stat-value" style="color:var(--yellow)">€'+fmt(ds.gom)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">📋 Tasse</div><div class="stat-value" style="color:var(--purple)">€'+fmt(ds.tax)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">📅 Media annua</div><div class="stat-value" style="color:var(--text2)">€'+fmt(ds.avg)+'</div><div class="stat-sub">'+(ds.f?fd(ds.f):'—')+' → '+(ds.l?fd(ds.l):'—')+'</div></div>';
+  if(purchasePrice>0)html+='<div class="card stat-card"><div class="stat-label">💸 Investimento totale</div><div class="stat-value" style="color:var(--accent2)">€'+fmt(totalInvestment)+'</div>'+(salePrice>0?'<div class="stat-sub">Venduta: €'+fmt(salePrice)+'</div>':'')+'</div>';
+  html+='</div>';
+
+  html+='<div class="grid-2" style="margin-bottom:24px"><div class="card"><div class="card-title">Spese per anno</div><div class="cb"><canvas id="yc"></canvas></div></div><div class="card"><div class="card-title">Ripartizione spese</div><div class="cb"><canvas id="pc"></canvas></div></div></div>';
+  html+='<div class="card"><div class="card-title">Top fornitori</div><div class="grid-auto" id="dg"></div></div>';
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+
+  const yd=gYD(v,S.ownerFilter);
+  ch.y=new Chart(document.getElementById("yc"),{type:"bar",data:{labels:yd.map(y=>y.year),datasets:[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),backgroundColor:"#4a9fe8",borderRadius:4},{label:"Gomme",data:yd.map(y=>y.gomme),backgroundColor:"#e8c44a"},{label:"Tasse",data:yd.map(y=>y.tasse),backgroundColor:"#9b6fe8"},{label:"Accessori",data:yd.map(y=>y.accessori),backgroundColor:"#4ae88a",borderRadius:4},{label:"Altro",data:yd.map(y=>y.altro),backgroundColor:"#888888"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:"#6a6a88"}},y:{stacked:true,grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
+
+  const recs=filterByOwner(v,S.ownerFilter);
+  const tb={};recs.forEach(r=>{const t=r.type;if(!tb[t])tb[t]={n:tl(t),v:0,t};tb[t].v+=r.total});
+  const tbd=Object.values(tb).filter(t=>t.v>0);
+  ch.p=new Chart(document.getElementById("pc"),{type:"doughnut",data:{labels:tbd.map(t=>t.n),datasets:[{data:tbd.map(t=>t.v),backgroundColor:tbd.map(t=>tc(t.t)),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:"55%",plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}},tooltip:{callbacks:{label:c=>c.label+': €'+fmt(c.raw)}}}}});
+
+  document.getElementById("dg").innerHTML=gTD(v,S.ownerFilter).map(d=>'<div class="dc"><div><div style="font-size:13px;font-weight:600;color:#d0d0e0">'+esc(d.n)+'</div><div style="font-size:11px;color:var(--text5)">'+d.c+' operaz.</div></div><div style="font-size:14px;font-weight:700;color:var(--accent);font-family:var(--mono)">€'+fmt(d.t)+'</div></div>').join("");
+}
+
+// ═══ RECORDS ═══
+function rRecs(){
+  const v=V();if(!v)return;const r=aR(v);
+  const ys=[...new Set(r.map(x=>x.date?.slice(0,4)).filter(Boolean))].sort();
+
+  let html='<div class="fi">';
+  html+=ownerFilterBtns(v);
+  html+='<div class="toolbar">';
+  html+='<input class="input" id="searchInput" style="flex:1 1 200px;max-width:320px" placeholder="🔍 Cerca..." value="'+esc(S.search)+'" oninput="S.search=this.value;rRecsTable()">';
+  html+='<select class="input" style="width:auto;min-width:130px" onchange="S.tf=this.value;rRecsTable()"><option value="ALL">Tutti i tipi</option>'+Object.entries(S.types).map(([k,t])=>'<option value="'+k+'" '+(S.tf===k?'selected':'')+'>'+t.label+'</option>').join("")+'</select>';
+  html+='<select class="input" style="width:auto;min-width:90px" onchange="S.yf=this.value;rRecsTable()"><option value="ALL">Anni</option>'+ys.map(y=>'<option '+(S.yf===y?'selected':'')+'>'+y+'</option>').join("")+'</select>';
+  if(S._tireFilter)html+='<button class="btn-o btn-sm" style="border-color:var(--accent);color:var(--accent)" onclick="S._tireFilter=null;rRecsTable()">🛞 Filtro gomme ✕</button>';
+  html+='<div class="sp"></div>';
+  html+='<button class="btn btn-p btn-sm" onclick="showRF()">＋ Nuova voce</button>';
+  html+='</div>';
+  html+='<div id="recsTableWrap"></div>';
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+  rRecsTable();
+}
+function rRecsTable(){
+  const v=V();if(!v)return;
+  const f=gF();
+  let html='<div class="table-wrap"><table><thead><tr>';
+  html+='<th onclick="tgS(\'date\')">Data</th><th onclick="tgS(\'km\')">Km</th><th onclick="tgS(\'description\')">Descrizione</th><th onclick="tgS(\'dealer\')">Rivenditore</th><th onclick="tgS(\'type\')">Tipo</th><th onclick="tgS(\'total\')" class="tr">Totale</th><th class="ns" style="width:70px"></th>';
+  html+='</tr></thead><tbody>';
+  f.forEach(r=>{
+    const opacity=r.ownerId&&r.ownerId!=='current'?' style="opacity:.6;font-style:italic"':'';
+    html+='<tr'+opacity+'>';
+    html+='<td class="nw">'+fd(r.date)+'</td>';
+    html+='<td class="mono">'+(r.km?fk(r.km):'')+'</td>';
+    html+='<td class="ell">'+tireTag(r)+ownerTag(r,v)+esc(r.description)+'</td>';
+    html+='<td class="nw" style="color:var(--text3)">'+esc(r.dealer||'')+'</td>';
+    html+='<td class="nw"><span style="color:'+tc(r.type)+'">'+ti(r.type)+' '+tl(r.type)+'</span></td>';
+    html+='<td class="tr mono" style="font-weight:600">€'+fmt(r.total)+'</td>';
+    html+='<td class="nw"><button class="btn-i" onclick="showRF(\''+r.id+'\')">✏️</button><button class="btn-i" onclick="cDel(\''+r.id+'\')">🗑️</button></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<div style="margin-top:12px;color:var(--text5);font-size:12px">'+f.length+' voci · Totale: €'+fmt(f.reduce((s,x)=>s+x.total,0))+'</div>';
+  const w=document.getElementById("recsTableWrap");if(w)w.innerHTML=html;
+}
+
+function uT(){rRecsTable()}
+function tgS(col){if(S.sc===col)S.sd=S.sd==='asc'?'desc':'asc';else{S.sc=col;S.sd='desc'}uT()}
+
+// ═══ ANALYTICS ═══
+function rAna(){
+  const v=V();if(!v)return;
+  const s=gS(v,S.ownerFilter);
+  const recs=filterByOwner(v,S.ownerFilter);
+  const yd=gYD(v,S.ownerFilter);
+  const purchP=parseFloat(v.purchasePrice)||0;
+  const saleP=parseFloat(v.archivePrice)||0;
+  const vehicleCost=purchP>0?purchP-saleP:0; // costo netto veicolo (acquisto - vendita)
+  const inclVehicle=S._anaInclVehicle||false;
+  const grandTot=s.tot+(inclVehicle?vehicleCost:0);
+  const cpk=s.driven>0?grandTot/s.driven:0;const mpk=s.driven>0?s.mnt/s.driven:0;const gpk=s.driven>0?s.gom/s.driven:0;
+  const km=recs.filter(r=>r.date&&r.km>0).sort((a,b)=>a.date.localeCompare(b.date));
+  const sn={};const ku=km.filter(r=>{const k=r.date+r.km;if(sn[k])return false;sn[k]=true;return true});
+
+  let html='<div class="fi" style="display:grid;gap:20px">';
+  html+=ownerFilterBtns(v);
+
+  // Toggle costo veicolo
+  if(purchP>0){
+    html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;width:fit-content">';
+    html+='<label style="font-size:13px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:8px">';
+    html+='<input type="checkbox" '+(inclVehicle?'checked':'')+' onchange="S._anaInclVehicle=this.checked;render()" style="width:16px;height:16px;accent-color:var(--accent)">';
+    html+='🚗 Includi costo veicolo nei calcoli';
+    if(purchP)html+=' <span style="color:var(--text5)">('+eur(purchP);
+    if(saleP)html+=' − vendita '+eur(saleP)+' = <b>'+eur(vehicleCost)+'</b>';
+    html+=')</span></label></div>';
+  }
+
+  // Grafici
+  html+='<div class="card"><div class="card-title">Andamento chilometrico</div><div class="cb" style="height:280px"><canvas id="kc"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Trend costi annuali</div><div class="cb" style="height:300px"><canvas id="tc2"></canvas></div></div>';
+
+  // Costi per km
+  html+='<div class="grid-2">';
+  html+='<div class="card"><div class="card-title">Costo per chilometro</div><div style="display:grid;gap:14px">';
+  html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Costo'+(inclVehicle?' totale + veicolo':' totale')+' / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--accent)">'+eur(cpk,4)+'</div><div style="font-size:12px;color:var(--text5)">'+fmt(cpk*100)+' cent/km</div></div>';
+  html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Manutenzione / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--blue)">'+eur(mpk,4)+'</div></div>';
+  html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Gomme / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--yellow)">'+eur(gpk,4)+'</div></div>';
+  if(inclVehicle&&vehicleCost>0){
+    const vkm=s.driven>0?vehicleCost/s.driven:0;
+    html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Veicolo / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:#e84c4a">'+eur(vkm,4)+'</div></div>';
+  }
+  html+='</div></div>';
+
+  // Riepilogo annuale
+  const GK=Object.keys(TYPE_GROUPS);const GL=Object.values(TYPE_GROUPS);
+  html+='<div class="card"><div class="card-title">Riepilogo annuale</div><div style="max-height:400px;overflow-y:auto"><table style="font-size:12px"><thead><tr><th class="ns">Anno</th>'+GK.map((g,i)=>'<th class="ns tr">'+GL[i].label+'</th>').join('')+'<th class="ns tr" style="font-weight:700">Totale</th></tr></thead><tbody>';
+  yd.forEach(y=>{
+    html+='<tr><td style="font-weight:600">'+y.year+'</td>';
+    GK.forEach((g,i)=>{html+='<td class="tr mono" style="color:'+GL[i].color+'">'+eur(y[g]||0)+'</td>'});
+    html+='<td class="tr mono" style="font-weight:700;color:var(--text1)">'+eur(y.tot)+'</td></tr>';
+  });
+  const totRow={};GK.forEach(g=>{totRow[g]=yd.reduce((s,y)=>s+(y[g]||0),0)});totRow.tot=yd.reduce((s,y)=>s+y.tot,0);
+  html+='<tr style="border-top:2px solid var(--border2);font-weight:700"><td>TOTALE</td>';
+  GK.forEach((g,i)=>{html+='<td class="tr mono" style="color:'+GL[i].color+'">'+eur(totRow[g])+'</td>'});
+  html+='<td class="tr mono" style="color:var(--text1)">'+eur(totRow.tot)+'</td></tr>';
+  if(inclVehicle&&vehicleCost>0){
+    html+='<tr style="border-top:1px dashed var(--border2)"><td style="color:#e84c4a;font-weight:600">🚗 Veicolo</td>';
+    GK.forEach(()=>{html+='<td></td>'});
+    html+='<td class="tr mono" style="font-weight:700;color:#e84c4a">'+eur(vehicleCost)+'</td></tr>';
+    html+='<tr style="background:var(--bg)"><td style="font-weight:700;font-size:13px">COSTO REALE</td>';
+    GK.forEach(()=>{html+='<td></td>'});
+    html+='<td class="tr mono" style="font-weight:700;font-size:13px;color:var(--accent)">'+eur(totRow.tot+vehicleCost)+'</td></tr>';
+  }
+  html+='</tbody></table></div></div></div>';
+
+  // Ripartizione spese (pie chart)
+  html+='<div class="card"><div class="card-title">Ripartizione spese'+(inclVehicle?' (incluso veicolo)':'')+'</div><div class="cb" style="height:280px"><canvas id="pc"></canvas></div></div>';
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+
+  ch.k=new Chart(document.getElementById("kc"),{type:"line",data:{labels:ku.map(p=>p.date.slice(0,7)),datasets:[{label:"Km",data:ku.map(p=>p.km),borderColor:"#e8734a",backgroundColor:"rgba(232,115,74,.1)",fill:true,tension:.3,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88",maxTicksLimit:12}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88",callback:v=>(v/1000).toFixed(0)+"k"}}}}});
+
+  // Trend chart - add vehicle cost line if enabled
+  const trendDS=[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),borderColor:"#4a9fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Gomme",data:yd.map(y=>y.gomme),borderColor:"#e8c44a",pointRadius:4,borderWidth:2,tension:.2},{label:"Tasse",data:yd.map(y=>y.tasse),borderColor:"#9b6fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Accessori",data:yd.map(y=>y.accessori),borderColor:"#4ae88a",pointRadius:4,borderWidth:2,tension:.2},{label:"Altro",data:yd.map(y=>y.altro),borderColor:"#888888",pointRadius:4,borderWidth:2,tension:.2},{label:"Totale",data:yd.map(y=>y.tot),borderColor:"#ccc",pointRadius:0,borderWidth:2.5,borderDash:[6,3],tension:.2}];
+  ch.t2=new Chart(document.getElementById("tc2"),{type:"line",data:{labels:yd.map(y=>y.year),datasets:trendDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88"}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
+
+  // Pie chart
+  const pieItems=GK.map((g,i)=>({l:GL[i].label,v:totRow[g],c:GL[i].color})).filter(x=>x.v>0);
+  if(inclVehicle&&vehicleCost>0)pieItems.push({l:'Veicolo',v:vehicleCost,c:'#e84c4a'});
+  ch.pc=new Chart(document.getElementById("pc"),{type:"doughnut",data:{labels:pieItems.map(x=>x.l),datasets:[{data:pieItems.map(x=>x.v),backgroundColor:pieItems.map(x=>x.c),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{color:"#aaa",boxWidth:12,padding:12,font:{size:12}}}}}});
+}
+
+// ═══ TIRES MANAGEMENT (ONLY FROM HERE) ═══
+function rTires(){
+  const v=V();if(!v)return;
+  recalcAllTireKm(v);
+  const sub=S.ts||"list";
+  let html='<div class="fi">';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
+  html+='<h2 style="font-size:18px">🛞 Gestione gomme – '+esc(v.name)+'</h2>';
+  html+='<button class="btn btn-p" onclick="showNewTireWizard()">＋ Nuove gomme</button>';
+  html+='</div>';
+  html+='<div class="tp" style="margin-bottom:20px">';
+  html+='<button class="tpl '+(sub==='list'?'active':'')+'" onclick="S.ts=\'list\';rTires()">📋 Treni gomme</button>';
+  html+='<button class="tpl '+(sub==='history'?'active':'')+'" onclick="S.ts=\'history\';rTires()">📅 Storico</button>';
+  html+='<button class="tpl '+(sub==='stats'?'active':'')+'" onclick="S.ts=\'stats\';rTires()">📊 Statistiche</button>';
+  html+='</div><div id="tiresContent"></div></div>';
+  document.getElementById("C").innerHTML=html;
+  if(sub==='list')rTireList(v);else if(sub==='history')rTireHistory(v);else rTireStats(v);
+}
+
+function rTireList(v){
+  const tires=v.tires||[];
+  if(!tires.length){document.getElementById("tiresContent").innerHTML='<div class="card" style="text-align:center;padding:40px;color:var(--text4)"><p style="font-size:42px;margin-bottom:8px">🛞</p><p>Nessun treno gomme registrato</p></div>';return}
+  const vLastKm=getVehicleLastKm(v);
+  let html='';
+  tires.forEach(t=>{
+    const totalCost=t.purchaseCost+(t.events||[]).reduce((s,e)=>s+e.cost,0);
+    const totalKm=t._cachedKm||calcTireKm(t,vLastKm);
+    const costPerKm=totalKm>0?(totalCost/totalKm):0;
+    const mountCount=(t.events||[]).filter(e=>e.type==='mount'&&e.recordId).length;
+    const mounted=isTireMounted(t);
+    const qty=t.qty||4;
+
+    html+='<div class="card" style="margin-bottom:16px">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">';
+    // Left info
+    html+='<div style="flex:1;min-width:200px">';
+    html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
+    html+='<span style="font-size:24px">'+(SEASON_ICONS[t.season]||'🛞')+'</span>';
+    html+='<div><div style="font-size:16px;font-weight:700">'+esc(t.brand)+' '+esc(t.model)+'</div>';
+    html+='<div style="font-size:12px;color:var(--text4)">'+esc(t.size)+' · <span style="color:'+(SEASON_COLORS[t.season]||'#888')+'">'+(SEASONS[t.season]||t.season)+'</span> · '+(t.units?t.units.filter(u=>u.status!=='disposed').length:qty)+'/'+(t.units?t.units.length:qty)+' gomme</div></div></div>';
+    // Badges
+    html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">';
+    html+='<span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'18;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+';border:1px solid '+(TIRE_STATUS_COLORS[t.status]||'#888')+'30">'+(TIRE_STATUS[t.status]||t.status)+'</span>';
+    if(mounted)html+='<span class="badge" style="background:#4ae88a18;color:#4ae88a;border:1px solid #4ae88a30">🔧 Montate</span>';
+    if(t.dot)html+='<span class="badge" style="background:var(--bg);border:1px solid var(--border)">DOT '+esc(t.dot)+'</span>';
+    html+='</div>';
+    // Per-tire km
+    if(t.units&&t.units.length>0){
+      html+='<div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">';
+      t.units.forEach((u,i)=>{
+        const uk=calcTireUnitKm(t,i,vLastKm);
+        const label=POS_LABELS[i]||(''+(i+1));
+        const isDisposed=u.status==='disposed';
+        const isMtd=mounted&&!isDisposed;
+        html+='<span class="tire-unit'+(isMtd?' mounted':'')+'" style="'+(isDisposed?'opacity:.4;text-decoration:line-through':'')+'">'+label+': '+fk(uk)+' km'+(isDisposed?' ✕':'')+'</span>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+    // Right stats
+    html+='<div style="display:flex;gap:16px;flex-wrap:wrap;text-align:center">';
+    html+='<div><div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600">Km percorsi</div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--accent)">'+fk(totalKm)+'</div></div>';
+    html+='<div><div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600">Costo totale</div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--yellow)">€'+fmt(totalCost)+'</div></div>';
+    html+='<div><div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600">€/km</div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--blue)">'+(costPerKm>0?costPerKm.toFixed(3):'—')+'</div></div>';
+    html+='<div><div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600">Montaggi</div><div style="font-size:20px;font-weight:700;font-family:var(--mono);color:var(--text2)">'+mountCount+'</div></div>';
+    html+='</div></div>';
+    if(t.notes)html+='<div style="margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--text4);border:1px solid var(--border3)">'+esc(t.notes)+'</div>';
+    // Actions
+    html+='<div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">';
+    if(!mounted&&t.status!=='disposed')html+='<button class="btn-o btn-sm" onclick="showTireMountForm(\''+t.id+'\')">🔧 Monta</button>';
+    if(mounted)html+='<button class="btn-o btn-sm" style="border-color:var(--blue);color:var(--blue)" onclick="showTireUnmountForm(\''+t.id+'\')">📦 Smonta</button>';
+    if(t.units&&t.units.some(u=>u.status!=='disposed'))html+='<button class="btn-o btn-sm" onclick="showDisposeForm(\''+t.id+'\')">⚠️ Smaltisci gomma</button>';
+    else if(t.units&&t.units.some(u=>u.status==='disposed'))html+='<button class="btn-o btn-sm" style="border-color:var(--green);color:var(--green)" onclick="showDisposeForm(\''+t.id+'\')">♻️ Ripristina</button>';
+    html+='<button class="btn-o btn-sm" onclick="showTireRecs(\''+t.id+'\')">📋 Registro</button>';
+    html+='<button class="btn-o btn-sm" onclick="showTireForm(\''+t.id+'\')">✏️ Modifica</button>';
+    html+='<button class="btn-o btn-sm" style="border-color:#e84c4a;color:#e84c4a" onclick="delTire(\''+t.id+'\')">🗑️</button>';
+    html+='</div></div>';
+  });
+  document.getElementById("tiresContent").innerHTML=html;
+}
+
+function rTireHistory(v){
+  const allEvts=[];
+  (v.tires||[]).forEach(t=>{(t.events||[]).forEach(e=>{allEvts.push({...e,tireName:t.brand+' '+t.model,tireSize:t.size,season:t.season,tireId:t.id})})});
+  allEvts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  let html='';
+  if(allEvts.length){
+    html+='<div class="table-wrap"><table><thead><tr><th class="ns">Data</th><th class="ns">Evento</th><th class="ns">Gomme</th><th class="ns">Km auto</th><th class="ns">Costo</th><th class="ns">Note</th></tr></thead><tbody>';
+    allEvts.forEach(e=>{
+      html+='<tr><td class="nw">'+fd(e.date)+'</td>';
+      html+='<td><span style="color:'+(e.type==='mount'?'var(--green)':'var(--blue)')+'">⬆ '+(e.type==='mount'?'Montaggio':'Smontaggio')+'</span></td>';
+      html+='<td style="font-weight:600">'+(SEASON_ICONS[e.season]||'')+' '+esc(e.tireName)+'<div style="font-size:11px;color:var(--text4)">'+esc(e.tireSize)+'</div></td>';
+      html+='<td class="mono">'+fk(e.km)+'</td>';
+      html+='<td class="mono">€'+fmt(e.cost)+'</td>';
+      html+='<td style="color:var(--text4);font-size:12px;max-width:200px">'+esc(e.notes||'')+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  } else {
+    html='<div class="card" style="text-align:center;padding:40px;color:var(--text4)">Nessun evento registrato</div>';
+  }
+  document.getElementById("tiresContent").innerHTML=html;
+}
+
+function rTireStats(v){
+  const tires=v.tires||[];
+  const vLk=getVehicleLastKm(v);
+  const totalCostAll=tires.reduce((s,t)=>s+t.purchaseCost+(t.events||[]).reduce((a,e)=>a+e.cost,0),0);
+  const totalKmAll=tires.reduce((s,t)=>s+(t._cachedKm||calcTireKm(t,vLk)),0);
+  let html='<div class="stat-cards">';
+  html+='<div class="card stat-card"><div class="stat-label">🛞 Treni totali</div><div class="stat-value" style="color:var(--accent)">'+tires.length+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">💸 Investimento gomme</div><div class="stat-value" style="color:var(--yellow)">€'+fmt(totalCostAll)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">🛣️ Km totali su gomme</div><div class="stat-value" style="color:var(--green)">'+fk(totalKmAll)+'</div></div>';
+  html+='</div>';
+  html+='<div class="card"><div class="card-title">Dettaglio per treno</div><div class="table-wrap"><table><thead><tr><th class="ns">Treno</th><th class="ns">Stagione</th><th class="ns">Stato</th><th class="ns tr">Costo acq.</th><th class="ns tr">Costi mont.</th><th class="ns tr">Totale</th><th class="ns tr">Km percorsi</th><th class="ns tr">€/km</th></tr></thead><tbody>';
+  tires.forEach(t=>{
+    const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const cpk=tk>0?tot/tk:0;
+    html+='<tr><td style="font-weight:600">'+(SEASON_ICONS[t.season]||'')+' '+esc(t.brand)+' '+esc(t.model)+'<div style="font-size:11px;color:var(--text4)">'+esc(t.size)+'</div></td>';
+    html+='<td style="color:'+(SEASON_COLORS[t.season]||'#888')+'">'+(SEASONS[t.season]||'')+'</td>';
+    html+='<td><span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'18;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+';border:1px solid '+(TIRE_STATUS_COLORS[t.status]||'#888')+'30">'+(TIRE_STATUS[t.status]||'')+'</span></td>';
+    html+='<td class="tr mono">€'+fmt(t.purchaseCost)+'</td><td class="tr mono">€'+fmt(mc)+'</td>';
+    html+='<td class="tr mono" style="font-weight:700;color:var(--yellow)">€'+fmt(tot)+'</td>';
+    html+='<td class="tr mono" style="color:var(--accent)">'+fk(tk)+'</td>';
+    html+='<td class="tr mono" style="color:var(--blue)">'+(cpk>0?cpk.toFixed(3):'—')+'</td></tr>';
+  });
+  html+='</tbody></table></div></div>';
+  // Charts
+  html+='<div class="grid-2" style="margin-top:16px">';
+  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:280px"><canvas id="tireKmChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:280px"><canvas id="tireCpkChart"></canvas></div></div>';
+  html+='</div>';
+  document.getElementById("tiresContent").innerHTML=html;
+  const activeT=tires.filter(t=>(t._cachedKm||calcTireKm(t,vLk))>0);
+  const chData=activeT.map(t=>{const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);return{name:t.brand+' '+t.model,km:tk,cpk:(t.purchaseCost+mc)/tk,color:SEASON_COLORS[t.season]||'#888'}});
+  if(chData.length){
+    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.km),backgroundColor:chData.map(d=>d.color+'99'),borderColor:chData.map(d=>d.color),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.cpk),backgroundColor:chData.map(d=>d.color),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+  }
+}
+
+// ═══ TIRE FORMS ═══
+function showTireForm(id){
+  const v=V();const t=id?(v.tires||[]).find(x=>x.id===id):null;
+  const d=t||{brand:'',model:'',size:'',season:'summer',dot:'',purchaseDate:'',purchaseCost:0,purchaseDealer:'',qty:4,notes:''};
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join('');
+  // Compute current status for display only
+  const curStatus=t?computeTireStatus(t):'stored';
+  let h='<div class="fg">';
+  h+='<div><label class="label">Marca</label><input class="input" id="tBr" value="'+esc(d.brand)+'" placeholder="Michelin, Pirelli..."></div>';
+  h+='<div><label class="label">Modello</label><input class="input" id="tMo" value="'+esc(d.model)+'" placeholder="Alpine 4..."></div>';
+  h+='<div><label class="label">Misura</label><input class="input" id="tSz" value="'+esc(d.size)+'" placeholder="205/55R16 91V"></div>';
+  h+='<div><label class="label">Stagione</label><select class="input" id="tSe">'+Object.entries(SEASONS).map(([k,v])=>'<option value="'+k+'" '+(d.season===k?'selected':'')+'>'+(SEASON_ICONS[k]||'')+' '+v+'</option>').join('')+'</select></div>';
+  h+='<div><label class="label">Quantità gomme</label><input class="input" type="number" id="tQt" value="'+(d.qty||4)+'" min="1" max="8"'+(t&&(t.units||[]).some(u=>u.status==='disposed')?' disabled title="Non modificabile: unità smaltite presenti"':'')+'></div>';
+  h+='<div><label class="label">Codice DOT</label><input class="input" id="tDot" value="'+esc(d.dot||'')+'" placeholder="es. 2024"></div>';
+  h+='<div class="fs"><div class="fst">Acquisto</div></div>';
+  h+='<div><label class="label">Data acquisto</label><input class="input" type="date" id="tPD" value="'+(d.purchaseDate||'')+'"></div>';
+  h+='<div><label class="label">Costo totale acquisto (€)</label><input class="input" type="number" step="0.01" id="tPC" value="'+(d.purchaseCost||0)+'"></div>';
+  h+='<div><label class="label">Rivenditore</label><input class="input" id="tPDl" list="tdll" value="'+esc(d.purchaseDealer||'')+'"><datalist id="tdll">'+dl+'</datalist></div>';
+  // Status is read-only - computed from events/units
+  h+='<div><label class="label">Stato</label><div class="input" style="background:var(--bg);cursor:default;opacity:.7"><span style="color:'+(TIRE_STATUS_COLORS[curStatus]||'#888')+'">'+(TIRE_STATUS[curStatus]||curStatus)+'</span> <span style="font-size:11px;color:var(--text5)">— calcolato automaticamente</span></div></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="tNo" rows="2">'+esc(d.notes||'')+'</textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svTire(\''+( id||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(t?'Modifica treno gomme':'Nuovo treno gomme',h);
+}
+
+function svTire(eid){
+  const data={brand:document.getElementById('tBr').value,model:document.getElementById('tMo').value,size:document.getElementById('tSz').value,season:document.getElementById('tSe').value,qty:parseInt(document.getElementById('tQt').value)||4,dot:document.getElementById('tDot').value,purchaseDate:document.getElementById('tPD').value,purchaseCost:parseFloat(document.getElementById('tPC').value)||0,purchaseDealer:document.getElementById('tPDl').value,notes:document.getElementById('tNo').value};
+  if(!data.brand||!data.model)return;
+  const v=V();if(!v.tires)v.tires=[];
+  ensureDealer(data.purchaseDealer);
+  if(eid){
+    const t=v.tires.find(x=>x.id===eid);if(t){
+      const disposedCount=(t.units||[]).filter(u=>u.status==='disposed').length;
+      if(disposedCount>0)data.qty=t.units.length;
+      data.status=computeTireStatus(t);
+      Object.assign(t,data);
+      if(!t.units)t.units=[];
+      while(t.units.length<data.qty)t.units.push({status:'active',events:[]});
+      while(t.units.length>data.qty)t.units.pop();
+    }
+  } else {
+    const tid=gid();
+    const units=[];for(let i=0;i<data.qty;i++)units.push({status:'active',events:[]});
+    data.status='stored';
+    v.tires.push({id:tid,events:[],units:units,...data});
+    if(data.purchaseCost>0){
+      v.records.push({id:gid(),date:data.purchaseDate||new Date().toISOString().slice(0,10),km:0,lot:'',description:'Acquisto gomme '+data.brand+' '+data.model+' '+data.size,dealer:data.purchaseDealer||'',type:'GA',qty:data.qty,cost:data.purchaseCost/data.qty,total:data.purchaseCost,ownerId:'current',tireId:tid,tireEvtId:''});
+    }
+  }
+  save();closeModal();render();
+}
+
+
+// ═══ NEW TIRES WIZARD ═══
+function showNewTireWizard(){
+  const v=V();
+  const existing=(v.tires||[]).filter(t=>{
+    if(t.status==='disposed')return false;
+    const activeUnits=(t.units||[]).filter(u=>u.status!=='disposed');
+    return activeUnits.length<4;
+  });
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join('');
+  const tireOpts=existing.map(t=>{
+    const activeCount=(t.units||[]).filter(u=>u.status!=='disposed').length;
+    const freeSlots=4-activeCount;
+    return '<option value="'+t.id+'">'+(SEASON_ICONS[t.season]||'🛞')+' '+esc(t.brand)+' '+esc(t.model)+' ('+activeCount+'/4 – '+freeSlots+' posti liberi)</option>';
+  }).join('');
+  let h='<div class="fg">';
+  h+='<div class="fs"><div class="fst">🛞 Dati gomma</div></div>';
+  h+='<div><label class="label">Marca</label><input class="input" id="ngBr" placeholder="Michelin, Pirelli..."></div>';
+  h+='<div><label class="label">Modello</label><input class="input" id="ngMo" placeholder="Alpine 4..."></div>';
+  h+='<div><label class="label">Misura</label><input class="input" id="ngSz" placeholder="205/55R16 91V"></div>';
+  h+='<div><label class="label">Stagione</label><select class="input" id="ngSe">'+Object.entries(SEASONS).map(([k,v])=>'<option value="'+k+'">'+(SEASON_ICONS[k]||'')+' '+v+'</option>').join('')+'</select></div>';
+  h+='<div><label class="label">Quantità gomme</label><input class="input" type="number" id="ngQt" value="4" min="1" max="4"></div>';
+  h+='<div><label class="label">Codice DOT</label><input class="input" id="ngDot" placeholder="es. 2024"></div>';
+  h+='<div class="fs"><div class="fst">💰 Acquisto</div></div>';
+  h+='<div><label class="label">Data acquisto</label><input class="input" type="date" id="ngPD" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+  h+='<div><label class="label">Km auto al momento</label><input class="input" type="number" id="ngKm" placeholder="0"></div>';
+  h+='<div><label class="label">Costo totale (€)</label><input class="input" type="number" step="0.01" id="ngPC" value="0"></div>';
+  h+='<div><label class="label">Rivenditore</label><input class="input" id="ngPDl" list="ngdll" value=""><datalist id="ngdll">'+dl+'</datalist></div>';
+  h+='<div class="fs"><div class="fst">📦 Assegnazione treno</div></div>';
+  h+='<div class="ff"><label class="label">Assegna a</label><select class="input" id="ngTreno" onchange="document.getElementById(\'ngNewInfo\').style.display=this.value===\'new\'?\'block\':\'none\'">';
+  h+='<option value="new">✨ Crea nuovo treno</option>';
+  h+=tireOpts;
+  h+='</select></div>';
+  h+='<div class="ff" id="ngNewInfo"><p style="font-size:11px;color:var(--text5);padding:4px 0">ℹ️ Il nome del treno verrà generato automaticamente dai dati inseriti.</p></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svNewTires()">💾 Salva</button></div>';
+  h+='</div>';
+  openModal('🛞 Nuove gomme',h);
+}
+
+function svNewTires(){
+  const brand=document.getElementById('ngBr').value.trim();
+  const model=document.getElementById('ngMo').value.trim();
+  const size=document.getElementById('ngSz').value.trim();
+  const season=document.getElementById('ngSe').value;
+  const qty=Math.min(4,Math.max(1,parseInt(document.getElementById('ngQt').value)||4));
+  const dot=document.getElementById('ngDot').value.trim();
+  const purchaseDate=document.getElementById('ngPD').value;
+  const purchaseKm=parseInt(document.getElementById('ngKm').value)||0;
+  const purchaseCost=parseFloat(document.getElementById('ngPC').value)||0;
+  const purchaseDealer=document.getElementById('ngPDl').value.trim();
+  const trenoId=document.getElementById('ngTreno').value;
+  if(!brand||!model)return showToast('❌ Marca e modello obbligatori','err');
+  const v=V();if(!v.tires)v.tires=[];
+  ensureDealer(purchaseDealer);
+
+  if(trenoId==='new'){
+    const tid=gid();
+    const units=[];for(let i=0;i<qty;i++)units.push({events:[],status:'active',addedDate:purchaseDate,addedKm:purchaseKm,isOriginal:true});
+    v.tires.push({id:tid,brand:brand,model:model,size:size,season:season,qty:qty,dot:dot,purchaseDate:purchaseDate,purchaseCost:purchaseCost,purchaseDealer:purchaseDealer,status:'stored',notes:'',events:[],units:units});
+    v.records.push({id:gid(),date:purchaseDate||new Date().toISOString().slice(0,10),km:purchaseKm,lot:'',description:'Acquisto gomme '+brand+' '+model+' '+size,dealer:purchaseDealer,type:'GA',qty:qty,cost:purchaseCost>0?purchaseCost/qty:0,total:purchaseCost,ownerId:'current',tireId:tid,tireEvtId:''});
+    showToast('✅ Treno "'+brand+' '+model+'" creato con '+qty+' gomme');
+  } else {
+    const t=v.tires.find(x=>x.id===trenoId);
+    if(!t)return;
+    if(!t.units)t.units=[];
+    const activeCount=t.units.filter(u=>u.status!=='disposed').length;
+    const freeSlots=4-activeCount;
+    if(qty>freeSlots)return showToast('❌ Solo '+freeSlots+' posti liberi nel treno','err');
+    for(let i=0;i<qty;i++)t.units.push({events:[],status:'active',addedDate:purchaseDate,addedKm:purchaseKm,isOriginal:false});
+    t.qty=(t.units||[]).filter(u=>u.status!=='disposed').length;
+    t.purchaseCost+=purchaseCost;
+    v.records.push({id:gid(),date:purchaseDate||new Date().toISOString().slice(0,10),km:purchaseKm,lot:'',description:'Acquisto gomme '+brand+' '+model+(trenoId!=='new'?' (aggiunta a treno '+t.brand+' '+t.model+')':''),dealer:purchaseDealer,type:'GA',qty:qty,cost:purchaseCost>0?purchaseCost/qty:0,total:purchaseCost,ownerId:'current',tireId:trenoId,tireEvtId:''});
+    showToast('✅ '+qty+' gomme aggiunte al treno "'+t.brand+' '+t.model+'"');
+  }
+  save();closeModal();render();
+}
+
+// ═══ DISPOSE TIRE UNIT ═══
+function showDisposeForm(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  if(!t.units||!t.units.length)return showToast('❌ Nessuna gomma nel treno','err');
+  const activeUnits=t.units.map((u,i)=>({u,i})).filter(x=>x.u.status!=='disposed');
+  const disposedUnits=t.units.map((u,i)=>({u,i})).filter(x=>x.u.status==='disposed');
+
+  if(!activeUnits.length&&!disposedUnits.length)return showToast('❌ Nessuna gomma nel treno','err');
+
+  let h='<div class="fg">';
+  // Sezione smaltimento
+  if(activeUnits.length){
+    h+='<div class="ff"><label class="label">⚠️ Smaltisci gomme</label>';
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">';
+    activeUnits.forEach(x=>{
+      const label=(POS_LABELS[x.i]||'G'+(x.i+1));
+      const km=calcTireUnitKm(t,x.i,getVehicleLastKm(v));
+      h+='<label style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg);border:1px solid var(--border3);border-radius:8px;cursor:pointer"><input type="checkbox" class="dispCk" value="'+x.i+'" style="accent-color:var(--accent)"> <span>'+label+' ('+fk(km)+' km)</span></label>';
+    });
+    h+='</div></div>';
+    h+='<div><label class="label">Motivo</label><select class="input" id="dispReason"><option value="worn">Usura</option><option value="damaged">Danneggiata</option><option value="puncture">Foratura</option><option value="sold">Ceduta</option><option value="other">Altro</option></select></div>';
+    h+='<div><label class="label">Km auto attuali</label><input class="input" type="number" id="dispKm" placeholder="0"></div>';
+    h+='<div><label class="label">Data</label><input class="input" type="date" id="dispDate" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+    h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="dispNotes" rows="2"></textarea></div>';
+  }
+  // Sezione ripristino
+  if(disposedUnits.length){
+    h+='<div class="ff" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><label class="label">♻️ Ripristina gomme smaltite</label>';
+    h+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">';
+    disposedUnits.forEach(x=>{
+      const label=(POS_LABELS[x.i]||'G'+(x.i+1));
+      const reasons={worn:'Usura',damaged:'Danneggiata',puncture:'Foratura',sold:'Ceduta',other:'Altro'};
+      const rText=reasons[x.u.disposeReason]||'';
+      h+='<label style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(232,76,74,.08);border:1px solid rgba(232,76,74,.2);border-radius:8px;cursor:pointer;opacity:.7"><input type="checkbox" class="restoreCk" value="'+x.i+'" style="accent-color:#4ae88a"> <span style="text-decoration:line-through">'+label+'</span> <span style="font-size:10px;color:var(--text5)">'+rText+(x.u.disposeDate?' '+fd(x.u.disposeDate):'')+'</span></label>';
+    });
+    h+='</div></div>';
+  }
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button>';
+  if(activeUnits.length)h+='<button class="btn btn-d" onclick="svDispose(\''+tireId+'\')">⚠️ Smaltisci</button>';
+  if(disposedUnits.length)h+='<button class="btn btn-p" onclick="svRestore(\''+tireId+'\')">♻️ Ripristina</button>';
+  h+='</div></div>';
+  openModal('⚠️ Smaltimento / Ripristino – '+esc(t.brand)+' '+esc(t.model),h);
+}
+
+function svDispose(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  const checks=document.querySelectorAll('.dispCk:checked');
+  if(!checks.length)return showToast('❌ Seleziona almeno una gomma','err');
+  const reason=document.getElementById('dispReason').value;
+  const km=parseInt(document.getElementById('dispKm').value)||0;
+  const date=document.getElementById('dispDate').value;
+  const notes=document.getElementById('dispNotes').value;
+  const reasons={worn:'Usura',damaged:'Danneggiata',puncture:'Foratura',sold:'Ceduta',other:'Altro'};
+  const mounted=isTireMounted(t);
+  const activeCount=t.units.filter(u=>u.status!=='disposed').length;
+  const disposeCount=checks.length;
+
+  // Smontaggio SOLO se tutte le gomme attive vengono smaltite (smaltimento totale)
+  if(mounted&&disposeCount>=activeCount){
+    const unmEvtId=gid();
+    const unmRecId=gid();
+    t.events.push({id:unmEvtId,type:'unmount',date:date,km:km,cost:0,dealer:'',notes:'Smontaggio per smaltimento',recordId:unmRecId});
+    v.records.push({id:unmRecId,date:date,km:km,lot:'',description:'Smontaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:'',type:'GS',qty:1,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:unmEvtId});
+    if(t.units){t.units.forEach(u=>{if(u.status!=='disposed'){u.events.push({type:'unmount',date:date,km:km})}})}
+  }
+
+  let disposedLabels=[];
+  checks.forEach(ck=>{
+    const idx=parseInt(ck.value);
+    const unit=t.units[idx];if(!unit)return;
+    unit.status='disposed';
+    unit.disposeDate=date;
+    unit.disposeReason=reason;
+    unit.disposeKm=km;
+    disposedLabels.push(POS_LABELS[idx]||'G'+(idx+1));
+  });
+  t.qty=t.units.filter(u=>u.status!=='disposed').length;
+  t.status=computeTireStatus(t);
+  v.records.push({id:gid(),date:date,km:km,lot:'',description:'Smaltimento gomma '+disposedLabels.join(', ')+' ('+t.brand+' '+t.model+') – '+(reasons[reason]||reason)+(notes?' – '+notes:''),dealer:'',type:'GD',qty:disposedLabels.length,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:''});
+  recalcAllTireKm(v);
+  save();closeModal();render();
+  showToast('⚠️ '+disposedLabels.length+' gomma/e smaltite');
+}
+
+function svRestore(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  const checks=document.querySelectorAll('.restoreCk:checked');
+  if(!checks.length)return showToast('❌ Seleziona almeno una gomma da ripristinare','err');
+  let restoredLabels=[];
+  checks.forEach(ck=>{
+    const idx=parseInt(ck.value);
+    const unit=t.units[idx];if(!unit)return;
+    unit.status='active';
+    delete unit.disposeDate;delete unit.disposeReason;delete unit.disposeKm;
+    restoredLabels.push(POS_LABELS[idx]||'G'+(idx+1));
+  });
+  t.qty=t.units.filter(u=>u.status!=='disposed').length;
+  t.status=computeTireStatus(t);
+  // Rimuovi i record GD corrispondenti (l'ultimo che contiene queste gomme)
+  const gdRecs=(v.records||[]).filter(r=>r.tireId===tireId&&r.type==='GD').sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  let remaining=restoredLabels.length;
+  for(let i=0;i<gdRecs.length&&remaining>0;i++){
+    const qty=gdRecs[i].qty||0;
+    if(qty<=remaining){
+      v.records=v.records.filter(r=>r.id!==gdRecs[i].id);
+      remaining-=qty;
+    } else {
+      gdRecs[i].qty-=remaining;
+      gdRecs[i].description=gdRecs[i].description.replace(/\d+ gomma/,gdRecs[i].qty+' gomma');
+      remaining=0;
+    }
+  }
+  recalcAllTireKm(v);
+  save();closeModal();render();
+  showToast('♻️ '+restoredLabels.length+' gomma/e ripristinate');
+}
+
+function delTire(id){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===id);if(!t)return;
+  const tireRecs=(v.records||[]).filter(r=>r.tireId===id);
+  const nonGA=tireRecs.filter(r=>r.type!=='GA');
+  if(nonGA.length){
+    openModal('⚠️ Impossibile eliminare','<p style="color:var(--text2);margin-bottom:12px">Per eliminare il treno <b>'+esc(t.brand)+' '+esc(t.model)+'</b> devi prima eliminare dal registro le '+nonGA.length+' voci operative (montaggi, smontaggi, smaltimenti).</p><p style="font-size:12px;color:var(--text4);margin-bottom:16px">Rimangono ammesse solo le voci di acquisto (GA) che verranno rimosse automaticamente.</p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-p" onclick="closeModal()">OK</button></div>');
+    return;
+  }
+  if(!confirm('Eliminare il treno "'+t.brand+' '+t.model+'" e le voci di acquisto associate?'))return;
+  v.tires=(v.tires||[]).filter(x=>x.id!==id);
+  v.records=(v.records||[]).filter(r=>r.tireId!==id);
+  recalcAllTireKm(v);
+  save();closeModal();render();
+  showToast('🗑️ Treno "'+t.brand+' '+t.model+'" eliminato');
+}
+
+// Mount form
+function showTireMountForm(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  const mounted=getMountedTires(v);
+  const mountedNames=mounted.filter(m=>m.id!==tireId).map(m=>m.brand+' '+m.model).join(', ');
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join('');
+  let h='<div class="fg">';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="meD" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+  h+='<div><label class="label">Km auto</label><input class="input" type="number" id="meK" placeholder="0"></div>';
+  h+='<div><label class="label">Costo montaggio (€)</label><input class="input" type="number" step="0.01" id="meC" value="0"></div>';
+  h+='<div><label class="label">Rivenditore/Officina</label><input class="input" id="meDl" list="medll" value=""><datalist id="medll">'+dl+'</datalist></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="meNo" rows="2"></textarea></div>';
+  if(mountedNames)h+='<div class="ff" style="margin-top:4px"><p style="font-size:12px;padding:8px 12px;background:rgba(74,159,232,.1);border:1px solid rgba(74,159,232,.2);border-radius:8px;color:var(--blue)">📦 Smontaggio automatico: <strong>'+esc(mountedNames)+'</strong> → deposito</p></div>';
+  h+='<div class="ff" style="margin-top:4px"><p style="font-size:11px;color:var(--text5)">ℹ️ Verrà creata una voce nel Registro manutenzioni.</p></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svTireEvt(\''+tireId+'\')">💾 Monta</button></div>';
+  h+='</div>';
+  openModal('🔧 Montaggio '+esc(t.brand)+' '+esc(t.model),h);
+}
+
+function svTireEvt(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  if(!t.events)t.events=[];
+  const evtDate=document.getElementById('meD').value;
+  const evtKm=parseInt(document.getElementById('meK').value)||0;
+  const evtCost=parseFloat(document.getElementById('meC').value)||0;
+  const evtDealer=document.getElementById('meDl').value;
+  const evtNotes=document.getElementById('meNo').value;
+  ensureDealer(evtDealer);
+
+  // AUTO-UNMOUNT: smonta QUALSIASI treno attualmente montato
+  getMountedTires(v).forEach(other=>{
+    if(other.id===tireId)return;
+    const unmId=gid();
+    const unmEvt={id:unmId,type:'unmount',date:evtDate,km:evtKm,cost:0,dealer:evtDealer,notes:'Smontaggio automatico (montate '+t.brand+' '+t.model+')',recordId:''};
+    other.events.push(unmEvt);
+    other.status='stored';
+    // Update per-unit events
+    if(other.units){other.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:evtDate,km:evtKm})})}
+    // Registro record
+    const unmRecId=gid();
+    v.records.push({id:unmRecId,date:evtDate,km:evtKm,lot:'',description:'Smontaggio gomme '+other.brand+' '+other.model+' ('+(SEASONS[other.season]||'')+')',dealer:evtDealer,type:'GS',qty:1,cost:0,total:0,ownerId:'current',tireId:other.id,tireEvtId:unmId});
+    unmEvt.recordId=unmRecId;
+  });
+
+  // Mount the tire
+  const evtId=gid();
+  const evt={id:evtId,type:'mount',date:evtDate,km:evtKm,cost:evtCost,dealer:evtDealer,notes:evtNotes};
+  t.events.push(evt);
+  t.status=computeTireStatus(t);
+  // Update per-unit events
+  if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'mount',date:evtDate,km:evtKm})})}
+  // Registro record
+  const recId=gid();
+  v.records.push({id:recId,date:evtDate,km:evtKm,lot:'',description:'Montaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:evtDealer,type:'GM',qty:1,cost:evtCost,total:evtCost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
+  evt.recordId=recId;
+  recalcAllTireKm(v);
+  save();closeModal();render();
+}
+
+function showTireUnmountForm(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join('');
+  let h='<div class="fg">';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="muD" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+  h+='<div><label class="label">Km auto</label><input class="input" type="number" id="muK" placeholder="0"></div>';
+  h+='<div><label class="label">Costo smontaggio (€)</label><input class="input" type="number" step="0.01" id="muC" value="0"></div>';
+  h+='<div><label class="label">Rivenditore/Officina</label><input class="input" id="muDl" list="mudll" value=""><datalist id="mudll">'+dl+'</datalist></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="muNo" rows="2"></textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svTireUnmount(\''+tireId+'\')">📦 Smonta</button></div>';
+  h+='</div>';
+  openModal('📦 Smontaggio '+esc(t.brand)+' '+esc(t.model),h);
+}
+
+function svTireUnmount(tireId){
+  const v=V();const t=(v.tires||[]).find(x=>x.id===tireId);if(!t)return;
+  if(!t.events)t.events=[];
+  const date=document.getElementById('muD').value;
+  const km=parseInt(document.getElementById('muK').value)||0;
+  const cost=parseFloat(document.getElementById('muC').value)||0;
+  const dealer=document.getElementById('muDl').value;
+  const notes=document.getElementById('muNo').value;
+  ensureDealer(dealer);
+  const evtId=gid();
+  const evt={id:evtId,type:'unmount',date:date,km:km,cost:cost,dealer:dealer,notes:notes};
+  t.events.push(evt);
+  t.status=computeTireStatus(t);
+  if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:date,km:km})})}
+  const recId=gid();
+  v.records.push({id:recId,date:date,km:km,lot:'',description:'Smontaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:dealer,type:'GS',qty:1,cost:cost,total:cost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
+  evt.recordId=recId;
+  recalcAllTireKm(v);
+  save();closeModal();render();
+}
+
+function showTireRecs(tireId){S.tab='records';S._tireFilter=tireId;render()}
+
+// ═══ VEHICLE DETAIL ═══
+function rVeh(){
+  const v=V();if(!v)return;const s=gS(v,'current');
+  let html='<div class="fi">';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
+  html+='<h2 style="font-size:20px">🚘 '+esc(v.name)+(v.status==='archived'?' <span class="badge-a">ARCHIVIATA</span>':'')+'</h2>';
+  html+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+  html+='<button class="btn-o" onclick="showVF(\''+v.id+'\')">✏️ Modifica</button>';
+  if(v.status==='active')html+='<button class="btn-o" style="border-color:#e84c4a;color:#e84c4a" onclick="showAF(\''+v.id+'\')">🗄️ Archivia</button>';
+  else html+='<button class="btn-o" style="border-color:var(--green);color:var(--green)" onclick="restV(\''+v.id+'\')">♻️ Ripristina</button>';
+  html+='</div></div>';
+
+  // Vehicle data
+  const fields=[["Nome",v.name],["Marca",v.brand],["Modello",v.model],["Anno",v.year],["Targa",v.plate],["Alimentazione",v.fuel],["Motorizzazione",v.engine],["N° Telaio",v.vin],["Data acquisto",v.purchaseDate?fd(v.purchaseDate):""],["Km acquisto",v.purchaseKm?fk(v.purchaseKm)+" km":""],["Prezzo acquisto",v.purchasePrice?"€"+fmt(v.purchasePrice):""]];
+  html+='<div class="card" style="margin-bottom:20px"><div class="card-title">Dati veicolo</div><div class="ig">';
+  fields.forEach(([l,val])=>{html+='<div class="ii"><div class="l3">'+l+'</div><div class="vl">'+esc(String(val||'—'))+'</div></div>'});
+  html+='</div>';
+  if(v.notes)html+='<div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border3);font-size:13px;color:var(--text2)"><strong style="color:var(--text3)">Note:</strong> '+esc(v.notes)+'</div>';
+  html+='</div>';
+
+  // Owners section
+  html+='<div class="card" style="margin-bottom:20px">';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div class="card-title" style="margin:0">👤 Proprietari</div><button class="btn-o btn-sm" onclick="showOwnerForm(\''+v.id+'\')">＋ Aggiungi</button></div>';
+  html+='<div class="owner-card" style="border-color:var(--accent)"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:700;color:var(--accent)">Proprietario attuale</div><div style="font-size:12px;color:var(--text4)">Dal '+(v.purchaseDate?fd(v.purchaseDate):'—')+(v.purchaseKm?' · km '+fk(v.purchaseKm):'')+'</div></div><div style="font-size:12px;color:var(--text3)">'+s.cnt+' operaz. · €'+fmt(s.tot)+'</div></div></div>';
+  (v.owners||[]).forEach(o=>{
+    const oRecs=aR(v).filter(r=>r.ownerId===o.id);
+    const oTot=oRecs.reduce((s,r)=>s+r.total,0);
+    html+='<div class="owner-card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><div style="font-weight:600">'+esc(o.name)+'</div><div style="font-size:12px;color:var(--text4)">'+(o.from?fd(o.from):'?')+' → '+(o.to?fd(o.to):'?')+(o.kmFrom?' · km '+fk(o.kmFrom):'')+(o.kmTo?' → '+fk(o.kmTo):'')+'</div>';
+    if(o.notes)html+='<div style="font-size:11px;color:var(--text5);margin-top:4px">'+esc(o.notes)+'</div>';
+    html+='</div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:var(--text3)">'+oRecs.length+' operaz. · €'+fmt(oTot)+'</span>';
+    html+='<button class="btn-i" onclick="showOwnerForm(\''+v.id+'\',\''+o.id+'\')">✏️</button>';
+    html+='<button class="btn-i" onclick="delOwner(\''+v.id+'\',\''+o.id+'\')">🗑️</button>';
+    html+='</div></div></div>';
+  });
+  html+='</div>';
+
+  // Archive data
+  if(v.status==='archived'){
+    html+='<div class="card" style="margin-bottom:20px;border-color:rgba(232,76,74,.3)"><div class="card-title" style="color:#e84c4a">🗄️ Dati archiviazione</div><div class="ig">';
+    [["Motivo",AR[v.archiveReason]||"—"],["Data",v.archiveDate?fd(v.archiveDate):"—"],["Km finali",v.archiveKm?fk(v.archiveKm)+" km":"—"],["Prezzo vendita",v.archivePrice?"€"+fmt(v.archivePrice):"—"]].forEach(([l,val])=>{html+='<div class="ii"><div class="l3">'+l+'</div><div class="vl">'+val+'</div></div>'});
+    html+='</div>';
+    if(v.archiveNotes)html+='<div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:8px;border:1px solid var(--border3);font-size:13px;color:var(--text2)">'+esc(v.archiveNotes)+'</div>';
+    html+='</div>';
+  }
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+}
+
+// ═══ OWNERS MANAGEMENT ═══
+function showOwnerForm(vid,oid){
+  const v=S.vehicles.find(x=>x.id===vid);if(!v)return;
+  if(!v.owners)v.owners=[];
+  const o=oid?v.owners.find(x=>x.id===oid):null;
+  const d=o||{name:'',from:'',to:'',kmFrom:0,kmTo:0,notes:''};
+  let h='<div class="fg">';
+  h+='<div class="ff"><label class="label">Nome proprietario</label><input class="input" id="oN" value="'+esc(d.name)+'" placeholder="es. Mario Rossi"></div>';
+  h+='<div><label class="label">Data inizio possesso</label><input class="input" type="date" id="oF" value="'+(d.from||'')+'"></div>';
+  h+='<div><label class="label">Data fine possesso</label><input class="input" type="date" id="oT" value="'+(d.to||'')+'"></div>';
+  h+='<div><label class="label">Km inizio</label><input class="input" type="number" id="oKF" value="'+(d.kmFrom||0)+'"></div>';
+  h+='<div><label class="label">Km fine</label><input class="input" type="number" id="oKT" value="'+(d.kmTo||0)+'"></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="oNo" rows="2">'+esc(d.notes||'')+'</textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svOwner(\''+vid+'\',\''+(oid||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(o?'Modifica proprietario':'Nuovo proprietario precedente',h);
+}
+
+function svOwner(vid,oid){
+  const v=S.vehicles.find(x=>x.id===vid);if(!v)return;
+  if(!v.owners)v.owners=[];
+  const data={name:document.getElementById('oN').value,from:document.getElementById('oF').value,to:document.getElementById('oT').value,kmFrom:parseInt(document.getElementById('oKF').value)||0,kmTo:parseInt(document.getElementById('oKT').value)||0,notes:document.getElementById('oNo').value};
+  if(!data.name)return;
+  if(oid){const o=v.owners.find(x=>x.id===oid);if(o)Object.assign(o,data)}
+  else v.owners.push({id:gid(),...data});
+  save();closeModal();render();
+}
+
+function delOwner(vid,oid){
+  if(!confirm('Eliminare questo proprietario?'))return;
+  const v=S.vehicles.find(x=>x.id===vid);if(!v)return;
+  v.owners=(v.owners||[]).filter(o=>o.id!==oid);
+  // Remove ownerId from records of this owner
+  v.records.forEach(r=>{if(r.ownerId===oid)r.ownerId='current'});
+  save();render();
+}
+
+// ═══ DEALERS & TYPES ═══
+function rDlr(){
+  let html='<div class="fi"><div class="tp">';
+  html+='<button class="tpl '+(S.ds==='dealers'?'active':'')+'" onclick="S.ds=\'dealers\';rDlr()">📒 Rivenditori</button>';
+  html+='<button class="tpl '+(S.ds==='types'?'active':'')+'" onclick="S.ds=\'types\';rDlr()">🏷️ Tipi operazione</button>';
+  html+='</div><div id="rc"></div></div>';
+  document.getElementById("C").innerHTML=html;
+  if(S.ds==='dealers')rDL();else rTL();
+}
+function rDL(){
+  let html='<div class="toolbar"><div class="sp"></div><button class="btn btn-p btn-sm" onclick="showDF()">＋ Nuovo rivenditore</button></div>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Nome</th><th class="ns">Città</th><th class="ns">Telefono</th><th class="ns">Note</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
+  S.dealers.forEach(d=>{html+='<tr><td style="font-weight:600">'+esc(d.name)+'</td><td style="color:var(--text3)">'+esc(d.city||'')+'</td><td class="mono">'+esc(d.phone||'')+'</td><td style="color:var(--text4);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(d.notes||'')+'</td><td class="nw"><button class="btn-i" onclick="showDF(\''+d.id+'\')">✏️</button><button class="btn-i" onclick="dDlr(\''+d.id+'\')">🗑️</button></td></tr>'});
+  html+='</tbody></table></div>';
+  document.getElementById("rc").innerHTML=html;
+}
+function rTL(){
+  const usedTypes=new Set();S.vehicles.forEach(v=>(v.records||[]).forEach(r=>usedTypes.add(r.type)));
+  let html='<div class="toolbar"><div class="sp"></div><button class="btn btn-p btn-sm" onclick="showTF()">＋ Nuovo tipo</button></div>';
+  // Tipi operazioni normali raggruppati
+  html+='<div style="margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text3)">⚙️ Operazioni veicolo</div>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Codice</th><th class="ns">Etichetta</th><th class="ns">Gruppo</th><th class="ns">Icona</th><th class="ns">Colore</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
+  Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0).forEach(([k,t])=>{
+    const inUse=usedTypes.has(k);const g=typeGroup(k);const gi=TYPE_GROUPS[g]||TYPE_GROUPS.altro;
+    html+='<tr><td class="mono" style="font-weight:600">'+esc(k)+'</td><td>'+esc(t.label)+'</td><td><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+gi.color+'18;color:'+gi.color+';font-weight:600">'+gi.icon+' '+gi.label+'</span></td><td style="font-size:18px">'+t.icon+'</td><td><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+t.color+';vertical-align:middle"></span> <span class="mono" style="color:var(--text3)">'+t.color+'</span></td><td class="nw"><button class="btn-i" onclick="showTF(\''+k+'\')">✏️</button>'+(inUse?'<span style="font-size:10px;color:var(--text5)" title="In uso nel registro">🔒</span>':'<button class="btn-i" onclick="dTyp(\''+k+'\')">🗑️</button>')+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+  // Tipi operazioni gomme
+  html+='<div style="margin-top:20px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text3)">🛞 Operazioni gomme</div>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Codice</th><th class="ns">Etichetta</th><th class="ns">Icona</th><th class="ns">Colore</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
+  Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)>=0).forEach(([k,t])=>{html+='<tr><td class="mono" style="font-weight:600">'+esc(k)+'</td><td>'+esc(t.label)+'</td><td style="font-size:18px">'+t.icon+'</td><td><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+t.color+';vertical-align:middle"></span> <span class="mono" style="color:var(--text3)">'+t.color+'</span></td><td class="nw"><button class="btn-i" onclick="showTF(\''+k+'\')">✏️</button><span style="font-size:10px;color:var(--text5)" title="Tipo di sistema">🔒</span></td></tr>'});
+  html+='</tbody></table></div>';
+  document.getElementById("rc").innerHTML=html;
+}
+
+// ═══ ARCHIVE ═══
+function rArc(){
+  const a=arcV();
+  let html='<div class="fi"><h2 style="font-size:18px;margin-bottom:20px">🗄️ Archivio veicoli</h2>';
+  if(!a.length)html+='<div class="card" style="text-align:center;padding:40px;color:var(--text4)"><p style="font-size:36px;margin-bottom:8px">🚗</p><p>Nessun veicolo archiviato</p></div>';
+  a.forEach(v=>{
+    const s=gS(v,'current');
+    html+='<div class="ac"><div style="font-size:28px">🚘</div><div style="flex:1"><div style="font-size:15px;font-weight:600">'+esc(v.name)+'</div><div style="font-size:12px;color:var(--text4)">'+v.year+' · '+v.fuel+(v.plate?' · '+v.plate:'')+' · '+fk(s.mk)+' km · €'+fmt(s.tot)+(v.archivePrice?' · Venduta: €'+fmt(v.archivePrice):'')+'</div></div>';
+    html+='<span style="font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;background:'+(AC[v.archiveReason]||'#888')+'20;color:'+(AC[v.archiveReason]||'#888')+';border:1px solid '+(AC[v.archiveReason]||'#888')+'30">'+(AR[v.archiveReason]||'Archiviata')+(v.archiveDate?' · '+fd(v.archiveDate):'')+'</span>';
+    html+='<div style="display:flex;gap:6px"><button class="btn-o btn-sm" onclick="S.av=\''+v.id+'\';S.tab=\'vehicle\';render()">Dettagli</button><button class="btn-o btn-sm" style="border-color:var(--green);color:var(--green)" onclick="restV(\''+v.id+'\')">♻️</button></div></div>';
+  });
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+}
+
+// ═══ EXPORT ═══
+function rExp(){
+  let html='<div class="fi"><h2 style="font-size:18px;margin-bottom:20px">📤 Esportazione dati</h2>';
+  html+='<div class="grid-2">';
+  html+='<div class="card"><div class="card-title">💾 Backup / Ripristino</div><p style="color:var(--text4);font-size:13px;margin-bottom:16px">Backup completo di tutti i dati in formato JSON.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" onclick="downloadJSON(false)">💾 Salva backup JSON</button><button class="btn btn-s" onclick="loadJSONFile()">📂 Carica backup JSON</button></div></div>';
+  html+='<div class="card"><div class="card-title">📋 Esporta registro veicolo</div><select class="input" id="ev" style="margin-bottom:12px">'+S.vehicles.map(v=>'<option value="'+v.id+'">'+esc(v.name)+(v.status==='archived'?' (arch.)':'')+'</option>').join("")+'</select><button class="btn btn-p" onclick="expVehicleJSON()">📥 Esporta JSON</button></div>';
+  html+='</div>';
+  html+='<div class="grid-2" style="margin-top:16px">';
+  html+='<div class="card"><div class="card-title">📒 Anagrafica rivenditori</div><button class="btn-o" onclick="expDealersJSON()">📥 Esporta JSON</button></div>';
+  html+='<div class="card"><div class="card-title">🛞 Gestione gomme</div><button class="btn-o" onclick="expTiresJSON()">📥 Esporta JSON</button></div>';
+  html+='</div>';
+  html+='<div style="margin-top:20px"><div class="card"><div class="card-title">📄 Scheda veicolo PDF</div><p style="color:var(--text4);font-size:13px;margin-bottom:16px">Genera un PDF completo con anagrafica, riepilogo spese, storico gomme per il veicolo selezionato.</p><select class="input" id="pdfV" style="margin-bottom:12px;max-width:300px">'+S.vehicles.map(v=>'<option value="'+v.id+'">'+esc(v.name)+(v.status==='archived'?' (arch.)':'')+'</option>').join("")+'</select><div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3);cursor:pointer"><input type="checkbox" id="pdfIncReg" checked style="width:16px;height:16px;accent-color:var(--accent)"> Includi registro completo</label></div><button class="btn btn-p" onclick="genPDF()">📄 Genera PDF</button></div></div>';
+  html+='</div>';
+  document.getElementById("C").innerHTML=html;
+}
+
+// ═══ MODALS ═══
+function openModal(t,b){document.getElementById("MT").textContent=t;document.getElementById("MB").innerHTML=b;document.getElementById("MO").style.display="flex"}
+function closeModal(){document.getElementById("MO").style.display="none"}
+
+// Record form - specializzato per gomme vs normali
+function showRF(id){
+  const v=V();const r=id?aR(v).find(x=>x.id===id):null;const e=!!r;
+  if(e&&isTireRecord(r)){showTireRecordForm(id);return}
+  const d=r||{date:new Date().toISOString().slice(0,10),km:"",lot:"",description:"",dealer:"",type:"R",qty:1,cost:"",total:"",ownerId:'current',tireId:""};
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join("");
+  const oOpts='<option value="current" '+((!d.ownerId||d.ownerId==='current')?'selected':'')+'">Proprietario attuale</option>'+(v.owners||[]).map(o=>'<option value="'+o.id+'" '+(d.ownerId===o.id?'selected':'')+'>'+esc(o.name)+'</option>').join('');
+  const hasOwners=v.owners&&v.owners.length>0;
+  let h='<div class="fg">';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="fD" value="'+(d.date||'')+'"></div>';
+  h+='<div><label class="label">Chilometri</label><input class="input" type="number" id="fK" value="'+(d.km||'')+'" placeholder="0"></div>';
+  h+='<div class="ff"><label class="label">Descrizione</label><input class="input" id="fDe" value="'+esc(d.description||'')+'"></div>';
+  h+='<div><label class="label">Rivenditore</label><input class="input" id="fDl" list="dll" value="'+esc(d.dealer||'')+'"><datalist id="dll">'+dl+'</datalist></div>';
+  h+='<div><label class="label">Tipo</label><select class="input" id="fT">'+Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0).map(([k,t])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+t.icon+' '+t.label+'</option>').join("")+'</select></div>';
+  h+='<div><label class="label">Lotto</label><input class="input" id="fL" value="'+esc(d.lot||'')+'"></div>';
+  h+='<div><label class="label">Quantità</label><input class="input" type="number" id="fQ" value="'+(d.qty||1)+'" min="1" oninput="cT()"></div>';
+  h+='<div><label class="label">Costo unit. (€)</label><input class="input" type="number" step="0.01" id="fC" value="'+(d.cost||'')+'" oninput="cT()"></div>';
+  h+='<div><label class="label">Totale (€)</label><input class="input" type="number" step="0.01" id="fTo" value="'+(d.total||'')+'"></div>';
+  if(hasOwners)h+='<div><label class="label">👤 Proprietario</label><select class="input" id="fO">'+oOpts+'</select></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svR(\''+(id||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(e?"Modifica Voce":"Nuova Voce",h);
+}
+
+// Editor specializzato per record legati a gomme
+function showTireRecordForm(id){
+  const v=V();const r=aR(v).find(x=>x.id===id);if(!r)return;
+  const t=(v.tires||[]).find(x=>x.id===r.tireId);
+  const tireName=t?(t.brand+' '+t.model):'Treno sconosciuto';
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join("");
+  let h='<div class="fg">';
+  h+='<div class="ff"><div style="padding:10px 14px;background:rgba(232,196,74,.08);border:1px solid rgba(232,196,74,.2);border-radius:8px;font-size:13px;color:#e8c44a;display:flex;align-items:center;gap:8px">🛞 <strong>'+esc(tireName)+'</strong><span style="color:var(--text4);font-size:11px"> — le modifiche si sincronizzano con la gestione gomme</span></div></div>';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="fD" value="'+(r.date||'')+'"></div>';
+  h+='<div><label class="label">Km auto</label><input class="input" type="number" id="fK" value="'+(r.km||'')+'" placeholder="0"></div>';
+  h+='<div class="ff"><label class="label">Descrizione</label><input class="input" id="fDe" value="'+esc(r.description||'')+'"></div>';
+  h+='<div><label class="label">Rivenditore / Officina</label><input class="input" id="fDl" list="dll" value="'+esc(r.dealer||'')+'"><datalist id="dll">'+dl+'</datalist></div>';
+  h+='<div><label class="label">Tipo operazione gomme</label><select class="input" id="fT">'+TIRE_TYPES.map(k=>'<option value="'+k+'" '+(r.type===k?'selected':'')+'>'+ti(k)+' '+tl(k)+'</option>').join("")+'</select></div>';
+  h+='<div><label class="label">Quantità</label><input class="input" type="number" id="fQ" value="'+(r.qty||1)+'" min="1" oninput="cT()"></div>';
+  h+='<div><label class="label">Costo unit. (€)</label><input class="input" type="number" step="0.01" id="fC" value="'+(r.cost||'')+'" oninput="cT()"></div>';
+  h+='<div><label class="label">Totale (€)</label><input class="input" type="number" step="0.01" id="fTo" value="'+(r.total||'')+'"></div>';
+  h+='<div style="display:none"><input id="fL" value="'+esc(r.lot||'')+'"></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svR(\''+id+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal('🛞 Modifica voce gomme',h);
+}
+
+function cT(){const c=parseFloat(document.getElementById("fC").value)||0;const q=parseInt(document.getElementById("fQ").value)||1;document.getElementById("fTo").value=(c*q).toFixed(2)}
+
+function svR(eid){
+  const v=V();const existing=eid?aR(v).find(x=>x.id===eid):null;
+  const r={id:eid||gid(),date:document.getElementById("fD").value,km:parseInt(document.getElementById("fK").value)||0,lot:document.getElementById("fL").value,description:document.getElementById("fDe").value,dealer:document.getElementById("fDl").value,type:document.getElementById("fT").value,qty:parseInt(document.getElementById("fQ").value)||1,cost:parseFloat(document.getElementById("fC").value)||0,total:parseFloat(document.getElementById("fTo").value)||0,ownerId:document.getElementById("fO")?document.getElementById("fO").value:'current',tireId:existing?.tireId||'',tireEvtId:existing?.tireEvtId||''};
+  if(!r.description)return;ensureDealer(r.dealer);
+  if(eid)v.records=v.records.map(x=>x.id===eid?r:x);else v.records.push(r);
+  recalcAllTireKm(v);
+  save();closeModal();render();
+}
+
+function cDel(id){
+  const v=V();const rec=v.records.find(r=>r.id===id);if(!rec)return;
+  const isTire=rec&&rec.tireId;
+  if(isTire&&rec.type==='GA'){
+    const t=(v.tires||[]).find(x=>x.id===rec.tireId);
+    const tireName=t?(t.brand+' '+t.model):'';
+    // Check if this is the primary GA (first/original purchase) or a secondary GA (added tires)
+    const allGA=(v.records||[]).filter(r=>r.tireId===rec.tireId&&r.type==='GA').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    const isPrimaryGA=allGA.length>0&&allGA[0].id===id;
+    let otherRecs;
+    if(isPrimaryGA){
+      // Primary purchase: block if ANY non-GA records exist for this tire
+      otherRecs=(v.records||[]).filter(r=>r.tireId===rec.tireId&&r.id!==id&&r.type!=='GA');
+    } else {
+      // Secondary purchase (added tires): only block if there are GM/GS records
+      // that were created AFTER this GA and reference the same tire, excluding
+      // records that existed before this GA (by date comparison)
+      const gaDate=rec.date||'';
+      const gaKm=rec.km||0;
+      // Find units added by this GA (units with addedKm matching this GA's km)
+      const addedUnits=t&&t.units?t.units.filter(u=>!u.isOriginal&&u.addedKm===gaKm):[];
+      if(addedUnits.length){
+        // Only block if there are GM/GS specifically for these added units
+        // (records at or after the GA's km that aren't the primary tire operations)
+        otherRecs=(v.records||[]).filter(r=>r.tireId===rec.tireId&&r.id!==id&&r.type!=='GA'&&(r.km||0)>=gaKm&&(r.date||'')>=gaDate&&!allGA.some(g=>g.id===r.id));
+        // Exclude the existing mount/unmount records from BEFORE this GA
+        const preExisting=(v.records||[]).filter(r=>r.tireId===rec.tireId&&r.type!=='GA'&&r.tireEvtId);
+        otherRecs=otherRecs.filter(r=>!preExisting.some(p=>p.id===r.id));
+      } else {
+        // No matching units found — allow deletion (cleanup scenario)
+        otherRecs=[];
+      }
+    }
+    if(otherRecs.length){
+      openModal('⚠️ Impossibile eliminare','<p style="color:var(--text2);margin-bottom:12px">Non puoi eliminare l\'acquisto di <b>'+esc(tireName)+'</b> perché ci sono ancora '+otherRecs.length+' voci operative nel registro (montaggi, smontaggi, smaltimenti).</p><p style="font-size:12px;color:var(--text4);margin-bottom:16px">Elimina prima le voci operative dal registro.</p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-p" onclick="closeModal()">OK</button></div>');
+      return;
+    }
+    // Unico GA (o ultimo GA) senza voci operative: cancella record + treno
+    const otherGA=(v.records||[]).filter(r=>r.tireId===rec.tireId&&r.type==='GA'&&r.id!==id);
+    const willDeleteTire=otherGA.length===0;
+    const msg=willDeleteTire
+      ?'<p style="color:var(--text2);margin-bottom:12px">Eliminando l\'acquisto di <b>'+esc(tireName)+'</b> verrà eliminato anche il treno dalla gestione gomme.</p>'
+      :'<p style="color:var(--text2);margin-bottom:12px">Eliminare questa voce di acquisto?</p>';
+    openModal("Elimina acquisto",msg+'<div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-d" onclick="dRecGA(\''+id+'\','+willDeleteTire+')">🗑️ Elimina</button></div>');
+    return;
+  }
+  const tireWarn=isTire?'<p style="font-size:12px;color:var(--blue);margin-bottom:12px;padding:8px;background:rgba(74,159,232,.08);border-radius:6px">🛞 Questa voce è collegata alla gestione gomme. Eliminandola, gli eventi del treno verranno aggiornati.</p>':'';
+  openModal("Elimina voce",'<p style="color:var(--text2);margin-bottom:12px">Eliminare questa voce?</p>'+tireWarn+'<div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-d" onclick="dRec(\''+id+'\')">🗑️ Elimina</button></div>');
+}
+function dRecGA(id,deleteTire){
+  const v=V();
+  const rec=v.records.find(r=>r.id===id);
+  const tireId=rec?rec.tireId:'';
+  if(!deleteTire&&tireId&&rec){
+    // Secondary GA: remove the units that were added with this purchase
+    const t=(v.tires||[]).find(x=>x.id===tireId);
+    if(t&&t.units){
+      const gaKm=rec.km||0;
+      t.units=t.units.filter(u=>!((!u.isOriginal)&&u.addedKm===gaKm));
+      t.qty=t.units.filter(u=>u.status!=='disposed').length;
+      t.status=computeTireStatus(t);
+    }
+  }
+  v.records=v.records.filter(r=>r.id!==id);
+  if(deleteTire&&tireId){
+    // Rimuovi anche eventuali altri GA rimasti
+    v.records=v.records.filter(r=>!(r.tireId===tireId&&r.type==='GA'));
+    v.tires=(v.tires||[]).filter(t=>t.id!==tireId);
+    showToast('🗑️ Treno gomme eliminato');
+  }
+  recalcAllTireKm(v);
+  save();closeModal();render();
+}
+function dRec(id){
+  const v=V();
+  v.records=v.records.filter(r=>r.id!==id);
+  recalcAllTireKm(v);
+  save();closeModal();render();
+}
+
+// Vehicle form
+function showVF(id){
+  const v=id?S.vehicles.find(x=>x.id===id):null;
+  const d=v||{name:"",brand:"",model:"",plate:"",year:new Date().getFullYear(),fuel:"Benzina",engine:"",vin:"",purchaseDate:"",purchaseKm:0,purchasePrice:0,notes:""};
+  let h='<div class="fg">';
+  h+='<div><label class="label">Nome</label><input class="input" id="vN" value="'+esc(d.name||'')+'"></div>';
+  h+='<div><label class="label">Marca</label><input class="input" id="vB" value="'+esc(d.brand||'')+'"></div>';
+  h+='<div><label class="label">Modello</label><input class="input" id="vM" value="'+esc(d.model||'')+'"></div>';
+  h+='<div><label class="label">Targa</label><input class="input" id="vP" value="'+esc(d.plate||'')+'"></div>';
+  h+='<div><label class="label">Anno</label><input class="input" type="number" id="vY" value="'+(d.year||'')+'"></div>';
+  h+='<div><label class="label">Alimentazione</label><select class="input" id="vF"><option>Benzina</option><option>Diesel</option><option>GPL</option><option>Metano</option><option>Ibrido</option><option>Elettrico</option></select></div>';
+  h+='<div><label class="label">Motorizzazione</label><input class="input" id="vE" value="'+esc(d.engine||'')+'"></div>';
+  h+='<div><label class="label">N° Telaio (VIN)</label><input class="input" id="vV" value="'+esc(d.vin||'')+'"></div>';
+  h+='<div class="fs"><div class="fst">💰 Acquisto</div></div>';
+  h+='<div><label class="label">Data acquisto</label><input class="input" type="date" id="vPD" value="'+(d.purchaseDate||'')+'"></div>';
+  h+='<div><label class="label">Km acquisto</label><input class="input" type="number" id="vPK" value="'+(d.purchaseKm||0)+'"></div>';
+  h+='<div><label class="label">Prezzo acquisto (€)</label><input class="input" type="number" step="0.01" id="vPP" value="'+(d.purchasePrice||0)+'"></div>';
+  h+='<div class="ff"><label class="label">Note generali</label><textarea class="input" id="vNo" rows="2">'+esc(d.notes||'')+'</textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svV(\''+(id||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(v?"Modifica veicolo":"Nuovo veicolo",h);
+  if(d.fuel)setTimeout(()=>{const el=document.getElementById("vF");if(el)el.value=d.fuel},10);
+}
+
+function svV(eid){
+  const n=document.getElementById("vN").value;if(!n)return;
+  const data={name:n,brand:document.getElementById("vB").value,model:document.getElementById("vM").value,plate:document.getElementById("vP").value,year:parseInt(document.getElementById("vY").value)||0,fuel:document.getElementById("vF").value,engine:document.getElementById("vE").value,vin:document.getElementById("vV").value,purchaseDate:document.getElementById("vPD").value,purchaseKm:parseInt(document.getElementById("vPK").value)||0,purchasePrice:parseFloat(document.getElementById("vPP").value)||0,notes:document.getElementById("vNo").value};
+  if(eid){const v=S.vehicles.find(x=>x.id===eid);if(v)Object.assign(v,data)}
+  else{const nv={id:gid(),status:"active",archiveDate:"",archiveReason:"",archiveKm:0,archivePrice:0,archiveNotes:"",records:[],tires:[],owners:[],...data};S.vehicles.push(nv);S.av=nv.id}
+  save();closeModal();render();
+}
+
+// Archive form
+function showAF(id){
+  let h='<p style="color:var(--text2);margin-bottom:16px">Il veicolo sarà archiviato (vendita, rottamazione, etc.).</p><div class="fg">';
+  h+='<div><label class="label">Motivo</label><select class="input" id="aR">'+Object.entries(AR).map(([k,v])=>'<option value="'+k+'">'+v+'</option>').join("")+'</select></div>';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="aD" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+  h+='<div><label class="label">Km finali</label><input class="input" type="number" id="aK" value="0"></div>';
+  h+='<div><label class="label">Prezzo vendita (€)</label><input class="input" type="number" step="0.01" id="aP" value="0"></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="aN" rows="2"></textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-d" onclick="arcV2(\''+id+'\')">🗄️ Archivia</button></div></div>';
+  openModal("Archivia veicolo",h);
+}
+
+function arcV2(id){
+  const v=S.vehicles.find(x=>x.id===id);if(!v)return;
+  v.status="archived";v.archiveReason=document.getElementById("aR").value;v.archiveDate=document.getElementById("aD").value;v.archiveKm=parseInt(document.getElementById("aK").value)||0;v.archivePrice=parseFloat(document.getElementById("aP").value)||0;v.archiveNotes=document.getElementById("aN").value;
+  if(S.av===id){const ac=actV();S.av=ac.length?ac[0].id:id}
+  save();closeModal();S.tab="archive";render();
+}
+function restV(id){const v=S.vehicles.find(x=>x.id===id);if(!v)return;v.status="active";v.archiveDate="";v.archiveReason="";S.av=id;save();S.tab="dashboard";render()}
+
+// Dealer form
+function showDF(id){
+  const d=id?S.dealers.find(x=>x.id===id):null;const data=d||{name:"",city:"",phone:"",notes:""};
+  let h='<div class="fg">';
+  h+='<div class="ff"><label class="label">Nome</label><input class="input" id="dN" value="'+esc(data.name)+'"></div>';
+  h+='<div><label class="label">Città</label><input class="input" id="dC" value="'+esc(data.city||'')+'"></div>';
+  h+='<div><label class="label">Telefono</label><input class="input" id="dP" value="'+esc(data.phone||'')+'"></div>';
+  h+='<div class="ff"><label class="label">Note</label><textarea class="input" id="dNo" rows="2">'+esc(data.notes||'')+'</textarea></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svDlr(\''+(id||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(d?"Modifica rivenditore":"Nuovo rivenditore",h);
+}
+function svDlr(eid){
+  const n=document.getElementById("dN").value;if(!n)return;
+  const data={name:n,city:document.getElementById("dC").value,phone:document.getElementById("dP").value,notes:document.getElementById("dNo").value};
+  if(eid){const d=S.dealers.find(x=>x.id===eid);if(d)Object.assign(d,data)}else S.dealers.push({id:gid(),...data});
+  save();closeModal();render();
+}
+function dDlr(id){S.dealers=S.dealers.filter(x=>x.id!==id);save();render()}
+
+// Type form
+function showTF(code){
+  const t=code?S.types[code]:null;const d=t||{label:"",icon:"",color:"#e8734a",group:"altro"};
+  const isTire=code&&TIRE_TYPES.indexOf(code)>=0;
+  const grpOpts=Object.entries(TYPE_GROUPS).filter(([k])=>isTire?k==='gomme':k!=='gomme').map(([k,g])=>'<option value="'+k+'" '+((d.group||'altro')===k?'selected':'')+'>'+g.icon+' '+g.label+'</option>').join('');
+  let h='<div class="fg">';
+  h+='<div><label class="label">Codice (1-3 lettere)</label><input class="input" id="tK" value="'+esc(code||'')+'" '+(code?'disabled':'')+' maxlength="3" style="text-transform:uppercase"></div>';
+  h+='<div><label class="label">Etichetta</label><input class="input" id="tL" value="'+esc(d.label)+'"></div>';
+  h+='<div><label class="label">Gruppo analisi</label><select class="input" id="tG"'+(isTire?' disabled':'')+'>'+grpOpts+'</select></div>';
+  h+='<div><label class="label">Icona (emoji)</label><input class="input" id="tI" value="'+d.icon+'"></div>';
+  h+='<div><label class="label">Colore</label><input class="input" type="color" id="tC" value="'+d.color+'" style="height:42px;padding:4px"></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svTyp(\''+(code||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(t?"Modifica tipo":"Nuovo tipo operazione",h);
+}
+function svTyp(ecode){
+  const k=ecode||document.getElementById("tK").value.toUpperCase().trim();
+  const l=document.getElementById("tL").value.trim();
+  if(!k||!l)return showToast('❌ Codice e etichetta obbligatori','err');
+  // Check codice duplicato solo per nuovi
+  if(!ecode&&S.types[k])return showToast('❌ Il codice "'+k+'" è già in uso','err');
+  S.types[k]={label:l,icon:document.getElementById("tI").value,color:document.getElementById("tC").value,group:document.getElementById("tG").value||'altro'};
+  save();closeModal();render();
+}
+function dTyp(k){
+  // Verifica se il tipo è usato in qualche record
+  const used=S.vehicles.some(v=>(v.records||[]).some(r=>r.type===k));
+  if(used){
+    openModal('⚠️ Impossibile eliminare','<p style="color:var(--text2);margin-bottom:12px">Il tipo <b>'+esc(k)+' — '+esc((S.types[k]||{}).label||k)+'</b> è utilizzato nel registro e non può essere eliminato.</p><p style="font-size:12px;color:var(--text4);margin-bottom:16px">Puoi modificarne etichetta, icona e colore.</p><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-p" onclick="closeModal()">OK</button></div>');
+    return;
+  }
+  if(!confirm('Eliminare il tipo "'+k+'"?'))return;
+  delete S.types[k];save();render();
+}
+
+// ═══ EXPORTS ═══
+function dlFile(name,content,type){const b=new Blob([content],{type:type||'application/json;charset=utf-8'});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;a.click()}
+
+function expVehicleJSON(){
+  const vid=document.getElementById("ev").value;const v=S.vehicles.find(x=>x.id===vid);if(!v)return;
+  const lk=getVehicleLastKm(v);
+  const data={vehicle:{name:v.name,brand:v.brand,model:v.model,plate:v.plate,year:v.year,fuel:v.fuel,engine:v.engine,vin:v.vin,purchaseDate:v.purchaseDate,purchaseKm:v.purchaseKm,purchasePrice:v.purchasePrice},records:aR(v).map(r=>({date:r.date,km:r.km,description:r.description,dealer:r.dealer,type:r.type,typeLabel:tl(r.type),qty:r.qty,cost:r.cost,total:r.total})),tires:(v.tires||[]).map(t=>({brand:t.brand,model:t.model,size:t.size,season:SEASONS[t.season]||'',status:TIRE_STATUS[t.status]||'',qty:t.qty,km:calcTireKm(t,lk),purchaseDate:t.purchaseDate,purchaseCost:t.purchaseCost})),exportDate:new Date().toISOString()};
+  dlFile('autodiario_'+v.name.replace(/\s+/g,'_')+'.json',JSON.stringify(data,null,2));
+  showToast('📥 Esportazione completata');
+}
+function expDealersJSON(){
+  const data={dealers:S.dealers.map(d=>({name:d.name,city:d.city,phone:d.phone,notes:d.notes})),exportDate:new Date().toISOString()};
+  dlFile('autodiario_rivenditori.json',JSON.stringify(data,null,2));
+}
+function expTiresJSON(){
+  const data={tires:S.vehicles.flatMap(v=>{const lk=getVehicleLastKm(v);return(v.tires||[]).map(t=>({vehicle:v.name,brand:t.brand,model:t.model,size:t.size,season:SEASONS[t.season]||'',status:TIRE_STATUS[t.status]||'',qty:t.qty,dot:t.dot,purchaseDate:t.purchaseDate,purchaseCost:t.purchaseCost,km:calcTireKm(t,lk),events:(t.events||[]).map(e=>({type:e.type,date:e.date,km:e.km}))}))}),exportDate:new Date().toISOString()};
+  dlFile('autodiario_gomme.json',JSON.stringify(data,null,2));
+}
+
+// ═══ PDF GENERATOR ═══
+function buildPDFContent(v,opts){
+  const inclReg=opts&&opts.includeRegistry!==undefined?opts.includeRegistry:true;
+  const s=gS(v,'current');const yd=gYD(v,'current');const lk=getVehicleLastKm(v);
+  const recs=aR(v).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const GK=Object.keys(TYPE_GROUPS);const GL=Object.values(TYPE_GROUPS);
+  const purchP=parseFloat(v.purchasePrice)||0;const saleP=parseFloat(v.archivePrice)||0;
+  const vehicleCost=purchP>0?purchP-saleP:0;
+
+  let p='<!DOCTYPE html><html><head><meta charset="utf-8"><title>AutoDiario - '+esc(v.name)+'</title><style>';
+  p+='@page{size:A4;margin:14mm 12mm 18mm 12mm;@bottom-center{content:"Pagina " counter(page) " di " counter(pages);font-size:8px;color:#999;font-family:Helvetica,Arial,sans-serif}}';
+  p+='*{box-sizing:border-box}';
+  p+='body{font-family:Helvetica,Arial,sans-serif;font-size:10px;color:#222;line-height:1.4;margin:0;padding:0;counter-reset:page-num}';
+  p+='h2{font-size:13px;margin:16px 0 6px;color:#1a1a2e;border-bottom:2px solid #e8734a;padding-bottom:3px;page-break-after:avoid}';
+  p+='table{width:100%;border-collapse:collapse;font-size:9px;margin-bottom:8px;page-break-inside:auto}';
+  p+='thead{display:table-header-group}tr{page-break-inside:avoid}';
+  p+='th{background:#f0f0f5;font-weight:700;text-align:left;padding:3px 5px;border-bottom:1px solid #ccc}td{padding:2px 5px;border-bottom:1px solid #eee}';
+  p+='.tr{text-align:right}.mono{font-family:Courier New,monospace}.b{font-weight:700}.nw{white-space:nowrap}';
+  p+='.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}';
+  p+='.box{background:#f7f7fb;border:1px solid #e0e0ea;border-radius:5px;padding:7px}';
+  p+='.box-t{font-size:7px;text-transform:uppercase;color:#888;font-weight:700;margin-bottom:2px}';
+  p+='.box-v{font-size:14px;font-weight:700;font-family:Courier New,monospace}';
+  p+='.hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:8px;border-bottom:3px solid #1a1a2e;margin-bottom:10px}';
+  p+='.badge{display:inline-block;padding:1px 5px;border-radius:6px;font-size:7px;font-weight:600}';
+  // Page footer for screen view
+  p+='.page-footer{display:none}';
+  p+='@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.no-print{display:none!important}}';
+  p+='.topbar{position:fixed;top:0;left:0;right:0;background:#1a1a2e;color:#fff;padding:8px 20px;display:flex;align-items:center;gap:12px;font-family:sans-serif;font-size:13px;z-index:9999}';
+  p+='.topbar button{background:#e8734a;color:#fff;border:none;padding:6px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}.topbar button:hover{background:#d0633a}';
+  p+='body{padding-top:44px}@media print{body{padding-top:0}}';
+  p+='</style></head><body>';
+
+  // Top bar
+  p+='<div class="topbar no-print"><span>AutoDiario — '+esc(v.name)+'</span><button onclick="window.print()">📄 Stampa / Salva PDF</button><span style="font-size:11px;color:#aaa">Usa "Salva come PDF" nella finestra di stampa</span></div>';
+
+  const box=(t,val,col)=>'<div class="box"><div class="box-t">'+t+'</div><div class="box-v"'+(col?' style="color:'+col+'"':'')+'>'+val+'</div></div>';
+
+  // Header
+  p+='<div class="hdr"><div><div style="font-size:18px;font-weight:700;color:#1a1a2e">'+esc(v.name)+'</div>';
+  p+='<div style="font-size:10px;color:#555">'+[v.brand,v.model,v.year,v.fuel,v.engine,v.plate?'Targa: '+v.plate:'',v.vin?'VIN: '+v.vin:''].filter(Boolean).join(' | ')+'</div>';
+  p+='</div><div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#1a1a2e">AutoDiario</div><div style="font-size:8px;color:#666">'+new Date().toLocaleDateString('it-IT')+'</div></div></div>';
+
+  // Riepilogo
+  p+='<h2>Riepilogo generale</h2>';
+  p+='<div class="grid">'+box('Km totali',fk(s.mk)+' km')+box('Spesa gestione',eur(s.tot))+box('Costo/km gestione',s.driven>0?eur(s.tot/s.driven,4):'—')+box('Voci registrate',String(s.cnt))+'</div>';
+  p+='<div class="grid">';
+  GK.forEach((g,i)=>{const key=g==='manutenzione'?'mnt':g==='tasse'?'tax':g==='gomme'?'gom':g==='accessori'?'acc':'altro';p+=box(GL[i].label,eur(s[key]),GL[i].color)});
+  p+='</div>';
+
+  // Costo veicolo
+  if(vehicleCost>0){
+    p+='<div class="grid">';
+    p+=box('Costo acquisto veicolo',eur(purchP),'#e84c4a');
+    if(saleP>0)p+=box('Prezzo vendita',eur(saleP),'#4ae88a');
+    p+=box('Costo netto veicolo',eur(vehicleCost),'#e84c4a');
+    p+=box('COSTO REALE TOTALE',eur(s.tot+vehicleCost),'#e8734a');
+    p+='</div>';
+    if(s.driven>0){
+      p+='<div class="grid">';
+      p+=box('Costo reale / km',eur((s.tot+vehicleCost)/s.driven,4),'#e8734a');
+      p+=box('Veicolo / km',eur(vehicleCost/s.driven,4),'#e84c4a');
+      p+='</div>';
+    }
+  }
+
+  // Acquisto/vendita
+  if(v.purchaseDate||v.purchasePrice){
+    p+='<h2>Acquisto / Vendita</h2><div class="grid">';
+    if(v.purchaseDate)p+=box('Data acquisto',fd(v.purchaseDate)+' a '+fk(v.purchaseKm||0)+' km');
+    if(v.purchasePrice)p+=box('Prezzo acquisto',eur(v.purchasePrice));
+    if(v.archivePrice)p+=box('Prezzo vendita',eur(v.archivePrice));
+    p+='</div>';
+  }
+
+  // Riepilogo annuale
+  if(yd.length){
+    p+='<h2>Riepilogo annuale</h2><table><thead><tr><th>Anno</th>';
+    GK.forEach((g,i)=>{p+='<th class="tr">'+GL[i].label+'</th>'});
+    p+='<th class="tr b">Totale</th></tr></thead><tbody>';
+    yd.forEach(y=>{
+      p+='<tr><td class="b">'+y.year+'</td>';
+      GK.forEach(g=>{p+='<td class="tr mono">'+eur(y[g]||0)+'</td>'});
+      p+='<td class="tr mono b">'+eur(y.tot)+'</td></tr>';
+    });
+    if(vehicleCost>0){
+      p+='<tr style="border-top:2px solid #ccc"><td class="b" style="color:#e84c4a">Veicolo</td>';
+      GK.forEach(()=>{p+='<td></td>'});
+      p+='<td class="tr mono b" style="color:#e84c4a">'+eur(vehicleCost)+'</td></tr>';
+      const gt=yd.reduce((a,y)=>a+y.tot,0)+vehicleCost;
+      p+='<tr><td class="b" style="font-size:10px">COSTO REALE</td>';
+      GK.forEach(()=>{p+='<td></td>'});
+      p+='<td class="tr mono b" style="font-size:10px;color:#e8734a">'+eur(gt)+'</td></tr>';
+    }
+    p+='</tbody></table>';
+  }
+
+  // Gomme
+  const tires=v.tires||[];
+  if(tires.length){
+    p+='<h2>Gestione gomme</h2><table><thead><tr><th>Treno</th><th>Misura</th><th>Stagione</th><th>Stato</th><th class="tr">Km</th><th class="tr">Costo</th></tr></thead><tbody>';
+    tires.forEach(t=>{
+      const tkm=calcTireKm(t,lk);const ga=(v.records||[]).filter(r=>r.tireId===t.id&&r.type==='GA').reduce((sr,r)=>sr+r.total,0);
+      p+='<tr><td class="b">'+esc(t.brand)+' '+esc(t.model)+'</td><td>'+esc(t.size)+'</td><td>'+(SEASONS[t.season]||'')+'</td>';
+      p+='<td><span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'22;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'">'+(TIRE_STATUS[t.status]||'')+'</span></td>';
+      p+='<td class="tr mono">'+fk(tkm)+'</td><td class="tr mono">'+eur(ga)+'</td></tr>';
+    });
+    p+='</tbody></table>';
+  }
+
+  // Registro completo (opzionale)
+  if(inclReg){
+    p+='<h2 style="page-break-before:always">Registro completo ('+recs.length+' voci)</h2>';
+    p+='<table><thead><tr><th>Data</th><th class="tr">Km</th><th>Descrizione</th><th>Rivenditore</th><th>Tipo</th><th class="tr">Totale</th></tr></thead><tbody>';
+    recs.forEach(r=>{
+      p+='<tr><td class="nw">'+fd(r.date)+'</td><td class="tr mono">'+(r.km?fk(r.km):'')+'</td><td>'+esc(r.description)+'</td><td>'+esc(r.dealer||'')+'</td><td>'+tl(r.type)+'</td><td class="tr mono b">'+eur(r.total)+'</td></tr>';
+    });
+    p+='</tbody></table>';
+  }
+
+  // Footer
+  p+='<div style="margin-top:20px;padding-top:8px;border-top:1px solid #ddd;text-align:center;font-size:8px;color:#aaa">AutoDiario — '+esc(v.name)+' — Generato il '+new Date().toLocaleDateString('it-IT')+(inclReg?'':' — Registro non incluso')+'</div>';
+  p+='</body></html>';
+  return p;
+}
+
+function genPDF(){
+  const vid=document.getElementById('pdfV').value;
+  const v=S.vehicles.find(x=>x.id===vid);if(!v)return;
+  const inclReg=document.getElementById('pdfIncReg')?document.getElementById('pdfIncReg').checked:true;
+  const htmlContent=buildPDFContent(v,{includeRegistry:inclReg});
+
+  const w=window.open('','_blank','width=900,height=700');
+  if(!w){showToast('❌ Popup bloccato — abilita i popup','err');return}
+  w.document.write(htmlContent);w.document.close();
+  w.document.title='AutoDiario - '+v.name;
+  setTimeout(()=>{w.focus();w.print()},400);
+  showToast('📄 Salva come PDF dalla finestra di stampa');
+}
+
+// ═══ AUTO-SAVE ═══
+let autoSaveTimer=null;
+function initAutoSave(){S.autoSave=true;S.autoSaveMin=30;if(S.autoSave)startAutoSave()}
+function startAutoSave(){stopAutoSave();if(!S.autoSave)return;autoSaveTimer=setInterval(()=>{downloadJSON(true)},S.autoSaveMin*60*1000)}
+function stopAutoSave(){if(autoSaveTimer){clearInterval(autoSaveTimer);autoSaveTimer=null}}
+
+function showToast(msg,type){
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;bottom:24px;right:24px;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:600;z-index:2000;animation:fadeIn .3s ease-out;font-family:var(--font);box-shadow:0 8px 32px rgba(0,0,0,.4);'+(type==='err'?'background:#2a1418;color:#e84c4a;border:1px solid #3a2028':'background:#1a2818;color:#4ae88a;border:1px solid #283a20');
+  el.textContent=msg;document.body.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},3500);
+}
+
+// ═══ INIT ═══
+Chart.defaults.font.family="'DM Sans','Segoe UI',sans-serif";
+
+function updSaveBtn(){
+  const btn=document.getElementById('saveBtn');if(!btn)return;
+  if(S._dirty){btn.style.borderColor='var(--accent)';btn.style.color='var(--accent)';document.getElementById('saveTxt').textContent='Salva ●'}
+  else{btn.style.borderColor='#2a2a3e';btn.style.color='var(--text3)';document.getElementById('saveTxt').textContent='Salva'}
+}
+
+function showWelcome(){
+  document.getElementById("C").innerHTML='<div style="text-align:center;padding:80px 20px"><div style="font-size:64px;margin-bottom:16px">🚗</div><h2 style="font-size:24px;margin-bottom:8px">AutoDiario v2</h2><p style="color:var(--text4);margin-bottom:32px">Gestionale Manutenzioni & Spese Auto</p><div class="card" style="max-width:480px;margin:0 auto;padding:32px"><p style="color:var(--text2);margin-bottom:20px">Carica il file <strong>autodiario_data.json</strong> per iniziare,<br>oppure crea un nuovo archivio vuoto.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><button class="btn btn-p" onclick="loadJSONFile()" style="font-size:15px;padding:12px 28px">📂 Carica dati JSON</button><button class="btn btn-s" onclick="startEmpty()" style="font-size:15px;padding:12px 28px">✨ Nuovo archivio</button></div></div></div>';
+}
+function startEmpty(){load(null);S._loaded=true;S.tab='dashboard';render();showToast('✨ Nuovo archivio creato')}
+
+async function init(){
+  try{const r=await fetch('autodiario_data.json');if(r.ok){const d=await r.json();if(d.vehicles){load(d);S.av=S.vehicles.filter(v=>v.status==='active')[0]?.id||S.vehicles[0]?.id||'';S.tab='dashboard';initAutoSave();render();return}}}catch{}
+  load(null);showWelcome();
+}
+init();
+window.addEventListener('beforeunload',function(e){if(S._dirty){e.preventDefault();e.returnValue=''}});
+</script>
+</body></html>

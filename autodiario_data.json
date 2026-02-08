@@ -1,0 +1,5558 @@
+{
+  "vehicles": [
+    {
+      "id": "c4",
+      "name": "Citroën C4",
+      "brand": "Citroën",
+      "model": "C4",
+      "year": 2007,
+      "plate": "",
+      "engine": "1.6 HDi",
+      "fuel": "Diesel",
+      "purchaseDate": "2008-02-15",
+      "purchaseKm": 0,
+      "purchasePrice": 0,
+      "usedCar": false,
+      "previousOwnerHistory": "",
+      "status": "active",
+      "archiveDate": "",
+      "archiveReason": "",
+      "archiveKm": 0,
+      "archivePrice": 0,
+      "archiveNotes": "",
+      "notes": "",
+      "vin": "",
+      "records": [
+        {
+          "id": "3z39vkv6",
+          "date": "2008-02-15",
+          "km": 0,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 951.33,
+          "total": 951.33,
+          "prevOwner": false
+        },
+        {
+          "id": "e7cuw86o",
+          "date": "2008-02-15",
+          "km": 0,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Ricevitoria",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.0,
+          "total": 170.0,
+          "prevOwner": false
+        },
+        {
+          "id": "baokjzm8",
+          "date": "2008-02-15",
+          "km": 0,
+          "lot": "0",
+          "description": "Gomme di serie (dotazione di fabbrica)",
+          "dealer": "",
+          "type": "GA",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "6w2o16j6",
+          "date": "2008-03-29",
+          "km": 3130,
+          "lot": "",
+          "description": "Primo tagliando",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "7ts7bnoj",
+          "date": "2008-08-02",
+          "km": 12753,
+          "lot": "",
+          "description": "Dischi anteriori",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "j2heatyv",
+          "date": "2008-10-18",
+          "km": 19870,
+          "lot": "",
+          "description": "Tagliando completo",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 191.0,
+          "total": 191.0,
+          "prevOwner": false
+        },
+        {
+          "id": "6p2fjvhj",
+          "date": "2009-01-19",
+          "km": 27257,
+          "lot": "",
+          "description": "pastiglie anteriori",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 100.9,
+          "total": 100.9,
+          "prevOwner": false
+        },
+        {
+          "id": "vder0da8",
+          "date": "2009-02-15",
+          "km": 30000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 1032.0,
+          "total": 1032.0,
+          "prevOwner": false
+        },
+        {
+          "id": "0ddirhky",
+          "date": "2009-02-15",
+          "km": 30000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Ricevitoria",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.0,
+          "total": 170.0,
+          "prevOwner": false
+        },
+        {
+          "id": "xdi8w8nu",
+          "date": "2009-03-31",
+          "km": 32924,
+          "lot": "",
+          "description": "Cinghia accessori",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 12.4,
+          "total": 12.4,
+          "prevOwner": false
+        },
+        {
+          "id": "35n8pet8",
+          "date": "2009-07-31",
+          "km": 41203,
+          "lot": "",
+          "description": "Tagliando completo",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 326.0,
+          "total": 326.0,
+          "prevOwner": false
+        },
+        {
+          "id": "niyfpazk",
+          "date": "2009-12-18",
+          "km": 49922,
+          "lot": "",
+          "description": "pastiglie anteriori e posteriori",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 199.0,
+          "total": 199.0,
+          "prevOwner": false
+        },
+        {
+          "id": "0ogcrx5t",
+          "date": "2010-02-15",
+          "km": 50000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 1029.57,
+          "total": 1029.57,
+          "prevOwner": false
+        },
+        {
+          "id": "7o59rjdj",
+          "date": "2010-02-15",
+          "km": 50000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Ricevitoria",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.0,
+          "total": 170.0,
+          "prevOwner": false
+        },
+        {
+          "id": "ghmd0cft",
+          "date": "2010-03-16",
+          "km": 60000,
+          "lot": "",
+          "description": "Tagliando completo",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 134.0,
+          "total": 134.0,
+          "prevOwner": false
+        },
+        {
+          "id": "kygw0gcb",
+          "date": "2010-04-17",
+          "km": 60000,
+          "lot": "0",
+          "description": "Smaltimento 2 gomme originali (sostituite con Pirelli P7)",
+          "dealer": "",
+          "type": "GD",
+          "qty": 2,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "hkr2aqtn",
+          "date": "2010-04-17",
+          "km": 60000,
+          "lot": "1",
+          "description": "Acquisto 2 gomme Pirelli P7 205/55R16 (Estive) – rimpiazzano 2 originali",
+          "dealer": "emmegi gomme",
+          "type": "GA",
+          "qty": 2,
+          "cost": 80,
+          "total": 160,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "ztp81gwj",
+          "date": "2010-05-18",
+          "km": 65000,
+          "lot": "",
+          "description": "Batteria 12v 60ah 540",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 50.0,
+          "total": 50.0,
+          "prevOwner": false
+        },
+        {
+          "id": "n1me1ddm",
+          "date": "2010-06-19",
+          "km": 75000,
+          "lot": "",
+          "description": "lampadina H7",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 2,
+          "cost": 13.8,
+          "total": 27.6,
+          "prevOwner": false
+        },
+        {
+          "id": "dxwrhl83",
+          "date": "2011-02-12",
+          "km": 79000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Ricevitoria",
+          "type": "T",
+          "qty": 1,
+          "cost": 172.0,
+          "total": 172.0,
+          "prevOwner": false
+        },
+        {
+          "id": "ivwttnuy",
+          "date": "2011-02-12",
+          "km": 79000,
+          "lot": "",
+          "description": "Tappetini Citroen",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 28.0,
+          "total": 28.0,
+          "prevOwner": false
+        },
+        {
+          "id": "jhjpn3dl",
+          "date": "2011-02-12",
+          "km": 79000,
+          "lot": "0",
+          "description": "Smaltimento ultime 2 gomme originali (sostituite con Pirelli P7 anteriori)",
+          "dealer": "",
+          "type": "GD",
+          "qty": 2,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "ouhufrka",
+          "date": "2011-02-12",
+          "km": 79000,
+          "lot": "1",
+          "description": "Acquisto 2 gomme Pirelli P7 205/55R16 (Estive) – anteriori, rimpiazzano ultime 2 originali",
+          "dealer": "emmegi gomme",
+          "type": "GA",
+          "qty": 2,
+          "cost": 95,
+          "total": 190,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "axg0j95p",
+          "date": "2011-02-15",
+          "km": 79000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 1000.0,
+          "total": 1000.0,
+          "prevOwner": false
+        },
+        {
+          "id": "5h90rqar",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "spazzole anteriori",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 41.76,
+          "total": 41.76,
+          "prevOwner": false
+        },
+        {
+          "id": "zfgckcee",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "spazzolea post.",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 11.61,
+          "total": 11.61,
+          "prevOwner": false
+        },
+        {
+          "id": "sxyty9iy",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "Filtro gasolio",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 39.79,
+          "total": 39.79,
+          "prevOwner": false
+        },
+        {
+          "id": "3jg94ljs",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "filtro olio",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 12.48,
+          "total": 12.48,
+          "prevOwner": false
+        },
+        {
+          "id": "mvnxp8oy",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "filtro polline",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 18.72,
+          "total": 18.72,
+          "prevOwner": false
+        },
+        {
+          "id": "k6oyk2dd",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "lampadina posiz. Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 1.95,
+          "total": 1.95,
+          "prevOwner": false
+        },
+        {
+          "id": "eo0sxwfz",
+          "date": "2011-03-09",
+          "km": 80800,
+          "lot": "",
+          "description": "Olio motore",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 28.9,
+          "total": 28.9,
+          "prevOwner": false
+        },
+        {
+          "id": "eokv2owq",
+          "date": "2011-09-26",
+          "km": 93000,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 9.9,
+          "total": 9.9,
+          "prevOwner": false
+        },
+        {
+          "id": "do46uvno",
+          "date": "2011-10-15",
+          "km": 95000,
+          "lot": "",
+          "description": "Parabrezza(assicurato)",
+          "dealer": "Doctot Glass",
+          "type": "R",
+          "qty": 1,
+          "cost": 62.0,
+          "total": 62.0,
+          "prevOwner": false
+        },
+        {
+          "id": "z7yze776",
+          "date": "2011-11-01",
+          "km": 96000,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 9.9,
+          "total": 9.9,
+          "prevOwner": false
+        },
+        {
+          "id": "anztsil8",
+          "date": "2012-01-01",
+          "km": 101157,
+          "lot": "",
+          "description": "Filtro olio, aria e abitacolo",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 53.0,
+          "total": 53.0,
+          "prevOwner": false
+        },
+        {
+          "id": "wm2416pc",
+          "date": "2012-01-01",
+          "km": 101157,
+          "lot": "",
+          "description": "Olio motore",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 29.9,
+          "total": 29.9,
+          "prevOwner": false
+        },
+        {
+          "id": "mbocna0d",
+          "date": "2012-01-01",
+          "km": 101157,
+          "lot": "",
+          "description": "lampadina posiz. Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "xsiluxnq",
+          "date": "2012-01-14",
+          "km": 101949,
+          "lot": "",
+          "description": "supporti gomma filtro aria – coperchio filtro abitacolo",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 3,
+          "cost": 3.66,
+          "total": 10.98,
+          "prevOwner": false
+        },
+        {
+          "id": "lrrdki17",
+          "date": "2012-01-14",
+          "km": 101949,
+          "lot": "",
+          "description": "lampadina targa destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 3.99,
+          "total": 3.99,
+          "prevOwner": false
+        },
+        {
+          "id": "kdnjkhpw",
+          "date": "2012-02-11",
+          "km": 103000,
+          "lot": "",
+          "description": "pastiglie KIT COMPLETO",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 140.0,
+          "total": 140.0,
+          "prevOwner": false
+        },
+        {
+          "id": "m2beugjd",
+          "date": "2012-02-15",
+          "km": 103000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 582.0,
+          "total": 582.0,
+          "prevOwner": false
+        },
+        {
+          "id": "s8mhntyn",
+          "date": "2012-02-24",
+          "km": 104000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Ricevitoria",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.28,
+          "total": 170.28,
+          "prevOwner": false
+        },
+        {
+          "id": "ck63swwq",
+          "date": "2012-02-27",
+          "km": 104795,
+          "lot": "",
+          "description": "Revisione 4 anni",
+          "dealer": "Auto riparazioni azzurra",
+          "type": "T",
+          "qty": 1,
+          "cost": 65.15,
+          "total": 65.15,
+          "prevOwner": false
+        },
+        {
+          "id": "xlw4gdx4",
+          "date": "2012-07-15",
+          "km": 115000,
+          "lot": "2",
+          "description": "Acquisto gomme Michelin Energy 205/55R16 (Estive)",
+          "dealer": "Marangoni iper",
+          "type": "GA",
+          "qty": 4,
+          "cost": 113.25,
+          "total": 453,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": ""
+        },
+        {
+          "id": "owuq3opc",
+          "date": "2012-07-15",
+          "km": 115000,
+          "lot": "2",
+          "description": "Montaggio gomme Michelin Energy (Estive)",
+          "dealer": "Marangoni iper",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te3"
+        },
+        {
+          "id": "gg32druf",
+          "date": "2012-07-15",
+          "km": 115000,
+          "lot": "1",
+          "description": "Smontaggio gomme Pirelli P7 (Estive)",
+          "dealer": "",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": "te2"
+        },
+        {
+          "id": "loub5kml",
+          "date": "2012-07-15",
+          "km": 115000,
+          "lot": "1",
+          "description": "Smaltimento gomme Pirelli P7 (Estive) – Usura",
+          "dealer": "",
+          "type": "GD",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0",
+          "tireEvtId": ""
+        },
+        {
+          "id": "b5l8xser",
+          "date": "2012-09-01",
+          "km": 120000,
+          "lot": "",
+          "description": "Filtro olio, abitacolo e carburante",
+          "dealer": "Luigi Maerna",
+          "type": "R",
+          "qty": 1,
+          "cost": 74.0,
+          "total": 74.0,
+          "prevOwner": false
+        },
+        {
+          "id": "pudk8x8b",
+          "date": "2012-09-01",
+          "km": 120000,
+          "lot": "",
+          "description": "Olio motore",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 24.9,
+          "total": 24.9,
+          "prevOwner": false
+        },
+        {
+          "id": "n4uhoqd1",
+          "date": "2013-02-15",
+          "km": 129000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 551.89,
+          "total": 551.89,
+          "prevOwner": false
+        },
+        {
+          "id": "4yyunpxd",
+          "date": "2013-02-15",
+          "km": 129000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.28,
+          "total": 170.28,
+          "prevOwner": false
+        },
+        {
+          "id": "01630vdk",
+          "date": "2013-02-18",
+          "km": 130000,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 9.9,
+          "total": 9.9,
+          "prevOwner": false
+        },
+        {
+          "id": "748438ar",
+          "date": "2013-05-01",
+          "km": 135000,
+          "lot": "",
+          "description": "pastiglie anteriori",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 81.48,
+          "total": 81.48,
+          "prevOwner": false
+        },
+        {
+          "id": "9c9f0l4s",
+          "date": "2013-08-17",
+          "km": 139838,
+          "lot": "",
+          "description": "Olio motore",
+          "dealer": "Bennet Olgiate",
+          "type": "R",
+          "qty": 1,
+          "cost": 33.9,
+          "total": 33.9,
+          "prevOwner": false
+        },
+        {
+          "id": "be2ir3ok",
+          "date": "2013-08-17",
+          "km": 139838,
+          "lot": "",
+          "description": "Filtro olio, aria e abitacolo",
+          "dealer": "Forti Franco",
+          "type": "R",
+          "qty": 1,
+          "cost": 45.99,
+          "total": 45.99,
+          "prevOwner": false
+        },
+        {
+          "id": "5y5sr6an",
+          "date": "2013-09-18",
+          "km": 140838,
+          "lot": "",
+          "description": "cricco ruota",
+          "dealer": "Clerici Auto",
+          "type": "R",
+          "qty": 1,
+          "cost": 35.0,
+          "total": 35.0,
+          "prevOwner": false
+        },
+        {
+          "id": "i38edar4",
+          "date": "2014-01-23",
+          "km": 148000,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 9.9,
+          "total": 9.9,
+          "prevOwner": false
+        },
+        {
+          "id": "z8v7jwbi",
+          "date": "2014-02-13",
+          "km": 149000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 454.72,
+          "total": 454.72,
+          "prevOwner": false
+        },
+        {
+          "id": "t7vcu1c2",
+          "date": "2014-02-27",
+          "km": 150000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.28,
+          "total": 170.28,
+          "prevOwner": false
+        },
+        {
+          "id": "6jxdes5w",
+          "date": "2014-04-19",
+          "km": 152000,
+          "lot": "",
+          "description": "Manutezione motore – KIT MOTORE – Pompa acqua – cinghia – liquido raffreddamento",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 645.0,
+          "total": 645.0,
+          "prevOwner": false
+        },
+        {
+          "id": "p5umhsoj",
+          "date": "2014-09-06",
+          "km": 158000,
+          "lot": "",
+          "description": "Batteria 12v 60ah 540",
+          "dealer": "Bennet Olgiate",
+          "type": "R",
+          "qty": 1,
+          "cost": 49.9,
+          "total": 49.9,
+          "prevOwner": false
+        },
+        {
+          "id": "tt99nhzh",
+          "date": "2014-11-15",
+          "km": 159000,
+          "lot": "",
+          "description": "spazzole tergicristallo",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 30.27,
+          "total": 30.27,
+          "prevOwner": false
+        },
+        {
+          "id": "ysl2v05n",
+          "date": "2014-11-24",
+          "km": 159500,
+          "lot": "",
+          "description": "Kit tagliando completo",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 94.3,
+          "total": 94.3,
+          "prevOwner": false
+        },
+        {
+          "id": "r07j0o2z",
+          "date": "2014-12-01",
+          "km": 159800,
+          "lot": "",
+          "description": "Revisione 2 anni",
+          "dealer": "Gentile e rizzato",
+          "type": "T",
+          "qty": 1,
+          "cost": 65.68,
+          "total": 65.68,
+          "prevOwner": false
+        },
+        {
+          "id": "3pon3wry",
+          "date": "2014-12-17",
+          "km": 160500,
+          "lot": "",
+          "description": "Kit freno anteriore Brembo/Ferodo",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 73.0,
+          "total": 73.0,
+          "prevOwner": false
+        },
+        {
+          "id": "8p4xrbkw",
+          "date": "2014-12-21",
+          "km": 160600,
+          "lot": "",
+          "description": "kit pastiglie FERODO posteriori",
+          "dealer": "Prostore snc",
+          "type": "R",
+          "qty": 1,
+          "cost": 25.76,
+          "total": 25.76,
+          "prevOwner": false
+        },
+        {
+          "id": "ymdwibn0",
+          "date": "2015-02-05",
+          "km": 162000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "UNIPOL Magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 454.0,
+          "total": 454.0,
+          "prevOwner": false
+        },
+        {
+          "id": "1631r3ts",
+          "date": "2015-04-01",
+          "km": 165000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 175.46,
+          "total": 175.46,
+          "prevOwner": false
+        },
+        {
+          "id": "zy77uz14",
+          "date": "2015-05-06",
+          "km": 166000,
+          "lot": "",
+          "description": "Retronebbia",
+          "dealer": "Euroricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 19.0,
+          "total": 19.0,
+          "prevOwner": false
+        },
+        {
+          "id": "ia78e5uj",
+          "date": "2015-10-07",
+          "km": 175000,
+          "lot": "2",
+          "description": "Smontaggio gomme Michelin Energy (Estive)",
+          "dealer": "",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te4"
+        },
+        {
+          "id": "vb10mjhv",
+          "date": "2015-10-07",
+          "km": 175000,
+          "lot": "3",
+          "description": "Acquisto gomme Michelin Alpine 4 205/55R16 (Invernali)",
+          "dealer": "Goome-auto.it",
+          "type": "GA",
+          "qty": 4,
+          "cost": 82.4,
+          "total": 329.6,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": ""
+        },
+        {
+          "id": "u6tan69p",
+          "date": "2015-10-07",
+          "km": 175000,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "GM",
+          "qty": 1,
+          "cost": 48,
+          "total": 48,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te9"
+        },
+        {
+          "id": "cjaofnx3",
+          "date": "2015-12-30",
+          "km": 180000,
+          "lot": "",
+          "description": "Lampadina 5/21W Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 2.98,
+          "total": 2.98,
+          "prevOwner": false
+        },
+        {
+          "id": "65bifgzf",
+          "date": "2015-12-30",
+          "km": 180000,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "Bennet Olgiate",
+          "type": "R",
+          "qty": 1,
+          "cost": 6.9,
+          "total": 6.9,
+          "prevOwner": false
+        },
+        {
+          "id": "rkuvsbs3",
+          "date": "2016-01-09",
+          "km": 180000,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "Bennet Olgiate",
+          "type": "R",
+          "qty": 1,
+          "cost": 6.9,
+          "total": 6.9,
+          "prevOwner": false
+        },
+        {
+          "id": "9ys0onko",
+          "date": "2016-01-10",
+          "km": 180000,
+          "lot": "",
+          "description": "Kit tagliando completo NO Filtro carb. No filtro aria",
+          "dealer": "ricambiautoforti",
+          "type": "R",
+          "qty": 1,
+          "cost": 65.0,
+          "total": 65.0,
+          "prevOwner": false
+        },
+        {
+          "id": "hagdwuyv",
+          "date": "2016-01-18",
+          "km": 180000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 259.32,
+          "total": 259.32,
+          "prevOwner": false
+        },
+        {
+          "id": "0cx20xns",
+          "date": "2016-02-27",
+          "km": 181000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.28,
+          "total": 170.28,
+          "prevOwner": false
+        },
+        {
+          "id": "cape53cb",
+          "date": "2016-03-22",
+          "km": 182000,
+          "lot": "",
+          "description": "Tappetini Citroen",
+          "dealer": "Clerici Auto",
+          "type": "R",
+          "qty": 1,
+          "cost": 30.0,
+          "total": 30.0,
+          "prevOwner": false
+        },
+        {
+          "id": "mn3lgw29",
+          "date": "2016-04-01",
+          "km": 183000,
+          "lot": "",
+          "description": "Cerchi 16\" per gomme estive",
+          "dealer": "OPONEO.PL",
+          "type": "R",
+          "qty": 1,
+          "cost": 156.0,
+          "total": 156.0,
+          "prevOwner": false
+        },
+        {
+          "id": "52szm90f",
+          "date": "2016-04-01",
+          "km": 183000,
+          "lot": "2",
+          "description": "Montaggio gomme Michelin Energy (Estive)",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "GM",
+          "qty": 1,
+          "cost": 50,
+          "total": 50,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te5"
+        },
+        {
+          "id": "ys8h6emn",
+          "date": "2016-04-01",
+          "km": 183000,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te10"
+        },
+        {
+          "id": "qczqw68y",
+          "date": "2016-07-13",
+          "km": 187000,
+          "lot": "",
+          "description": "ricarica aria condizionata",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "M",
+          "qty": 1,
+          "cost": 60.0,
+          "total": 60.0,
+          "prevOwner": false
+        },
+        {
+          "id": "zj3g39n2",
+          "date": "2016-11-12",
+          "km": 191000,
+          "lot": "2",
+          "description": "Smontaggio gomme Michelin Energy (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te6"
+        },
+        {
+          "id": "vhutoays",
+          "date": "2016-11-12",
+          "km": 191000,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te11"
+        },
+        {
+          "id": "iwczwibg",
+          "date": "2016-12-13",
+          "km": 192000,
+          "lot": "",
+          "description": "Revisione 2 anni",
+          "dealer": "Gentile e rizzato",
+          "type": "T",
+          "qty": 1,
+          "cost": 65.68,
+          "total": 65.68,
+          "prevOwner": false
+        },
+        {
+          "id": "wc7pssva",
+          "date": "2017-02-04",
+          "km": 194000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 236.76,
+          "total": 236.76,
+          "prevOwner": false
+        },
+        {
+          "id": "5g5a85r4",
+          "date": "2017-02-11",
+          "km": 194500,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.28,
+          "total": 170.28,
+          "prevOwner": false
+        },
+        {
+          "id": "g5bzw62y",
+          "date": "2017-04-15",
+          "km": 195300,
+          "lot": "2",
+          "description": "Montaggio gomme Michelin Energy (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te7"
+        },
+        {
+          "id": "6ilswz0y",
+          "date": "2017-04-15",
+          "km": 195300,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te12"
+        },
+        {
+          "id": "ncu1uqyv",
+          "date": "2017-06-03",
+          "km": 196600,
+          "lot": "",
+          "description": "Filtro gasolio",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "niidu85l",
+          "date": "2017-06-26",
+          "km": 198243,
+          "lot": "2",
+          "description": "Smontaggio gomme Michelin Energy (Estive)",
+          "dealer": "",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": "te8"
+        },
+        {
+          "id": "3pwuulbi",
+          "date": "2017-06-26",
+          "km": 198243,
+          "lot": "2",
+          "description": "Smaltimento gomme Michelin Energy (Estive) – Usura",
+          "dealer": "",
+          "type": "GD",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t2",
+          "tireEvtId": ""
+        },
+        {
+          "id": "8rkqxt70",
+          "date": "2017-06-26",
+          "km": 198243,
+          "lot": "4",
+          "description": "Acquisto gomme Michelin Energy Saver+ 205/55R16 (Estive)",
+          "dealer": "Goome-auto.it",
+          "type": "GA",
+          "qty": 4,
+          "cost": 76.3,
+          "total": 305.2,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": ""
+        },
+        {
+          "id": "6af1ow40",
+          "date": "2017-06-26",
+          "km": 198243,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "GM",
+          "qty": 1,
+          "cost": 48,
+          "total": 48,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te27"
+        },
+        {
+          "id": "r17l86xz",
+          "date": "2017-07-09",
+          "km": 198500,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 2,
+          "cost": 8.0,
+          "total": 16.0,
+          "prevOwner": false
+        },
+        {
+          "id": "ak8k0yrh",
+          "date": "2017-08-09",
+          "km": 199060,
+          "lot": "",
+          "description": "Kit tagliando tranne filtro gasolio",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 61.5,
+          "total": 61.5,
+          "prevOwner": false
+        },
+        {
+          "id": "a461l9yw",
+          "date": "2017-11-15",
+          "km": 201000,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te13"
+        },
+        {
+          "id": "0z7d71mh",
+          "date": "2017-11-15",
+          "km": 201000,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te28"
+        },
+        {
+          "id": "z2u8at6o",
+          "date": "2018-02-16",
+          "km": 202000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 234.55,
+          "total": 234.55,
+          "prevOwner": false
+        },
+        {
+          "id": "toa6v0uj",
+          "date": "2018-03-02",
+          "km": 202500,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 170.62,
+          "total": 170.62,
+          "prevOwner": false
+        },
+        {
+          "id": "ig01ov6x",
+          "date": "2018-04-14",
+          "km": 204500,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te14"
+        },
+        {
+          "id": "2ou97rhu",
+          "date": "2018-04-14",
+          "km": 204500,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te29"
+        },
+        {
+          "id": "za6bqcuu",
+          "date": "2018-07-10",
+          "km": 208000,
+          "lot": "",
+          "description": "Batteria 12v 60ah 540",
+          "dealer": "BRICOOK",
+          "type": "R",
+          "qty": 1,
+          "cost": 85.0,
+          "total": 85.0,
+          "prevOwner": false
+        },
+        {
+          "id": "lq2u94ye",
+          "date": "2018-07-15",
+          "km": 208800,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 8.0,
+          "total": 8.0,
+          "prevOwner": false
+        },
+        {
+          "id": "kagtzfgg",
+          "date": "2018-07-28",
+          "km": 209000,
+          "lot": "",
+          "description": "guscio chiave",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 5.99,
+          "total": 5.99,
+          "prevOwner": false
+        },
+        {
+          "id": "0pjyfaeo",
+          "date": "2018-07-31",
+          "km": 209500,
+          "lot": "",
+          "description": "batteria per telecomando 1620",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 2.29,
+          "total": 2.29,
+          "prevOwner": false
+        },
+        {
+          "id": "sxb2889a",
+          "date": "2018-10-20",
+          "km": 211000,
+          "lot": "",
+          "description": "relè ventola",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 22.49,
+          "total": 22.49,
+          "prevOwner": false
+        },
+        {
+          "id": "6jhdk807",
+          "date": "2018-11-17",
+          "km": 213230,
+          "lot": "",
+          "description": "olio TAMOIL Sintetico",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 29.9,
+          "total": 29.9,
+          "prevOwner": false
+        },
+        {
+          "id": "4ia4q92i",
+          "date": "2018-11-17",
+          "km": 213230,
+          "lot": "",
+          "description": "filtro olio x2 – filtro aria – filtro abitacolo",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 56.0,
+          "total": 56.0,
+          "prevOwner": false
+        },
+        {
+          "id": "kiqgp4pk",
+          "date": "2018-11-17",
+          "km": 213230,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te15"
+        },
+        {
+          "id": "ymxuxlfu",
+          "date": "2018-11-17",
+          "km": 213230,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te30"
+        },
+        {
+          "id": "05h4jol4",
+          "date": "2018-12-12",
+          "km": 214060,
+          "lot": "",
+          "description": "Revisione 2 anni",
+          "dealer": "Gentile e rizzato",
+          "type": "T",
+          "qty": 1,
+          "cost": 65.68,
+          "total": 65.68,
+          "prevOwner": false
+        },
+        {
+          "id": "23dcf50n",
+          "date": "2019-02-16",
+          "km": 215000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 240.85,
+          "total": 240.85,
+          "prevOwner": false
+        },
+        {
+          "id": "2g6yckf0",
+          "date": "2019-03-10",
+          "km": 216000,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 172.02,
+          "total": 172.02,
+          "prevOwner": false
+        },
+        {
+          "id": "9plw4qdc",
+          "date": "2019-04-26",
+          "km": 218893,
+          "lot": "",
+          "description": "ricarica aria condizionata",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "M",
+          "qty": 1,
+          "cost": 79.3,
+          "total": 79.3,
+          "prevOwner": false
+        },
+        {
+          "id": "0viy71lr",
+          "date": "2019-04-26",
+          "km": 218893,
+          "lot": "",
+          "description": "centratura ruote e convergenza",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "M",
+          "qty": 1,
+          "cost": 54.9,
+          "total": 54.9,
+          "prevOwner": false
+        },
+        {
+          "id": "2nh9pouf",
+          "date": "2019-04-26",
+          "km": 218893,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te16"
+        },
+        {
+          "id": "kd5zquyp",
+          "date": "2019-04-26",
+          "km": 218893,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te31"
+        },
+        {
+          "id": "d0wleaa3",
+          "date": "2019-05-04",
+          "km": 219051,
+          "lot": "",
+          "description": "KIT freno posteriore bosh/Ferodo",
+          "dealer": "Auto genius.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 242.23,
+          "total": 242.23,
+          "prevOwner": false
+        },
+        {
+          "id": "r3h7ymhd",
+          "date": "2019-06-16",
+          "km": 220550,
+          "lot": "",
+          "description": "olio TAMOIL Sintetico",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 25.0,
+          "total": 25.0,
+          "prevOwner": false
+        },
+        {
+          "id": "efrpye77",
+          "date": "2019-06-16",
+          "km": 220550,
+          "lot": "",
+          "description": "Filtro gasolio + filtro aria + filtro olio + filtro polline",
+          "dealer": "Ettore autoricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "g63d1c2v",
+          "date": "2019-10-22",
+          "km": 226000,
+          "lot": "",
+          "description": "puleggia alternatore",
+          "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+          "type": "R",
+          "qty": 1,
+          "cost": 140.0,
+          "total": 140.0,
+          "prevOwner": false
+        },
+        {
+          "id": "1kx4ntqk",
+          "date": "2019-11-23",
+          "km": 227148,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te17"
+        },
+        {
+          "id": "dvp2ka2p",
+          "date": "2019-11-23",
+          "km": 227148,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te32"
+        },
+        {
+          "id": "kawukjp7",
+          "date": "2019-11-24",
+          "km": 227148,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 2.99,
+          "total": 2.99,
+          "prevOwner": false
+        },
+        {
+          "id": "20weusln",
+          "date": "2019-11-29",
+          "km": 227758,
+          "lot": "",
+          "description": "pastiglie anteriori",
+          "dealer": "Ravizza Auto ricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 60.0,
+          "total": 60.0,
+          "prevOwner": false
+        },
+        {
+          "id": "ivruk71x",
+          "date": "2019-12-15",
+          "km": 228178,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 3.5,
+          "total": 3.5,
+          "prevOwner": false
+        },
+        {
+          "id": "2lhv3dyb",
+          "date": "2020-02-13",
+          "km": 230000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 267.22,
+          "total": 267.22,
+          "prevOwner": false
+        },
+        {
+          "id": "400m99tw",
+          "date": "2020-02-24",
+          "km": 231708,
+          "lot": "",
+          "description": "guarnizione coppa",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 17.25,
+          "total": 17.25,
+          "prevOwner": false
+        },
+        {
+          "id": "smm781bp",
+          "date": "2020-02-24",
+          "km": 231708,
+          "lot": "",
+          "description": "Olio motore",
+          "dealer": "amazon",
+          "type": "R",
+          "qty": 1,
+          "cost": 30.48,
+          "total": 30.48,
+          "prevOwner": false
+        },
+        {
+          "id": "qljqz7b8",
+          "date": "2020-05-06",
+          "km": 232984,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te18"
+        },
+        {
+          "id": "o406wwo7",
+          "date": "2020-05-06",
+          "km": 232984,
+          "lot": "4",
+          "description": "Lavaggio e controllo gomme Energy Saver+",
+          "dealer": "",
+          "type": "GL",
+          "qty": 1,
+          "cost": 54.9,
+          "total": 54.9,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": ""
+        },
+        {
+          "id": "0xbiohhn",
+          "date": "2020-05-06",
+          "km": 232984,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te33"
+        },
+        {
+          "id": "5z2r0bq1",
+          "date": "2020-06-17",
+          "km": 234283,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 3.5,
+          "total": 3.5,
+          "prevOwner": false
+        },
+        {
+          "id": "w8gbyx9v",
+          "date": "2020-07-22",
+          "km": 235438,
+          "lot": "",
+          "description": "asta olio",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 15.9,
+          "total": 15.9,
+          "prevOwner": false
+        },
+        {
+          "id": "6mno0swp",
+          "date": "2020-08-03",
+          "km": 236688,
+          "lot": "",
+          "description": "Comandi vetri anteriore sinistro",
+          "dealer": "aliexpress",
+          "type": "R",
+          "qty": 1,
+          "cost": 16.55,
+          "total": 16.55,
+          "prevOwner": false
+        },
+        {
+          "id": "lhwqxxpj",
+          "date": "2020-08-04",
+          "km": 236688,
+          "lot": "",
+          "description": "copertura fendinebbia destro",
+          "dealer": "aliexpress",
+          "type": "R",
+          "qty": 1,
+          "cost": 8.56,
+          "total": 8.56,
+          "prevOwner": false
+        },
+        {
+          "id": "q9ncjdl1",
+          "date": "2020-08-04",
+          "km": 236688,
+          "lot": "",
+          "description": "spazzole tergicristallo",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 31.65,
+          "total": 9.56,
+          "prevOwner": false
+        },
+        {
+          "id": "43p0c0oi",
+          "date": "2020-08-04",
+          "km": 236688,
+          "lot": "",
+          "description": "Copricerchi",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 52.52,
+          "total": 10.56,
+          "prevOwner": false
+        },
+        {
+          "id": "931ltudr",
+          "date": "2020-08-07",
+          "km": 237000,
+          "lot": "",
+          "description": "Lente faro anteriore destro",
+          "dealer": "aliexpress",
+          "type": "R",
+          "qty": 1,
+          "cost": 45.64,
+          "total": 45.64,
+          "prevOwner": false
+        },
+        {
+          "id": "4xini98t",
+          "date": "2020-08-07",
+          "km": 237000,
+          "lot": "",
+          "description": "Supporto destro paraurti anteriore",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 34.9,
+          "total": 34.9,
+          "prevOwner": false
+        },
+        {
+          "id": "4mjsz1ss",
+          "date": "2020-09-09",
+          "km": 237615,
+          "lot": "",
+          "description": "condensatore",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 115.99,
+          "total": 115.99,
+          "prevOwner": false
+        },
+        {
+          "id": "wbmuexh8",
+          "date": "2020-09-09",
+          "km": 237615,
+          "lot": "",
+          "description": "ricarica aria condizionata",
+          "dealer": "Auto riparazioni azzurra",
+          "type": "M",
+          "qty": 1,
+          "cost": 60.0,
+          "total": 60.0,
+          "prevOwner": false
+        },
+        {
+          "id": "cu7x7lal",
+          "date": "2020-11-05",
+          "km": 239900,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 176.73,
+          "total": 176.73,
+          "prevOwner": false
+        },
+        {
+          "id": "2fvk5jf8",
+          "date": "2020-11-29",
+          "km": 240570,
+          "lot": "",
+          "description": "filtro olio, filtro aria, filtro abitacolo",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 30.83,
+          "total": 30.83,
+          "prevOwner": false
+        },
+        {
+          "id": "k9o8fgnj",
+          "date": "2020-11-29",
+          "km": 240570,
+          "lot": "",
+          "description": "Tubo manicotto aspirazione",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 39.0,
+          "total": 39.0,
+          "prevOwner": false
+        },
+        {
+          "id": "jpow9wc4",
+          "date": "2020-11-29",
+          "km": 240570,
+          "lot": "",
+          "description": "Coperchio puntarie",
+          "dealer": "aliexpress",
+          "type": "R",
+          "qty": 1,
+          "cost": 38.99,
+          "total": 38.99,
+          "prevOwner": false
+        },
+        {
+          "id": "qhyyq8m5",
+          "date": "2020-11-29",
+          "km": 240570,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te19"
+        },
+        {
+          "id": "soozqmwm",
+          "date": "2020-11-29",
+          "km": 240570,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te34"
+        },
+        {
+          "id": "2fhl0ngn",
+          "date": "2020-12-15",
+          "km": 241720,
+          "lot": "",
+          "description": "Revisione 2 anni",
+          "dealer": "Auto riparazioni azzurra",
+          "type": "T",
+          "qty": 1,
+          "cost": 66.9,
+          "total": 66.9,
+          "prevOwner": false
+        },
+        {
+          "id": "63aa66yp",
+          "date": "2021-01-24",
+          "km": 244000,
+          "lot": "",
+          "description": "guarnizione coppa",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "zyvcm4d8",
+          "date": "2021-02-14",
+          "km": 245000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 261.3,
+          "total": 261.3,
+          "prevOwner": false
+        },
+        {
+          "id": "cbs8yg1m",
+          "date": "2021-03-22",
+          "km": 246500,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "1m5om3r5",
+          "date": "2021-04-15",
+          "km": 248769,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te20"
+        },
+        {
+          "id": "mocso6u4",
+          "date": "2021-04-15",
+          "km": 248769,
+          "lot": "4",
+          "description": "Acquisto 2 gomme Michelin Energy Saver+ 205/55R16 (Estive) – sostitutive anteriori",
+          "dealer": "montecar srl",
+          "type": "GA",
+          "qty": 2,
+          "cost": 120,
+          "total": 240,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": ""
+        },
+        {
+          "id": "zq3xy5mb",
+          "date": "2021-04-15",
+          "km": 248769,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "montecar srl",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te35"
+        },
+        {
+          "id": "9tuj4kkq",
+          "date": "2021-04-15",
+          "km": 248769,
+          "lot": "4",
+          "description": "Smaltimento 2 gomme Michelin Energy Saver+ (Estive) – anteriori usurate",
+          "dealer": "",
+          "type": "GD",
+          "qty": 2,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": ""
+        },
+        {
+          "id": "l09rihok",
+          "date": "2021-05-09",
+          "km": 250979,
+          "lot": "",
+          "description": "Lampadina 5 W targa",
+          "dealer": "OBI",
+          "type": "R",
+          "qty": 1,
+          "cost": 2.5,
+          "total": 2.5,
+          "prevOwner": false
+        },
+        {
+          "id": "d6fbfs2p",
+          "date": "2021-05-09",
+          "km": 250979,
+          "lot": "",
+          "description": "Lampadina 5 W posizione destra",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "qtxuw1x6",
+          "date": "2021-05-09",
+          "km": 250979,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 173.12,
+          "total": 173.12,
+          "prevOwner": false
+        },
+        {
+          "id": "z69i2t12",
+          "date": "2021-05-17",
+          "km": 252000,
+          "lot": "",
+          "description": "Copricerchi",
+          "dealer": "Citroën-Shop.eu",
+          "type": "R",
+          "qty": 1,
+          "cost": 115.94,
+          "total": 115.94,
+          "prevOwner": false
+        },
+        {
+          "id": "5nqc480c",
+          "date": "2021-06-12",
+          "km": 254623,
+          "lot": "",
+          "description": "lampadina H7 Sinistra",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 7.38,
+          "total": 7.38,
+          "prevOwner": false
+        },
+        {
+          "id": "69cvu0u0",
+          "date": "2021-08-14",
+          "km": 258852,
+          "lot": "",
+          "description": "pomello cambio",
+          "dealer": "aliexpress",
+          "type": "R",
+          "qty": 1,
+          "cost": 12.2,
+          "total": 12.2,
+          "prevOwner": false
+        },
+        {
+          "id": "rgkqq3ha",
+          "date": "2021-11-14",
+          "km": 262737,
+          "lot": "",
+          "description": "Olio motore tamoil",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 25.0,
+          "total": 25.0,
+          "prevOwner": false
+        },
+        {
+          "id": "aqxkqq4u",
+          "date": "2021-11-14",
+          "km": 262737,
+          "lot": "",
+          "description": "Sostanza sigillante - Filtro olio - Filtro aria - Filtro, Aria abitacolo - Filtro carburante - Coppa olio - Ammortizatore pneumatico, Cofano bagagli",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 120.19,
+          "total": 120.19,
+          "prevOwner": false
+        },
+        {
+          "id": "ivneayum",
+          "date": "2021-11-28",
+          "km": 263000,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te21"
+        },
+        {
+          "id": "5azczelo",
+          "date": "2021-11-28",
+          "km": 263000,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te36"
+        },
+        {
+          "id": "b1r0wcr8",
+          "date": "2022-02-19",
+          "km": 267843,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 239.99,
+          "total": 239.99,
+          "prevOwner": false
+        },
+        {
+          "id": "qyrrkkgy",
+          "date": "2022-04-09",
+          "km": 270198,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 173.12,
+          "total": 173.12,
+          "prevOwner": false
+        },
+        {
+          "id": "vcvc5ve9",
+          "date": "2022-04-09",
+          "km": 270198,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te22"
+        },
+        {
+          "id": "5umrh6ru",
+          "date": "2022-04-09",
+          "km": 270198,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te37"
+        },
+        {
+          "id": "f67rxbg9",
+          "date": "2022-10-10",
+          "km": 279334,
+          "lot": "",
+          "description": "Filtro aria – Filtro Aria abitacolo - Filtro carburante",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 64.02,
+          "total": 64.02,
+          "prevOwner": false
+        },
+        {
+          "id": "4hvcyvpw",
+          "date": "2022-10-10",
+          "km": 279334,
+          "lot": "",
+          "description": "Lampadina 5 W posizione destra",
+          "dealer": "OBI",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "7pt0g761",
+          "date": "2022-10-16",
+          "km": 279586,
+          "lot": "",
+          "description": "Filtro olio",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 64.02,
+          "total": 64.02,
+          "prevOwner": false
+        },
+        {
+          "id": "yvdqrwg6",
+          "date": "2022-10-16",
+          "km": 279586,
+          "lot": "",
+          "description": "Olio motore tamoil",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 28.0,
+          "total": 28.0,
+          "prevOwner": false
+        },
+        {
+          "id": "r017tz1j",
+          "date": "2022-10-16",
+          "km": 279586,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te23"
+        },
+        {
+          "id": "kgwiazoz",
+          "date": "2022-10-16",
+          "km": 279586,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te38"
+        },
+        {
+          "id": "atjk18kq",
+          "date": "2022-12-09",
+          "km": 282038,
+          "lot": "",
+          "description": "Revisione 2 anni",
+          "dealer": "Auto riparazioni azzurra",
+          "type": "T",
+          "qty": 1,
+          "cost": 79.0,
+          "total": 79.0,
+          "prevOwner": false
+        },
+        {
+          "id": "o96s7mni",
+          "date": "2023-01-21",
+          "km": 283833,
+          "lot": "",
+          "description": "Batteria Bosh 60Ah 540A (N)",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 63.0,
+          "total": 63.0,
+          "prevOwner": false
+        },
+        {
+          "id": "6x79wiry",
+          "date": "2023-02-04",
+          "km": 284707,
+          "lot": "",
+          "description": "lampadina H1 Destra",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 4.0,
+          "total": 4.0,
+          "prevOwner": false
+        },
+        {
+          "id": "mal4giqy",
+          "date": "2023-02-15",
+          "km": 285000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 271.74,
+          "total": 271.74,
+          "prevOwner": false
+        },
+        {
+          "id": "cdrmcj5n",
+          "date": "2023-03-19",
+          "km": 287608,
+          "lot": "",
+          "description": "Tappetini Citroen",
+          "dealer": "Citroen Magenta",
+          "type": "R",
+          "qty": 1,
+          "cost": 45.47,
+          "total": 45.47,
+          "prevOwner": false
+        },
+        {
+          "id": "iq5rnvzk",
+          "date": "2023-03-28",
+          "km": 288200,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 173.48,
+          "total": 173.48,
+          "prevOwner": false
+        },
+        {
+          "id": "jup0mylo",
+          "date": "2023-04-15",
+          "km": 289310,
+          "lot": "",
+          "description": "Parabrezza",
+          "dealer": "Glass radar",
+          "type": "R",
+          "qty": 1,
+          "cost": 474.49,
+          "total": 474.49,
+          "prevOwner": false
+        },
+        {
+          "id": "rn9yms6h",
+          "date": "2023-04-22",
+          "km": 289600,
+          "lot": "",
+          "description": "lampadina H7 Destra",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "m6x6yilg",
+          "date": "2023-04-29",
+          "km": 290031,
+          "lot": "",
+          "description": "KIT pastiglie Brembo Anteriori",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 19.66,
+          "total": 19.66,
+          "prevOwner": false
+        },
+        {
+          "id": "mv3wbs56",
+          "date": "2023-04-29",
+          "km": 290031,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te24"
+        },
+        {
+          "id": "nfbtuvkf",
+          "date": "2023-04-29",
+          "km": 290031,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te39"
+        },
+        {
+          "id": "15tnpgvv",
+          "date": "2023-07-08",
+          "km": 293490,
+          "lot": "",
+          "description": "Kit Tessuto Cielo Auto",
+          "dealer": "amazon",
+          "type": "R",
+          "qty": 1,
+          "cost": 69.9,
+          "total": 69.9,
+          "prevOwner": false
+        },
+        {
+          "id": "x2isq6l0",
+          "date": "2023-07-26",
+          "km": 294000,
+          "lot": "",
+          "description": "relè ventola",
+          "dealer": "ebay",
+          "type": "R",
+          "qty": 1,
+          "cost": 24.39,
+          "total": 24.39,
+          "prevOwner": false
+        },
+        {
+          "id": "7glavv6z",
+          "date": "2023-08-18",
+          "km": 295490,
+          "lot": "",
+          "description": "Regolatore velocità Ventola abitacolo",
+          "dealer": "Consiglio Paolo",
+          "type": "R",
+          "qty": 1,
+          "cost": 60.0,
+          "total": 60.0,
+          "prevOwner": false
+        },
+        {
+          "id": "d07bqzm9",
+          "date": "2023-09-17",
+          "km": 296798,
+          "lot": "",
+          "description": "Ventola Abitacolo",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 61.68,
+          "total": 61.68,
+          "prevOwner": false
+        },
+        {
+          "id": "1rdofwks",
+          "date": "2023-09-17",
+          "km": 296798,
+          "lot": "",
+          "description": "Relè venotal abitacolo (modifica)",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 11.98,
+          "total": 11.98,
+          "prevOwner": false
+        },
+        {
+          "id": "o6hrivmy",
+          "date": "2023-11-25",
+          "km": 301556,
+          "lot": "",
+          "description": "kit pastiglie Brembo posteriori",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 14.98,
+          "total": 14.98,
+          "prevOwner": false
+        },
+        {
+          "id": "oya71byk",
+          "date": "2023-11-25",
+          "km": 301556,
+          "lot": "3",
+          "description": "Montaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te25"
+        },
+        {
+          "id": "3go1hr0q",
+          "date": "2023-11-25",
+          "km": 301556,
+          "lot": "4",
+          "description": "Smontaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te40"
+        },
+        {
+          "id": "4ylem7lz",
+          "date": "2023-12-09",
+          "km": 302292,
+          "lot": "",
+          "description": "Olio motore tamoil",
+          "dealer": "iper",
+          "type": "R",
+          "qty": 1,
+          "cost": 31.0,
+          "total": 31.0,
+          "prevOwner": false
+        },
+        {
+          "id": "1cokxidm",
+          "date": "2023-12-09",
+          "km": 302292,
+          "lot": "",
+          "description": "Filtro aria – Filtro Aria abitacolo - Filtro carburante – filtro olio",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 46.09,
+          "total": 46.09,
+          "prevOwner": false
+        },
+        {
+          "id": "ysyh812m",
+          "date": "2024-02-02",
+          "km": 305439,
+          "lot": "",
+          "description": "lampadina H7",
+          "dealer": "IPER",
+          "type": "R",
+          "qty": 1,
+          "cost": 3.99,
+          "total": 3.99,
+          "prevOwner": false
+        },
+        {
+          "id": "13n3egkw",
+          "date": "2024-02-13",
+          "km": 305982,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 278.28,
+          "total": 278.28,
+          "prevOwner": false
+        },
+        {
+          "id": "3huqytce",
+          "date": "2024-03-05",
+          "km": 309695,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "banca",
+          "type": "T",
+          "qty": 1,
+          "cost": 173.48,
+          "total": 173.48,
+          "prevOwner": false
+        },
+        {
+          "id": "hhuxqobc",
+          "date": "2024-04-27",
+          "km": 311288,
+          "lot": "",
+          "description": "KIT pastiglie Brembo Anteriori",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 23.27,
+          "total": 23.27,
+          "prevOwner": false
+        },
+        {
+          "id": "i5n5ajx6",
+          "date": "2024-04-27",
+          "km": 311288,
+          "lot": "",
+          "description": "Disco freno BREMBO Anteriori",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 2,
+          "cost": 30.48,
+          "total": 60.96,
+          "prevOwner": false
+        },
+        {
+          "id": "idv5fvzc",
+          "date": "2024-04-27",
+          "km": 311288,
+          "lot": "3",
+          "description": "Smontaggio gomme Michelin Alpine 4 (Invernali)",
+          "dealer": "Personale",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": "te26"
+        },
+        {
+          "id": "os4k7i52",
+          "date": "2024-04-27",
+          "km": 311288,
+          "lot": "3",
+          "description": "Smaltimento gomme Michelin Alpine 4 (Invernali) – Fine vita utile",
+          "dealer": "",
+          "type": "GD",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t3",
+          "tireEvtId": ""
+        },
+        {
+          "id": "y5kum7cg",
+          "date": "2024-04-27",
+          "km": 311288,
+          "lot": "4",
+          "description": "Montaggio gomme Michelin Energy Saver+ (Estive)",
+          "dealer": "Personale",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t4",
+          "tireEvtId": "te41"
+        },
+        {
+          "id": "4k1a42f9",
+          "date": "2024-05-18",
+          "km": 312568,
+          "lot": "",
+          "description": "Alternatore",
+          "dealer": "Ravizza Auto ricambi",
+          "type": "R",
+          "qty": 1,
+          "cost": 250.0,
+          "total": 250.0,
+          "prevOwner": false
+        },
+        {
+          "id": "y0rnlaqr",
+          "date": "2024-05-18",
+          "km": 312568,
+          "lot": "",
+          "description": "Cinghia accessori",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 18.17,
+          "total": 18.17,
+          "prevOwner": false
+        },
+        {
+          "id": "t6wykqgl",
+          "date": "2024-06-19",
+          "km": 313646,
+          "lot": "",
+          "description": "filtro carburante",
+          "dealer": "autoparti.it",
+          "type": "R",
+          "qty": 1,
+          "cost": 19.67,
+          "total": 19.67,
+          "prevOwner": false
+        }
+      ],
+      "tires": [
+        {
+          "id": "t0",
+          "brand": "Di serie → Pirelli P7",
+          "model": "205/55R16",
+          "size": "205/55R16",
+          "season": "summer",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2008-02-15",
+          "purchaseCost": 350,
+          "purchaseDealer": "emmegi gomme",
+          "status": "disposed",
+          "notes": "Lotto 0/1 – Gomme di serie montate in fabbrica (km 0). Sostituite gradualmente con Pirelli P7: 2 a km 60.000 (17/04/2010, €160), 2 anteriori a km 79.000 (12/02/2011, €190). Tutte le 4 Pirelli P7 smontate a km 115.000 (15/07/2012) e sostituite con Michelin Energy.",
+          "events": [
+            {
+              "id": "te1",
+              "type": "mount",
+              "date": "2008-02-15",
+              "km": 0,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Gomme di serie montate in fabbrica",
+              "recordId": ""
+            },
+            {
+              "id": "te2",
+              "type": "unmount",
+              "date": "2012-07-15",
+              "km": 115000,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Sostituite con Michelin Energy",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u_o1",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 60000,
+              "label": "Originale",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2008-02-15",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2010-04-17",
+                  "km": 60000
+                }
+              ]
+            },
+            {
+              "id": "u_o2",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 60000,
+              "label": "Originale",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2008-02-15",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2010-04-17",
+                  "km": 60000
+                }
+              ]
+            },
+            {
+              "id": "u_o3",
+              "position": "PSx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 79000,
+              "label": "Originale",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2008-02-15",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2011-02-12",
+                  "km": 79000
+                }
+              ]
+            },
+            {
+              "id": "u_o4",
+              "position": "PDx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 79000,
+              "label": "Originale",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2008-02-15",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2011-02-12",
+                  "km": 79000
+                }
+              ]
+            },
+            {
+              "id": "u_p1",
+              "position": "PSx",
+              "status": "disposed",
+              "isOriginal": false,
+              "addedKm": 60000,
+              "disposeKm": 115000,
+              "label": "Pirelli P7",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2010-04-17",
+                  "km": 60000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                }
+              ]
+            },
+            {
+              "id": "u_p2",
+              "position": "PDx",
+              "status": "disposed",
+              "isOriginal": false,
+              "addedKm": 60000,
+              "disposeKm": 115000,
+              "label": "Pirelli P7",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2010-04-17",
+                  "km": 60000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                }
+              ]
+            },
+            {
+              "id": "u_p3",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": false,
+              "addedKm": 79000,
+              "disposeKm": 115000,
+              "label": "Pirelli P7",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2011-02-12",
+                  "km": 79000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                }
+              ]
+            },
+            {
+              "id": "u_p4",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": false,
+              "addedKm": 79000,
+              "disposeKm": 115000,
+              "label": "Pirelli P7",
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2011-02-12",
+                  "km": 79000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "t2",
+          "brand": "Michelin",
+          "model": "Energy",
+          "size": "205/55R16",
+          "season": "summer",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2012-07-15",
+          "purchaseCost": 453,
+          "purchaseDealer": "Marangoni iper",
+          "status": "disposed",
+          "notes": "Lotto 2 – Estive. Km percorsi: ~70.943",
+          "events": [
+            {
+              "id": "te3",
+              "type": "mount",
+              "date": "2012-07-15",
+              "km": 115000,
+              "cost": 0,
+              "dealer": "Marangoni iper",
+              "notes": "Primo montaggio",
+              "recordId": ""
+            },
+            {
+              "id": "te4",
+              "type": "unmount",
+              "date": "2015-10-07",
+              "km": 175000,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Montaggio Alpine 4 invernali",
+              "recordId": ""
+            },
+            {
+              "id": "te5",
+              "type": "mount",
+              "date": "2016-04-01",
+              "km": 183000,
+              "cost": 50,
+              "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+              "notes": "Rimontaggio estive",
+              "recordId": ""
+            },
+            {
+              "id": "te6",
+              "type": "unmount",
+              "date": "2016-11-12",
+              "km": 191000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te7",
+              "type": "mount",
+              "date": "2017-04-15",
+              "km": 195300,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te8",
+              "type": "unmount",
+              "date": "2017-06-26",
+              "km": 198243,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Sostituite con Energy Saver+",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u5",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 115000,
+              "disposeKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                }
+              ]
+            },
+            {
+              "id": "u6",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 115000,
+              "disposeKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                }
+              ]
+            },
+            {
+              "id": "u7",
+              "position": "PSx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 115000,
+              "disposeKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                }
+              ]
+            },
+            {
+              "id": "u8",
+              "position": "PDx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 115000,
+              "disposeKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2012-07-15",
+                  "km": 115000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "t3",
+          "brand": "Michelin",
+          "model": "Alpine 4",
+          "size": "205/55R16",
+          "season": "winter",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2015-10-07",
+          "purchaseCost": 329.6,
+          "purchaseDealer": "Goome-auto.it",
+          "status": "disposed",
+          "notes": "Lotto 3 – Invernali. 9 stagioni, 62873 km percorsi",
+          "events": [
+            {
+              "id": "te9",
+              "type": "mount",
+              "date": "2015-10-07",
+              "km": 175000,
+              "cost": 48,
+              "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+              "notes": "Primo montaggio",
+              "recordId": ""
+            },
+            {
+              "id": "te10",
+              "type": "unmount",
+              "date": "2016-04-01",
+              "km": 183000,
+              "cost": 0,
+              "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te11",
+              "type": "mount",
+              "date": "2016-11-12",
+              "km": 191000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te12",
+              "type": "unmount",
+              "date": "2017-04-15",
+              "km": 195300,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te13",
+              "type": "mount",
+              "date": "2017-11-15",
+              "km": 201000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te14",
+              "type": "unmount",
+              "date": "2018-04-14",
+              "km": 204500,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te15",
+              "type": "mount",
+              "date": "2018-11-17",
+              "km": 213230,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te16",
+              "type": "unmount",
+              "date": "2019-04-26",
+              "km": 218893,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te17",
+              "type": "mount",
+              "date": "2019-11-23",
+              "km": 227148,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te18",
+              "type": "unmount",
+              "date": "2020-05-06",
+              "km": 232984,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te19",
+              "type": "mount",
+              "date": "2020-11-29",
+              "km": 240570,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te20",
+              "type": "unmount",
+              "date": "2021-04-15",
+              "km": 248769,
+              "cost": 0,
+              "dealer": "",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te21",
+              "type": "mount",
+              "date": "2021-11-28",
+              "km": 263000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te22",
+              "type": "unmount",
+              "date": "2022-04-09",
+              "km": 270198,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te23",
+              "type": "mount",
+              "date": "2022-10-16",
+              "km": 279586,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te24",
+              "type": "unmount",
+              "date": "2023-04-29",
+              "km": 290031,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te25",
+              "type": "mount",
+              "date": "2023-11-25",
+              "km": 301556,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te26",
+              "type": "unmount",
+              "date": "2024-04-27",
+              "km": 311288,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "Fine vita utile",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u9",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 175000,
+              "disposeKm": 311288,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u10",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 175000,
+              "disposeKm": 311288,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u11",
+              "position": "PSx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 175000,
+              "disposeKm": 311288,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u12",
+              "position": "PDx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 175000,
+              "disposeKm": 311288,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2015-10-07",
+                  "km": 175000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2016-04-01",
+                  "km": 183000
+                },
+                {
+                  "type": "mount",
+                  "date": "2016-11-12",
+                  "km": 191000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-04-15",
+                  "km": 195300
+                },
+                {
+                  "type": "mount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "t4",
+          "brand": "Michelin",
+          "model": "Energy Saver +",
+          "size": "205/55R16",
+          "season": "summer",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2017-06-26",
+          "purchaseCost": 305.2,
+          "purchaseDealer": "Goome-auto.it",
+          "status": "active",
+          "notes": "Lotto 4 – Estive. +1 paio apr 2021 (€240, montecar srl). Attualmente montate.",
+          "events": [
+            {
+              "id": "te27",
+              "type": "mount",
+              "date": "2017-06-26",
+              "km": 198243,
+              "cost": 48,
+              "dealer": "Al.Ma Di Albonico E Mascetti Snc",
+              "notes": "Primo montaggio",
+              "recordId": ""
+            },
+            {
+              "id": "te28",
+              "type": "unmount",
+              "date": "2017-11-15",
+              "km": 201000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te29",
+              "type": "mount",
+              "date": "2018-04-14",
+              "km": 204500,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te30",
+              "type": "unmount",
+              "date": "2018-11-17",
+              "km": 213230,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te31",
+              "type": "mount",
+              "date": "2019-04-26",
+              "km": 218893,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te32",
+              "type": "unmount",
+              "date": "2019-11-23",
+              "km": 227148,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te33",
+              "type": "mount",
+              "date": "2020-05-06",
+              "km": 232984,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te34",
+              "type": "unmount",
+              "date": "2020-11-29",
+              "km": 240570,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te35",
+              "type": "mount",
+              "date": "2021-04-15",
+              "km": 248769,
+              "cost": 0,
+              "dealer": "montecar srl",
+              "notes": "+1 paio nuovo €240",
+              "recordId": ""
+            },
+            {
+              "id": "te36",
+              "type": "unmount",
+              "date": "2021-11-28",
+              "km": 263000,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te37",
+              "type": "mount",
+              "date": "2022-04-09",
+              "km": 270198,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te38",
+              "type": "unmount",
+              "date": "2022-10-16",
+              "km": 279586,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te39",
+              "type": "mount",
+              "date": "2023-04-29",
+              "km": 290031,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te40",
+              "type": "unmount",
+              "date": "2023-11-25",
+              "km": 301556,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "",
+              "recordId": ""
+            },
+            {
+              "id": "te41",
+              "type": "mount",
+              "date": "2024-04-27",
+              "km": 311288,
+              "cost": 0,
+              "dealer": "Personale",
+              "notes": "Ultimo montaggio noto",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u17",
+              "position": "ASx",
+              "status": "active",
+              "isOriginal": false,
+              "addedKm": 248769,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "mount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u18",
+              "position": "ADx",
+              "status": "active",
+              "isOriginal": false,
+              "addedKm": 248769,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "mount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u13",
+              "position": "PSx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "mount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u14",
+              "position": "PDx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 198243,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-11-28",
+                  "km": 263000
+                },
+                {
+                  "type": "mount",
+                  "date": "2022-04-09",
+                  "km": 270198
+                },
+                {
+                  "type": "unmount",
+                  "date": "2022-10-16",
+                  "km": 279586
+                },
+                {
+                  "type": "mount",
+                  "date": "2023-04-29",
+                  "km": 290031
+                },
+                {
+                  "type": "unmount",
+                  "date": "2023-11-25",
+                  "km": 301556
+                },
+                {
+                  "type": "mount",
+                  "date": "2024-04-27",
+                  "km": 311288
+                }
+              ]
+            },
+            {
+              "id": "u15",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 198243,
+              "disposeKm": 248769,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                }
+              ]
+            },
+            {
+              "id": "u16",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 198243,
+              "disposeKm": 248769,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2017-06-26",
+                  "km": 198243
+                },
+                {
+                  "type": "unmount",
+                  "date": "2017-11-15",
+                  "km": 201000
+                },
+                {
+                  "type": "mount",
+                  "date": "2018-04-14",
+                  "km": 204500
+                },
+                {
+                  "type": "unmount",
+                  "date": "2018-11-17",
+                  "km": 213230
+                },
+                {
+                  "type": "mount",
+                  "date": "2019-04-26",
+                  "km": 218893
+                },
+                {
+                  "type": "unmount",
+                  "date": "2019-11-23",
+                  "km": 227148
+                },
+                {
+                  "type": "mount",
+                  "date": "2020-05-06",
+                  "km": 232984
+                },
+                {
+                  "type": "unmount",
+                  "date": "2020-11-29",
+                  "km": 240570
+                },
+                {
+                  "type": "mount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                },
+                {
+                  "type": "unmount",
+                  "date": "2021-04-15",
+                  "km": 248769
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "owners": []
+    },
+    {
+      "id": "c5ac",
+      "name": "Citroën C5 Aircross",
+      "brand": "Citroën",
+      "model": "C5 Aircross",
+      "year": 2020,
+      "plate": "",
+      "engine": "1.5 BlueHDi",
+      "fuel": "Diesel",
+      "purchaseDate": "2022-03-18",
+      "purchaseKm": 7919,
+      "purchasePrice": 0,
+      "usedCar": true,
+      "previousOwnerHistory": "",
+      "status": "active",
+      "archiveDate": "",
+      "archiveReason": "",
+      "archiveKm": 0,
+      "archivePrice": 0,
+      "archiveNotes": "",
+      "notes": "",
+      "vin": "",
+      "records": [
+        {
+          "id": "yurujt9l",
+          "date": "2022-03-18",
+          "km": 0,
+          "lot": "0",
+          "description": "Gomme di serie (presenti all'acquisto auto usata)",
+          "dealer": "",
+          "type": "GA",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0c5",
+          "tireEvtId": ""
+        },
+        {
+          "id": "ydu2ve8u",
+          "date": "2022-03-18",
+          "km": 7919,
+          "lot": "",
+          "description": "olio motore 0w-30 filtro olio – varie",
+          "dealer": "Automagenta Novara",
+          "type": "M",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "oajqz4x8",
+          "date": "2023-03-27",
+          "km": 25963,
+          "lot": "",
+          "description": "olio motore 0w-20 filtro olio – liquido freni – filtro polline – varie",
+          "dealer": "Automagenta Novara",
+          "type": "M",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "65ibv8h1",
+          "date": "2024-06-19",
+          "km": 47000,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 231.0,
+          "total": 231.0,
+          "prevOwner": false
+        },
+        {
+          "id": "mpurq471",
+          "date": "2024-07-04",
+          "km": 47000,
+          "lot": "",
+          "description": "filtro olio – olio 0w20 – filtro polline – filtro aria – filtro carburante? – guarnizione tappo olio scarico – varie",
+          "dealer": "Automagenta Novara",
+          "type": "M",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "7amsnw1s",
+          "date": "2024-08-01",
+          "km": 47500,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "agenzia pratiche auto magenta",
+          "type": "T",
+          "qty": 1,
+          "cost": 229.79,
+          "total": 229.79,
+          "prevOwner": false
+        },
+        {
+          "id": "i7cxw94o",
+          "date": "2024-09-12",
+          "km": 52000,
+          "lot": "",
+          "description": "Modifica motore catena – cambio castelletto",
+          "dealer": "Automagenta Novara",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "fpp9zgeh",
+          "date": "2024-09-12",
+          "km": 52000,
+          "lot": "",
+          "description": "olio motore - filtro olio 5w30 – cinghia distribuzione",
+          "dealer": "Automagenta Novara",
+          "type": "R",
+          "qty": 1,
+          "cost": 0.0,
+          "total": 0.0,
+          "prevOwner": false
+        },
+        {
+          "id": "7d9coe8w",
+          "date": "2024-11-28",
+          "km": 55160,
+          "lot": "",
+          "description": "Acquisto gomme Michelin Alpine 7 225/55R18 102V (Invernali)",
+          "dealer": "Valgomme",
+          "type": "GA",
+          "qty": 4,
+          "cost": 220,
+          "total": 880,
+          "prevOwner": false,
+          "tireId": "t5",
+          "tireEvtId": ""
+        },
+        {
+          "id": "djfumv1f",
+          "date": "2024-11-28",
+          "km": 55160,
+          "lot": "",
+          "description": "Montaggio gomme Michelin Alpine 7 (Invernali)",
+          "dealer": "Valgomme",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t5",
+          "tireEvtId": "te42"
+        },
+        {
+          "id": "ua9tyjh2",
+          "date": "2024-11-28",
+          "km": 55160,
+          "lot": "0",
+          "description": "Smontaggio gomme di serie (sostituite con Michelin Alpine 7)",
+          "dealer": "Valgomme",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0c5",
+          "tireEvtId": "te48"
+        },
+        {
+          "id": "gte96tx6",
+          "date": "2024-11-28",
+          "km": 55160,
+          "lot": "0",
+          "description": "Smaltimento gomme di serie",
+          "dealer": "",
+          "type": "GD",
+          "qty": 4,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t0c5",
+          "tireEvtId": ""
+        },
+        {
+          "id": "qv1cmz2x",
+          "date": "2025-01-11",
+          "km": 56550,
+          "lot": "",
+          "description": "Adblue ruthe 5L",
+          "dealer": "Iper",
+          "type": "M",
+          "qty": 1,
+          "cost": 5.0,
+          "total": 5.0,
+          "prevOwner": false
+        },
+        {
+          "id": "h6nuznzl",
+          "date": "2025-04-12",
+          "km": 60121,
+          "lot": "",
+          "description": "Smontaggio gomme Michelin Alpine 7 (Invernali)",
+          "dealer": "Montecar srl",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t5",
+          "tireEvtId": "te43"
+        },
+        {
+          "id": "47mg0dam",
+          "date": "2025-04-12",
+          "km": 60121,
+          "lot": "",
+          "description": "Acquisto gomme Hankook Ventus Prime4 225/55R18 98V (Estive)",
+          "dealer": "Montecar srl",
+          "type": "GA",
+          "qty": 4,
+          "cost": 170,
+          "total": 680,
+          "prevOwner": false,
+          "tireId": "t6",
+          "tireEvtId": ""
+        },
+        {
+          "id": "onpk678b",
+          "date": "2025-04-12",
+          "km": 60121,
+          "lot": "",
+          "description": "Montaggio gomme Hankook Ventus Prime4 (Estive)",
+          "dealer": "Montecar srl",
+          "type": "GM",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t6",
+          "tireEvtId": "te45"
+        },
+        {
+          "id": "z5xddwhg",
+          "date": "2025-05-03",
+          "km": 60700,
+          "lot": "",
+          "description": "Revisione 1",
+          "dealer": "Auto Azzurra",
+          "type": "T",
+          "qty": 1,
+          "cost": 79.0,
+          "total": 79.0,
+          "prevOwner": false
+        },
+        {
+          "id": "75qvknw1",
+          "date": "2025-06-07",
+          "km": 61500,
+          "lot": "",
+          "description": "Adblue ruthe 10L",
+          "dealer": "Iper",
+          "type": "M",
+          "qty": 1,
+          "cost": 10.0,
+          "total": 10.0,
+          "prevOwner": false
+        },
+        {
+          "id": "6zxw1hcr",
+          "date": "2025-06-14",
+          "km": 62354,
+          "lot": "",
+          "description": "filtro olio – olio 5w30 – filtro polline – filtro aria – filtro carburante – guarnizione tappo olio scarico – olio freni",
+          "dealer": "Automagenta Magenta",
+          "type": "M",
+          "qty": 1,
+          "cost": 443.99,
+          "total": 443.99,
+          "prevOwner": false
+        },
+        {
+          "id": "00fdiztq",
+          "date": "2025-06-15",
+          "km": 62354,
+          "lot": "",
+          "description": "Assicurazione",
+          "dealer": "Prima.it",
+          "type": "T",
+          "qty": 1,
+          "cost": 307.51,
+          "total": 307.51,
+          "prevOwner": false
+        },
+        {
+          "id": "q94h8z6s",
+          "date": "2025-07-27",
+          "km": 63300,
+          "lot": "",
+          "description": "Bollo auto",
+          "dealer": "Intesa San Paolo",
+          "type": "T",
+          "qty": 1,
+          "cost": 253.65,
+          "total": 253.65,
+          "prevOwner": false
+        },
+        {
+          "id": "zzx1nrs9",
+          "date": "2025-11-01",
+          "km": 70300,
+          "lot": "",
+          "description": "Adblue ruthe 10L",
+          "dealer": "Iper",
+          "type": "M",
+          "qty": 1,
+          "cost": 10.0,
+          "total": 10.0,
+          "prevOwner": false
+        },
+        {
+          "id": "bkmvjv8l",
+          "date": "2025-11-22",
+          "km": 71350,
+          "lot": "",
+          "description": "Montaggio gomme Michelin Alpine 7 (Invernali)",
+          "dealer": "Montecar srl",
+          "type": "GM",
+          "qty": 1,
+          "cost": 50,
+          "total": 50,
+          "prevOwner": false,
+          "tireId": "t5",
+          "tireEvtId": "te44"
+        },
+        {
+          "id": "ifmkv4x9",
+          "date": "2025-11-22",
+          "km": 71350,
+          "lot": "",
+          "description": "Smontaggio gomme Hankook Ventus Prime4 (Estive)",
+          "dealer": "Montecar srl",
+          "type": "GS",
+          "qty": 1,
+          "cost": 0,
+          "total": 0,
+          "prevOwner": false,
+          "tireId": "t6",
+          "tireEvtId": "te46"
+        }
+      ],
+      "tires": [
+        {
+          "id": "t0c5",
+          "brand": "Di serie",
+          "model": "225/55R18",
+          "size": "225/55R18",
+          "season": "summer",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2022-03-18",
+          "purchaseCost": 0,
+          "purchaseDealer": "",
+          "status": "disposed",
+          "notes": "Gomme di serie (dotazione di fabbrica). Smontate a km 55.160 (28/11/2024) e sostituite con Michelin Alpine 7.",
+          "events": [
+            {
+              "id": "te47",
+              "type": "mount",
+              "date": "2022-03-18",
+              "km": 0,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Gomme di serie (dotazione di fabbrica)",
+              "recordId": ""
+            },
+            {
+              "id": "te48",
+              "type": "unmount",
+              "date": "2024-11-28",
+              "km": 55160,
+              "cost": 0,
+              "dealer": "",
+              "notes": "Sostituite con Michelin Alpine 7",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u_c5o1",
+              "position": "ASx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2022-03-18",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                }
+              ]
+            },
+            {
+              "id": "u_c5o2",
+              "position": "ADx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2022-03-18",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                }
+              ]
+            },
+            {
+              "id": "u_c5o3",
+              "position": "PSx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2022-03-18",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                }
+              ]
+            },
+            {
+              "id": "u_c5o4",
+              "position": "PDx",
+              "status": "disposed",
+              "isOriginal": true,
+              "addedKm": 0,
+              "disposeKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2022-03-18",
+                  "km": 0
+                },
+                {
+                  "type": "unmount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "t5",
+          "brand": "Michelin",
+          "model": "Alpine 7",
+          "size": "225/55R18 102V",
+          "season": "winter",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2024-11-28",
+          "purchaseCost": 880,
+          "purchaseDealer": "Valgomme",
+          "status": "active",
+          "notes": "Invernali.",
+          "events": [
+            {
+              "id": "te42",
+              "type": "mount",
+              "date": "2024-11-28",
+              "km": 55160,
+              "cost": 0,
+              "dealer": "Valgomme",
+              "notes": "Primo montaggio",
+              "recordId": ""
+            },
+            {
+              "id": "te43",
+              "type": "unmount",
+              "date": "2025-04-12",
+              "km": 60121,
+              "cost": 0,
+              "dealer": "Montecar srl",
+              "notes": "Cambio stagionale",
+              "recordId": ""
+            },
+            {
+              "id": "te44",
+              "type": "mount",
+              "date": "2025-11-22",
+              "km": 71350,
+              "cost": 50,
+              "dealer": "Montecar srl",
+              "notes": "Montaggio invernale",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u19",
+              "position": "ASx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "mount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u19",
+              "position": "ADx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "mount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u19",
+              "position": "PSx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "mount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u19",
+              "position": "PDx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 55160,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2024-11-28",
+                  "km": 55160
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "mount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "t6",
+          "brand": "Hankook",
+          "model": "Ventus Prime4",
+          "size": "225/55R18 98V",
+          "season": "summer",
+          "qty": 4,
+          "dot": "",
+          "purchaseDate": "2025-04-12",
+          "purchaseCost": 680,
+          "purchaseDealer": "Montecar srl",
+          "status": "stored",
+          "notes": "Estive.",
+          "events": [
+            {
+              "id": "te45",
+              "type": "mount",
+              "date": "2025-04-12",
+              "km": 60121,
+              "cost": 0,
+              "dealer": "Montecar srl",
+              "notes": "Primo montaggio",
+              "recordId": ""
+            },
+            {
+              "id": "te46",
+              "type": "unmount",
+              "date": "2025-11-22",
+              "km": 71350,
+              "cost": 0,
+              "dealer": "Montecar srl",
+              "notes": "Cambio stagionale",
+              "recordId": ""
+            }
+          ],
+          "units": [
+            {
+              "id": "u23",
+              "position": "ASx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 60121,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u23",
+              "position": "ADx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 60121,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u23",
+              "position": "PSx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 60121,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            },
+            {
+              "id": "u23",
+              "position": "PDx",
+              "status": "active",
+              "isOriginal": true,
+              "addedKm": 60121,
+              "events": [
+                {
+                  "type": "mount",
+                  "date": "2025-04-12",
+                  "km": 60121
+                },
+                {
+                  "type": "unmount",
+                  "date": "2025-11-22",
+                  "km": 71350
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "owners": []
+    }
+  ],
+  "dealers": [
+    {
+      "id": "d1",
+      "name": "Al.Ma Di Albonico E Mascetti Snc",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d2",
+      "name": "Auto Azzurra",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d3",
+      "name": "Auto genius.it",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d4",
+      "name": "Auto riparazioni azzurra",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d5",
+      "name": "Automagenta Magenta",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d6",
+      "name": "Automagenta Novara",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d7",
+      "name": "BRICOOK",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d8",
+      "name": "Bennet Olgiate",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d9",
+      "name": "Citroen Magenta",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d10",
+      "name": "Citroën-Shop.eu",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d11",
+      "name": "Clerici Auto",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d12",
+      "name": "Consiglio Paolo",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d13",
+      "name": "Doctot Glass",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d14",
+      "name": "Ettore autoricambi",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d15",
+      "name": "Euroricambi",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d16",
+      "name": "Forti Franco",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d17",
+      "name": "Gentile e rizzato",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d18",
+      "name": "Glass radar",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d19",
+      "name": "Goome-auto.it",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d20",
+      "name": "IPER",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d21",
+      "name": "Intesa San Paolo",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d22",
+      "name": "Iper",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d23",
+      "name": "Luigi Maerna",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d24",
+      "name": "Marangoni iper",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d25",
+      "name": "Montecar srl",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d26",
+      "name": "OBI",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d27",
+      "name": "OPONEO.PL",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d28",
+      "name": "Personale",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d29",
+      "name": "Prima.it",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d30",
+      "name": "Prostore snc",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d31",
+      "name": "Ravizza Auto ricambi",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d32",
+      "name": "Ricevitoria",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d33",
+      "name": "UNIPOL Magenta",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d34",
+      "name": "Valgomme",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d35",
+      "name": "agenzia pratiche auto magenta",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d36",
+      "name": "aliexpress",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d37",
+      "name": "amazon",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d38",
+      "name": "autoparti.it",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d39",
+      "name": "banca",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d40",
+      "name": "ebay",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d41",
+      "name": "emmegi gomme",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d42",
+      "name": "iper",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d43",
+      "name": "montecar srl",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "d44",
+      "name": "ricambiautoforti",
+      "city": "",
+      "phone": "",
+      "notes": ""
+    }
+  ],
+  "types": {
+    "R": {
+      "label": "Ricambio",
+      "icon": "⚙️",
+      "color": "#e8734a",
+      "group": "manutenzione"
+    },
+    "M": {
+      "label": "Manutenzione",
+      "icon": "🔧",
+      "color": "#4a9fe8",
+      "group": "manutenzione"
+    },
+    "T": {
+      "label": "Tassa",
+      "icon": "📋",
+      "color": "#9b6fe8",
+      "group": "tasse"
+    },
+    "A": {
+      "label": "Accessorio",
+      "icon": "🎨",
+      "color": "#4ae88a",
+      "group": "accessori"
+    },
+    "GA": {
+      "label": "Acquisto gomme",
+      "icon": "🛞",
+      "color": "#e8c44a",
+      "group": "gomme"
+    },
+    "GM": {
+      "label": "Montaggio gomme",
+      "icon": "🛞",
+      "color": "#e8c44a",
+      "group": "gomme"
+    },
+    "GS": {
+      "label": "Smontaggio gomme",
+      "icon": "🛞",
+      "color": "#e8c44a",
+      "group": "gomme"
+    },
+    "GD": {
+      "label": "Smaltimento gomme",
+      "icon": "🛞",
+      "color": "#e8c44a",
+      "group": "gomme"
+    },
+    "GL": {
+      "label": "Lavaggio gomme",
+      "icon": "🛞",
+      "color": "#e8c44a",
+      "group": "gomme"
+    }
+  }
+}
