@@ -373,7 +373,7 @@ function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
   return total;
 }
 
-function getTireLots(tire,vehicleLastKm){
+function getTireLots(tire,vehicleLastKm,records){
   if(!tire.units||tire.units.length<2)return null;
   const grp={};
   tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!grp[k])grp[k]={addedKm:u.addedKm||0,isOrig:!!u.isOriginal,units:[]};grp[k].units.push({idx:i,u})});
@@ -385,6 +385,10 @@ function getTireLots(tire,vehicleLastKm){
     lot.qty=lot.units.length;
     lot.label=lot.isOrig?'Originali':(lot.units[0].u.label||'Sostituzione');
   });
+  if(records){
+    const gaRecs=records.filter(r=>r.tireId===tire.id&&r.type==='GA');
+    lots.forEach(lot=>{const ga=gaRecs.find(r=>(r.km||0)===lot.addedKm);lot.cost=ga?(ga.total||0):0});
+  }
   return lots;
 }
 
@@ -684,6 +688,22 @@ function rTireList(v){
       });
       html+='</div>';
     }
+    // Lot breakdown for multi-lot tires
+    const lots=getTireLots(t,vLastKm,v.records);
+    if(lots){
+      html+='<div style="margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--border3);font-size:12px">';
+      html+='<div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600;margin-bottom:6px">Dettaglio lotti</div>';
+      lots.forEach(lot=>{
+        const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
+        html+='<div style="padding:3px 0;color:var(--text3)">└ <b style="color:var(--text2)">'+esc(lot.label)+' ×'+lot.qty+'</b>';
+        if(lot.addedKm>0)html+=' <span style="opacity:.5">(da '+fk(lot.addedKm)+' km)</span>';
+        html+=' — <span style="color:var(--accent)">'+fk(lot.km)+' km</span>';
+        if(lot.cost>0)html+=' · <span style="color:var(--yellow)">€'+fmt(lot.cost)+'</span>';
+        if(lCpk>0)html+=' · <span style="color:var(--blue)">€'+lCpk.toFixed(3)+'/km</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
     html+='</div>';
     // Right stats
     html+='<div style="display:flex;gap:16px;flex-wrap:wrap;text-align:center">';
@@ -742,7 +762,7 @@ function rTireStats(v){
   html+='<div class="card"><div class="card-title">Dettaglio per treno</div><div class="table-wrap"><table><thead><tr><th class="ns">Treno</th><th class="ns">Stagione</th><th class="ns">Stato</th><th class="ns tr">Costo acq.</th><th class="ns tr">Costi mont.</th><th class="ns tr">Totale</th><th class="ns tr">Km percorsi</th><th class="ns tr">€/km</th></tr></thead><tbody>';
   tires.forEach(t=>{
     const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const cpk=tk>0?tot/tk:0;
-    const lots=getTireLots(t,vLk);
+    const lots=getTireLots(t,vLk,v.records);
     html+='<tr><td style="font-weight:600">'+(SEASON_ICONS[t.season]||'')+' '+esc(t.brand)+' '+esc(t.model)+'<div style="font-size:11px;color:var(--text4)">'+esc(t.size)+'</div></td>';
     html+='<td style="color:'+(SEASON_COLORS[t.season]||'#888')+'">'+(SEASONS[t.season]||'')+'</td>';
     html+='<td><span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'18;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+';border:1px solid '+(TIRE_STATUS_COLORS[t.status]||'#888')+'30">'+(TIRE_STATUS[t.status]||'')+'</span></td>';
@@ -751,10 +771,13 @@ function rTireStats(v){
     html+='<td class="tr mono" style="color:var(--accent)">'+fk(tk)+'</td>';
     html+='<td class="tr mono" style="color:var(--blue)">'+(cpk>0?cpk.toFixed(3):'—')+'</td></tr>';
     if(lots){lots.forEach(lot=>{
+      const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
       html+='<tr style="font-size:11px;color:var(--text4)"><td style="padding-left:28px">└ '+esc(lot.label)+' ×'+lot.qty+(lot.addedKm>0?' <span style="opacity:.6">(da '+fk(lot.addedKm)+' km)</span>':'')+'</td>';
-      html+='<td></td><td></td><td></td><td></td><td></td>';
+      html+='<td></td><td></td>';
+      html+='<td class="tr mono">€'+fmt(lot.cost||0)+'</td><td></td>';
+      html+='<td class="tr mono" style="color:var(--yellow)">€'+fmt(lot.cost||0)+'</td>';
       html+='<td class="tr mono" style="color:var(--accent)">'+fk(lot.km)+'</td>';
-      html+='<td></td></tr>';
+      html+='<td class="tr mono" style="color:var(--blue)">'+(lCpk>0?lCpk.toFixed(3):'—')+'</td></tr>';
     })}
   });
   html+='</tbody></table></div></div>';
@@ -763,17 +786,20 @@ function rTireStats(v){
   const chKm=[],chCpk=[];
   activeT.forEach(t=>{
     const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const color=SEASON_COLORS[t.season]||'#888';
-    const lots=getTireLots(t,vLk);
+    const lots=getTireLots(t,vLk,v.records);
     if(lots){lots.forEach(lot=>{
       const lbl=lot.label+' ×'+lot.qty+(lot.addedKm>0?' (da '+(lot.addedKm/1000).toFixed(0)+'k)':'');
       chKm.push({name:lbl,km:lot.km,color});
-    })}else{chKm.push({name:t.brand+' '+t.model,km:tk,color})}
-    chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,color});
+      chCpk.push({name:lbl,cpk:lot.km>0?(lot.cost||0)/lot.km:0,color});
+    })}else{
+      chKm.push({name:t.brand+' '+t.model,km:tk,color});
+      chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,color});
+    }
   });
-  const kmH=Math.max(280,chKm.length*52);
+  const chH=Math.max(280,Math.max(chKm.length,chCpk.length)*52);
   html+='<div class="grid-2" style="margin-top:16px">';
-  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:'+kmH+'px"><canvas id="tireKmChart"></canvas></div></div>';
-  html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:280px"><canvas id="tireCpkChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:'+chH+'px"><canvas id="tireKmChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:'+chH+'px"><canvas id="tireCpkChart"></canvas></div></div>';
   html+='</div>';
   document.getElementById("tiresContent").innerHTML=html;
   if(chKm.length){
