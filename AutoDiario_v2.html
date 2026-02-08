@@ -374,18 +374,23 @@ function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
 }
 
 function calcTireKm(tire,vehicleLastKm){
+  // Use tire-level events (set mount/unmount) for accurate total km,
+  // especially when partial disposal + replacement occurred
+  const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(evts.length){
+    let total=0,mountKm=null;
+    evts.forEach(e=>{if(e.type==='mount')mountKm=e.km;else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}});
+    if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
+    return total;
+  }
+  // Fallback: use unit-level events if no tire-level events exist
   if(tire.units&&tire.units.length){
-    // Max km among active units (or all if none active)
     const activeIdx=tire.units.map((_,i)=>i).filter(i=>tire.units[i].status!=='disposed');
     const indices=activeIdx.length?activeIdx:tire.units.map((_,i)=>i);
     const kms=indices.map(i=>calcTireUnitKm(tire,i,vehicleLastKm||0));
     return kms.length?Math.max(...kms):0;
   }
-  const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  let total=0,mountKm=null;
-  evts.forEach(e=>{if(e.type==='mount')mountKm=e.km;else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}});
-  if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
-  return total;
+  return 0;
 }
 
 function recalcAllTireKm(v){
