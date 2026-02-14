@@ -7,7 +7,8 @@ Gestionale manutenzioni e spese auto — applicazione single-page HTML senza dip
 - **Multi-veicolo** — Gestione di più veicoli con anagrafica completa
 - **Registro manutenzioni** — Ricambi, manutenzione, tasse, accessori con filtri e ricerca
 - **Gestione gomme** — Treni gomme con tracciamento individuale per posizione, stagioni, montaggi/smontaggi, smaltimenti, km per singola gomma
-- **Gomme di serie** — Gestione implicita delle gomme OEM con conteggio km e smaltimento
+- **Dettaglio lotti gomme** — Breakdown per lotto nei treni multi-lotto (sostituzione parziale), con sub-splitting per km unitari e indicatore di smaltimento
+- **Gomme di serie** — Gestione implicita delle gomme OEM con conteggio km e smaltimento, escluse dalle statistiche finanziarie
 - **Analisi e statistiche** — Dashboard, grafici, trend annuali, ripartizione spese, costo/km
 - **Esportazione PDF** — Scheda veicolo completa in formato PDF
 - **Backup JSON** — Salvataggio manuale, automatico e all'uscita

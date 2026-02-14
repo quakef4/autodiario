@@ -5,6 +5,36 @@ Formato basato su [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), vers
 
 ---
 
+## [2.5.0] — 2026-02-14
+
+### Gestione gomme — dettaglio lotti e sub-lotti
+
+- **Dettaglio per lotto** — I treni multi-lotto (con sostituzione parziale) ora mostrano il breakdown per singolo lotto: originali, primo rimpiazzo, secondo rimpiazzo, ecc. Visibile nella tabella statistiche, nei grafici km e costo/km, e nelle schede treno.
+- **Sub-splitting per km unitari** — All'interno dello stesso lotto, se le singole gomme hanno km diversi (es. 2 originali smaltite a 27k e 2 a 64k), vengono mostrate come sub-lotti separati con indicatore di smaltimento.
+- **Calcolo km corretto per multi-lotto** — `calcTireKm()` usa il massimo km tra i lotti (non il totale degli eventi del treno), evitando conteggi gonfiati (es. 79k anziché 115k errati).
+- **Costo/km per lotto** — Il grafico costo/km è espanso per lotto, con costo proporzionale calcolato dai record GA.
+- **"Dettaglio lotti" nelle schede** — Box informativo nella gestione gomme con breakdown lotti, km e stato smaltimento.
+
+### Robustezza gestione gomme ↔ registro
+
+- **Storico: montaggio di serie nascosto** — Gli eventi di montaggio impliciti (gomme OEM/fabbrica, senza record GM) non appaiono più nello Storico. La data di montaggio è implicita con l'acquisto del veicolo.
+- **Eliminazione GA precisa** — `dRecGA()` ora abbina le unità per `addedKm` E `addedDate`, prevenendo falsi match tra acquisti diversi.
+- **Consistenza recordId** — In `svTireEvt()`, `svTireUnmount()` e auto-smontaggio, il `recordId` viene impostato nell'evento prima di aggiungerlo all'array (eliminato pattern fragile di mutazione post-push).
+- **Smaltimento con metadati lotto** — I record GD ora salvano `tireDisposeAddedKm` per un matching preciso delle unità durante il sync, con fallback per record legacy.
+
+### Sync engine — ricostruzione affidabile dopo cancellazione record
+
+- **Rebuild sempre attivo** — `syncAllTiresFromRecords()` ricostruisce sempre gli eventi dai record GM/GS rimasti, anche quando tutti i record di un tipo vengono cancellati (rimosso guard `if(evtRecs.length)` che impediva la ricostruzione).
+- **Identificazione factory events corretta** — Gli eventi di fabbrica sono ora identificati da `!e.recordId` (proprietà diretta), non dall'assenza di corrispondenza nei record correnti. Cancellare un record GM non lascia più eventi orfani "fantasma".
+- **Pulizia eventi orfani** — Se un treno non ha più record, gli eventi con `recordId` vengono rimossi (restano solo quelli di fabbrica).
+- **Trim unità in eccesso** — Se vengono cancellati record GA, le unità in eccesso vengono rimosse (l'array prima solo cresceva, mai si riduceva).
+
+### Statistiche — esclusione record OEM
+
+- **Niente 2022 fantasma** — I record GA di fabbrica (km=0, costo=0) sono ora esclusi da tutte le statistiche: trend costi annuali, riepilogo annuale, costo/km, grafici e rivenditori. Nuova funzione `analyticsRecs()` usata in modo consistente da `gS()`, `gYD()`, `gTD()`, `rAna()` e `curRecs()`.
+
+---
+
 ## [2.4.0] — 2026-02-08
 
 ### Gomme di serie (OEM)
