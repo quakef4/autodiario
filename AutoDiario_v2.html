@@ -284,14 +284,23 @@ function syncAllTiresFromRecords(v){
       });
       gdRecs.forEach(dr=>{
         const qty=dr.qty||0;
+        const addedKms=dr.tireDisposeAddedKm||[];
+        const reason=(dr.description||'').indexOf('Usura')>=0?'worn':'other';
         for(let i=0;i<qty;i++){
-          // Dispose oldest non-disposed unit
-          const u=t.units.find(u=>u.status!=='disposed');
+          let u;
+          if(addedKms.length>i){
+            // Match by addedKm from metadata (precise matching)
+            u=t.units.find(x=>x.status!=='disposed'&&(x.addedKm||0)===addedKms[i]);
+          }
+          if(!u){
+            // Fallback: dispose oldest non-disposed unit
+            u=t.units.find(x=>x.status!=='disposed');
+          }
           if(u){
             u.status='disposed';
             u.disposeDate=dr.date;
             u.disposeKm=dr.km||0;
-            u.disposeReason=(dr.description||'').indexOf('Usura')>=0?'worn':'other';
+            u.disposeReason=reason;
           }
         }
       });
@@ -373,19 +382,62 @@ function calcTireUnitKm(tire,unitIdx,vehicleLastKm){
   return total;
 }
 
+function getTireLots(tire,vehicleLastKm,records){
+  if(!tire.units||tire.units.length<2)return null;
+  // Group by addedKm
+  const byAdded={};
+  tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!byAdded[k])byAdded[k]={addedKm:u.addedKm||0,isOrig:!!u.isOriginal,units:[]};byAdded[k].units.push({idx:i,u})});
+  // Sub-split each addedKm group by individual unit km
+  const lots=[];
+  Object.values(byAdded).sort((a,b)=>a.addedKm-b.addedKm).forEach(grp=>{
+    const byKm={};
+    grp.units.forEach(x=>{const km=calcTireUnitKm(tire,x.idx,vehicleLastKm||0);const k=''+km;if(!byKm[k])byKm[k]={addedKm:grp.addedKm,isOrig:grp.isOrig,units:[],km};byKm[k].units.push(x)});
+    Object.values(byKm).sort((a,b)=>b.km-a.km).forEach(sub=>{
+      sub.qty=sub.units.length;
+      sub.label=sub.isOrig?'Originali':(sub.units[0].u.label||'Sostituzione');
+      sub.allDisposed=sub.units.every(x=>x.u.status==='disposed');
+      lots.push(sub);
+    });
+  });
+  if(lots.length<2)return null;
+  // Costs from GA records, distributed proportionally within each addedKm group
+  if(records){
+    const gaRecs=records.filter(r=>r.tireId===tire.id&&r.type==='GA');
+    [...new Set(lots.map(l=>l.addedKm))].forEach(akm=>{
+      const ga=gaRecs.find(r=>(r.km||0)===akm);const tc=ga?(ga.total||0):0;
+      const grpLots=lots.filter(l=>l.addedKm===akm);const tq=grpLots.reduce((s,l)=>s+l.qty,0);
+      grpLots.forEach(l=>{l.cost=tq>0?tc*l.qty/tq:0});
+    });
+  }
+  return lots;
+}
+
 function calcTireKm(tire,vehicleLastKm){
+  // Multi-lot tires (partial disposal + replacement): max km among lot maximums
+  if(tire.units&&tire.units.length>1){
+    const addedSet=new Set(tire.units.map(u=>(u.addedKm||0)));
+    if(addedSet.size>1){
+      const grp={};
+      tire.units.forEach((u,i)=>{const k=''+(u.addedKm||0);if(!grp[k])grp[k]=[];grp[k].push(i)});
+      return Math.max(...Object.values(grp).map(ii=>Math.max(...ii.map(i=>calcTireUnitKm(tire,i,vehicleLastKm||0)))));
+    }
+  }
+  // Single lot: use tire-level events
+  const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(evts.length){
+    let total=0,mountKm=null;
+    evts.forEach(e=>{if(e.type==='mount')mountKm=e.km;else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}});
+    if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
+    return total;
+  }
+  // Fallback: unit-level events
   if(tire.units&&tire.units.length){
-    // Max km among active units (or all if none active)
     const activeIdx=tire.units.map((_,i)=>i).filter(i=>tire.units[i].status!=='disposed');
     const indices=activeIdx.length?activeIdx:tire.units.map((_,i)=>i);
     const kms=indices.map(i=>calcTireUnitKm(tire,i,vehicleLastKm||0));
     return kms.length?Math.max(...kms):0;
   }
-  const evts=(tire.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-  let total=0,mountKm=null;
-  evts.forEach(e=>{if(e.type==='mount')mountKm=e.km;else if(e.type==='unmount'&&mountKm!==null){total+=Math.max(0,e.km-mountKm);mountKm=null}});
-  if(mountKm!==null&&(vehicleLastKm||0)>mountKm){total+=(vehicleLastKm||0)-mountKm}
-  return total;
+  return 0;
 }
 
 function recalcAllTireKm(v){
@@ -656,6 +708,24 @@ function rTireList(v){
       });
       html+='</div>';
     }
+    // Lot breakdown for multi-lot tires
+    const lots=getTireLots(t,vLastKm,v.records);
+    if(lots){
+      html+='<div style="margin-top:10px;padding:8px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--border3);font-size:12px">';
+      html+='<div style="font-size:10px;color:var(--text5);text-transform:uppercase;font-weight:600;margin-bottom:6px">Dettaglio lotti</div>';
+      lots.forEach(lot=>{
+        const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
+        const disp=lot.allDisposed&&t.status!=='disposed';
+        html+='<div style="padding:3px 0;color:var(--text3)'+(disp?';opacity:.5':'')+'">└ <b style="color:var(--text2)">'+esc(lot.label)+' ×'+lot.qty+'</b>';
+        if(lot.addedKm>0)html+=' <span style="opacity:.5">(da '+fk(lot.addedKm)+' km)</span>';
+        if(disp)html+=' <span style="color:#e84c4a;opacity:1">smaltite</span>';
+        html+=' — <span style="color:var(--accent)">'+fk(lot.km)+' km</span>';
+        if(lot.cost>0)html+=' · <span style="color:var(--yellow)">€'+fmt(lot.cost)+'</span>';
+        if(lCpk>0)html+=' · <span style="color:var(--blue)">€'+lCpk.toFixed(3)+'/km</span>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
     html+='</div>';
     // Right stats
     html+='<div style="display:flex;gap:16px;flex-wrap:wrap;text-align:center">';
@@ -681,7 +751,15 @@ function rTireList(v){
 
 function rTireHistory(v){
   const allEvts=[];
-  (v.tires||[]).forEach(t=>{(t.events||[]).forEach(e=>{allEvts.push({...e,tireName:t.brand+' '+t.model,tireSize:t.size,season:t.season,tireId:t.id})})});
+  (v.tires||[]).forEach(t=>{
+    // Identify the implicit first mount (factory/purchase mount with no registry record)
+    const sorted=(t.events||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.km||0)-(b.km||0));
+    const firstImplicit=sorted.length&&sorted[0].type==='mount'&&!sorted[0].recordId?sorted[0].id:null;
+    (t.events||[]).forEach(e=>{
+      if(e.id===firstImplicit)return;// Skip implicit first mount (factory/purchase)
+      allEvts.push({...e,tireName:t.brand+' '+t.model,tireSize:t.size,season:t.season,tireId:t.id});
+    });
+  });
   allEvts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   let html='';
   if(allEvts.length){
@@ -714,6 +792,7 @@ function rTireStats(v){
   html+='<div class="card"><div class="card-title">Dettaglio per treno</div><div class="table-wrap"><table><thead><tr><th class="ns">Treno</th><th class="ns">Stagione</th><th class="ns">Stato</th><th class="ns tr">Costo acq.</th><th class="ns tr">Costi mont.</th><th class="ns tr">Totale</th><th class="ns tr">Km percorsi</th><th class="ns tr">€/km</th></tr></thead><tbody>';
   tires.forEach(t=>{
     const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const cpk=tk>0?tot/tk:0;
+    const lots=getTireLots(t,vLk,v.records);
     html+='<tr><td style="font-weight:600">'+(SEASON_ICONS[t.season]||'')+' '+esc(t.brand)+' '+esc(t.model)+'<div style="font-size:11px;color:var(--text4)">'+esc(t.size)+'</div></td>';
     html+='<td style="color:'+(SEASON_COLORS[t.season]||'#888')+'">'+(SEASONS[t.season]||'')+'</td>';
     html+='<td><span class="badge" style="background:'+(TIRE_STATUS_COLORS[t.status]||'#888')+'18;color:'+(TIRE_STATUS_COLORS[t.status]||'#888')+';border:1px solid '+(TIRE_STATUS_COLORS[t.status]||'#888')+'30">'+(TIRE_STATUS[t.status]||'')+'</span></td>';
@@ -721,19 +800,51 @@ function rTireStats(v){
     html+='<td class="tr mono" style="font-weight:700;color:var(--yellow)">€'+fmt(tot)+'</td>';
     html+='<td class="tr mono" style="color:var(--accent)">'+fk(tk)+'</td>';
     html+='<td class="tr mono" style="color:var(--blue)">'+(cpk>0?cpk.toFixed(3):'—')+'</td></tr>';
+    if(lots){lots.forEach(lot=>{
+      const lCpk=lot.km>0?(lot.cost||0)/lot.km:0;
+      const disp=lot.allDisposed&&t.status!=='disposed';
+      html+='<tr style="font-size:11px;color:var(--text4)'+(disp?';opacity:.55':'')+'"><td style="padding-left:28px">└ '+esc(lot.label)+' ×'+lot.qty;
+      if(lot.addedKm>0)html+=' <span style="opacity:.6">(da '+fk(lot.addedKm)+' km)</span>';
+      if(disp)html+=' <span style="color:#e84c4a;opacity:1">smaltite</span>';
+      html+='</td>';
+      html+='<td></td><td></td>';
+      html+='<td class="tr mono">€'+fmt(lot.cost||0)+'</td><td></td>';
+      html+='<td class="tr mono" style="color:var(--yellow)">€'+fmt(lot.cost||0)+'</td>';
+      html+='<td class="tr mono" style="color:var(--accent)">'+fk(lot.km)+'</td>';
+      html+='<td class="tr mono" style="color:var(--blue)">'+(lCpk>0?lCpk.toFixed(3):'—')+'</td></tr>';
+    })}
   });
   html+='</tbody></table></div></div>';
-  // Charts
+  // Charts — build data first so we can size the km chart dynamically
+  const activeT=tires.filter(t=>(t._cachedKm||calcTireKm(t,vLk))>0);
+  const chKm=[],chCpk=[];
+  activeT.forEach(t=>{
+    const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);const tot=t.purchaseCost+mc;const color=SEASON_COLORS[t.season]||'#888';
+    const lots=getTireLots(t,vLk,v.records);
+    if(lots){lots.forEach(lot=>{
+      const disp=lot.allDisposed&&t.status!=='disposed';
+      let lbl=lot.label+' ×'+lot.qty;
+      if(lot.addedKm>0)lbl+=' (da '+(lot.addedKm/1000).toFixed(0)+'k)';
+      if(disp)lbl+=' ✕';
+      const bg=disp?color+'44':color+'99',bd=disp?color+'66':color;
+      chKm.push({name:lbl,km:lot.km,bg,bd});
+      chCpk.push({name:lbl,cpk:lot.km>0?(lot.cost||0)/lot.km:0,bg:disp?color+'66':color,bd:color});
+    })}else{
+      chKm.push({name:t.brand+' '+t.model,km:tk,bg:color+'99',bd:color});
+      chCpk.push({name:t.brand+' '+t.model,cpk:tk>0?tot/tk:0,bg:color,bd:color});
+    }
+  });
+  const chH=Math.max(280,Math.max(chKm.length,chCpk.length)*52);
   html+='<div class="grid-2" style="margin-top:16px">';
-  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:280px"><canvas id="tireKmChart"></canvas></div></div>';
-  html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:280px"><canvas id="tireCpkChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Km percorsi per treno</div><div class="cb" style="height:'+chH+'px"><canvas id="tireKmChart"></canvas></div></div>';
+  html+='<div class="card"><div class="card-title">Costo/km per treno</div><div class="cb" style="height:'+chH+'px"><canvas id="tireCpkChart"></canvas></div></div>';
   html+='</div>';
   document.getElementById("tiresContent").innerHTML=html;
-  const activeT=tires.filter(t=>(t._cachedKm||calcTireKm(t,vLk))>0);
-  const chData=activeT.map(t=>{const tk=t._cachedKm||calcTireKm(t,vLk);const mc=(t.events||[]).reduce((s,e)=>s+e.cost,0);return{name:t.brand+' '+t.model,km:tk,cpk:(t.purchaseCost+mc)/tk,color:SEASON_COLORS[t.season]||'#888'}});
-  if(chData.length){
-    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.km),backgroundColor:chData.map(d=>d.color+'99'),borderColor:chData.map(d=>d.color),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
-    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chData.map(d=>d.name),datasets:[{data:chData.map(d=>d.cpk),backgroundColor:chData.map(d=>d.color),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+  if(chKm.length){
+    if(document.getElementById("tireKmChart")){ch.tkm=new Chart(document.getElementById("tireKmChart"),{type:"bar",data:{labels:chKm.map(d=>d.name),datasets:[{data:chKm.map(d=>d.km),backgroundColor:chKm.map(d=>d.bg),borderColor:chKm.map(d=>d.bd),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fk(c.raw)+' km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>(v/1000).toFixed(0)+'k'}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
+  }
+  if(chCpk.length){
+    if(document.getElementById("tireCpkChart")){ch.tcpk=new Chart(document.getElementById("tireCpkChart"),{type:"bar",data:{labels:chCpk.map(d=>d.name),datasets:[{data:chCpk.map(d=>d.cpk),backgroundColor:chCpk.map(d=>d.bg),borderColor:chCpk.map(d=>d.bd),borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€'+c.raw.toFixed(4)+'/km'}}},scales:{x:{grid:{color:'#1e1e30'},ticks:{color:'#6a6a88',callback:v=>'€'+v.toFixed(3)}},y:{grid:{display:false},ticks:{color:'#aaa'}}}}})}
   }
 }
 
@@ -934,6 +1045,7 @@ function svDispose(tireId){
   }
 
   let disposedLabels=[];
+  const disposedAddedKms=[];
   checks.forEach(ck=>{
     const idx=parseInt(ck.value);
     const unit=t.units[idx];if(!unit)return;
@@ -942,10 +1054,11 @@ function svDispose(tireId){
     unit.disposeReason=reason;
     unit.disposeKm=km;
     disposedLabels.push(POS_LABELS[idx]||'G'+(idx+1));
+    disposedAddedKms.push(unit.addedKm||0);
   });
   t.qty=t.units.filter(u=>u.status!=='disposed').length;
   t.status=computeTireStatus(t);
-  v.records.push({id:gid(),date:date,km:km,lot:'',description:'Smaltimento gomma '+disposedLabels.join(', ')+' ('+t.brand+' '+t.model+') – '+(reasons[reason]||reason)+(notes?' – '+notes:''),dealer:'',type:'GD',qty:disposedLabels.length,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:''});
+  v.records.push({id:gid(),date:date,km:km,lot:'',description:'Smaltimento gomma '+disposedLabels.join(', ')+' ('+t.brand+' '+t.model+') – '+(reasons[reason]||reason)+(notes?' – '+notes:''),dealer:'',type:'GD',qty:disposedLabels.length,cost:0,total:0,ownerId:'current',tireId:tireId,tireEvtId:'',tireDisposeAddedKm:disposedAddedKms});
   recalcAllTireKm(v);
   save();closeModal();render();
   showToast('⚠️ '+disposedLabels.length+' gomma/e smaltite');
@@ -1033,28 +1146,24 @@ function svTireEvt(tireId){
   getMountedTires(v).forEach(other=>{
     if(other.id===tireId)return;
     const unmId=gid();
-    const unmEvt={id:unmId,type:'unmount',date:evtDate,km:evtKm,cost:0,dealer:evtDealer,notes:'Smontaggio automatico (montate '+t.brand+' '+t.model+')',recordId:''};
-    other.events.push(unmEvt);
+    const unmRecId=gid();
+    other.events.push({id:unmId,type:'unmount',date:evtDate,km:evtKm,cost:0,dealer:evtDealer,notes:'Smontaggio automatico (montate '+t.brand+' '+t.model+')',recordId:unmRecId});
     other.status='stored';
     // Update per-unit events
     if(other.units){other.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:evtDate,km:evtKm})})}
     // Registro record
-    const unmRecId=gid();
     v.records.push({id:unmRecId,date:evtDate,km:evtKm,lot:'',description:'Smontaggio gomme '+other.brand+' '+other.model+' ('+(SEASONS[other.season]||'')+')',dealer:evtDealer,type:'GS',qty:1,cost:0,total:0,ownerId:'current',tireId:other.id,tireEvtId:unmId});
-    unmEvt.recordId=unmRecId;
   });
 
   // Mount the tire
   const evtId=gid();
-  const evt={id:evtId,type:'mount',date:evtDate,km:evtKm,cost:evtCost,dealer:evtDealer,notes:evtNotes};
-  t.events.push(evt);
+  const recId=gid();
+  t.events.push({id:evtId,type:'mount',date:evtDate,km:evtKm,cost:evtCost,dealer:evtDealer,notes:evtNotes,recordId:recId});
   t.status=computeTireStatus(t);
   // Update per-unit events
   if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'mount',date:evtDate,km:evtKm})})}
   // Registro record
-  const recId=gid();
   v.records.push({id:recId,date:evtDate,km:evtKm,lot:'',description:'Montaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:evtDealer,type:'GM',qty:1,cost:evtCost,total:evtCost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
-  evt.recordId=recId;
   recalcAllTireKm(v);
   save();closeModal();render();
 }
@@ -1083,13 +1192,11 @@ function svTireUnmount(tireId){
   const notes=document.getElementById('muNo').value;
   ensureDealer(dealer);
   const evtId=gid();
-  const evt={id:evtId,type:'unmount',date:date,km:km,cost:cost,dealer:dealer,notes:notes};
-  t.events.push(evt);
+  const recId=gid();
+  t.events.push({id:evtId,type:'unmount',date:date,km:km,cost:cost,dealer:dealer,notes:notes,recordId:recId});
   t.status=computeTireStatus(t);
   if(t.units){t.units.forEach(u=>{if(u.status==='disposed')return;if(!u.events)u.events=[];u.events.push({type:'unmount',date:date,km:km})})}
-  const recId=gid();
   v.records.push({id:recId,date:date,km:km,lot:'',description:'Smontaggio gomme '+t.brand+' '+t.model+' ('+(SEASONS[t.season]||'')+')',dealer:dealer,type:'GS',qty:1,cost:cost,total:cost,ownerId:'current',tireId:tireId,tireEvtId:evtId});
-  evt.recordId=recId;
   recalcAllTireKm(v);
   save();closeModal();render();
 }
@@ -1366,7 +1473,8 @@ function dRecGA(id,deleteTire){
     const t=(v.tires||[]).find(x=>x.id===tireId);
     if(t&&t.units){
       const gaKm=rec.km||0;
-      t.units=t.units.filter(u=>!((!u.isOriginal)&&u.addedKm===gaKm));
+      const gaDate=rec.date||'';
+      t.units=t.units.filter(u=>!((!u.isOriginal)&&u.addedKm===gaKm&&(u.addedDate||'')===gaDate));
       t.qty=t.units.filter(u=>u.status!=='disposed').length;
       t.status=computeTireStatus(t);
     }
