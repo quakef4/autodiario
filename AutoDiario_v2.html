@@ -175,7 +175,10 @@ function filterByOwner(v,mode){
 }
 
 // Filtered records for current view
-function curRecs(v){return filterByOwner(v||V(),S.ownerFilter).filter(r=>!(r.type==='GA'&&r.km===0&&r.total===0))}
+function curRecs(v){return analyticsRecs(v||V(),S.ownerFilter)}
+
+// Exclude zero-cost GA metadata records (OEM/factory tires) from analytics
+function analyticsRecs(v,mode){return filterByOwner(v,mode||S.ownerFilter).filter(r=>!(r.type==='GA'&&(r.km||0)===0&&(r.total||0)===0))}
 
 function gF(){
   let r=curRecs();
@@ -188,7 +191,7 @@ function gF(){
 }
 
 function gS(v,mode){
-  const r=filterByOwner(v,mode||S.ownerFilter);
+  const r=analyticsRecs(v,mode||S.ownerFilter);
   const t=r.reduce((s,x)=>s+x.total,0);
   const byG={manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0};
   r.forEach(x=>{const g=typeGroup(x.type);byG[g]=(byG[g]||0)+x.total});
@@ -204,14 +207,14 @@ function gS(v,mode){
 }
 
 function gYD(v,mode){
-  const recs=filterByOwner(v,mode||S.ownerFilter);
+  const recs=analyticsRecs(v,mode||S.ownerFilter);
   const by={};recs.forEach(r=>{const y=r.date?.slice(0,4);if(!y)return;if(!by[y])by[y]={year:y,manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0,tot:0};
   const g=typeGroup(r.type);by[y][g]=(by[y][g]||0)+r.total;by[y].tot+=r.total});
   return Object.values(by).sort((a,b)=>a.year.localeCompare(b.year));
 }
 
 function gTD(v,mode){
-  const recs=filterByOwner(v,mode||S.ownerFilter);
+  const recs=analyticsRecs(v,mode||S.ownerFilter);
   const by={};recs.forEach(r=>{if(!r.dealer)return;if(!by[r.dealer])by[r.dealer]={n:r.dealer,t:0,c:0};by[r.dealer].t+=r.total;by[r.dealer].c++});
   return Object.values(by).sort((a,b)=>b.t-a.t).slice(0,8);
 }
@@ -577,7 +580,7 @@ function tgS(col){if(S.sc===col)S.sd=S.sd==='asc'?'desc':'asc';else{S.sc=col;S.s
 function rAna(){
   const v=V();if(!v)return;
   const s=gS(v,S.ownerFilter);
-  const recs=filterByOwner(v,S.ownerFilter);
+  const recs=analyticsRecs(v,S.ownerFilter);
   const yd=gYD(v,S.ownerFilter);
   const purchP=parseFloat(v.purchasePrice)||0;
   const saleP=parseFloat(v.archivePrice)||0;
