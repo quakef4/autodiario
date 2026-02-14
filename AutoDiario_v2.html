@@ -230,20 +230,23 @@ function getVehicleLastKm(v){
 function syncAllTiresFromRecords(v){
   (v.tires||[]).forEach(t=>{
     const anyRec=(v.records||[]).some(r=>r.tireId===t.id);
-    if(!anyRec){t.status=computeTireStatus(t);return}
+    if(!anyRec){
+      // No records: keep only factory events (no recordId), remove stale record-linked events
+      t.events=(t.events||[]).filter(e=>!e.recordId);
+      t.status=computeTireStatus(t);
+      return;
+    }
 
     // 1. Rebuild events from GM/GS records
     const evtRecs=(v.records||[]).filter(r=>r.tireId===t.id&&r.tireEvtId&&(r.type==='GM'||r.type==='GS'))
       .sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-    if(evtRecs.length){
-      // Preserve implicit/factory mount events (no GM record) — e.g. OEM tires
-      const existingFactory=(t.events||[]).filter(e=>e.type==='mount'&&!evtRecs.some(r=>r.tireEvtId===e.id));
-      t.events=existingFactory.concat(evtRecs.map(r=>({
-        id:r.tireEvtId,type:r.type==='GM'?'mount':'unmount',date:r.date,km:r.km,
-        cost:r.total||0,dealer:r.dealer||'',notes:'',recordId:r.id
-      })));
-      t.events.sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.km||0)-(b.km||0));
-    }
+    // Always rebuild: preserve only implicit/factory mount events (those created without a registry record)
+    const existingFactory=(t.events||[]).filter(e=>e.type==='mount'&&!e.recordId);
+    t.events=existingFactory.concat(evtRecs.map(r=>({
+      id:r.tireEvtId,type:r.type==='GM'?'mount':'unmount',date:r.date,km:r.km,
+      cost:r.total||0,dealer:r.dealer||'',notes:'',recordId:r.id
+    })));
+    t.events.sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.km||0)-(b.km||0));
 
     // 2. Rebuild units from GA and GD records
     const gaRecs=(v.records||[]).filter(r=>r.tireId===t.id&&r.type==='GA').sort((a,b)=>(a.date||'').localeCompare(b.date||''));
@@ -259,10 +262,14 @@ function syncAllTiresFromRecords(v){
     });
     // If no GA records, keep existing units
     if(totalUnits>0){
+      if(!t.units)t.units=[];
       // Ensure we have enough units
-      while((t.units||[]).length<totalUnits){
-        if(!t.units)t.units=[];
+      while(t.units.length<totalUnits){
         t.units.push({status:'active'});
+      }
+      // Trim excess units (e.g. after deleting a GA record)
+      if(t.units.length>totalUnits){
+        t.units.length=totalUnits;
       }
       // Assign addedDate/addedKm to each unit based on batch
       let idx=0;
