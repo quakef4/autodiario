@@ -91,7 +91,7 @@ tbody tr:nth-child(even){background:var(--bg)}tbody tr:nth-child(odd){background
 "use strict";
 // ═══ CONSTANTS ═══
 const AR={"sold":"Venduta","scrapped":"Rottamata","other":"Altro"},AC={"sold":"#4a9fe8","scrapped":"#e84c4a","other":"#e8c44a"};
-const TABS=[["dashboard","📊 Dashboard"],["records","📋 Registro"],["analytics","📈 Analisi"],["tires","🛞 Gomme"],["vehicle","🚘 Veicolo"],["dealers","📒 Anagrafiche"],["archive","🗄️ Archivio"],["export","📤 Esportazione"]];
+const TABS=[["dashboard","📊 Dashboard"],["records","📋 Registro"],["fuel","⛽ Carburante"],["analytics","📈 Analisi"],["tires","🛞 Gomme"],["vehicle","🚘 Veicolo"],["dealers","📒 Anagrafiche"],["archive","🗄️ Archivio"],["export","📤 Esportazione"]];
 const SEASONS={summer:"Estive",winter:"Invernali",allseason:"4 Stagioni"};
 const SEASON_ICONS={summer:"☀️",winter:"❄️",allseason:"🌤️"};
 const SEASON_COLORS={summer:"#e8c44a",winter:"#4a9fe8",allseason:"#4ae88a"};
@@ -100,12 +100,17 @@ const TIRE_STATUS_COLORS={active:"#4ae88a",stored:"#4a9fe8",worn:"#e8c44a",sold:
 const POS_LABELS=["ASx","ADx","PSx","PDx","Sc1","Sc2","Sc3","Sc4"];
 const TIRE_TYPES=['GA','GM','GS','GD','GL'];
 const NORMAL_TYPES=['R','M','T','A'];
-const TYPE_GROUPS={manutenzione:{label:'Manutenzione',color:'#4a9fe8',icon:'🔧'},tasse:{label:'Tasse',color:'#9b6fe8',icon:'📋'},gomme:{label:'Gomme',color:'#e8c44a',icon:'🛞'},accessori:{label:'Accessori',color:'#4ae88a',icon:'🎨'},altro:{label:'Altro',color:'#888888',icon:'📁'}};
-function typeGroup(code){const t=S.types[code];if(t&&t.group&&TYPE_GROUPS[t.group])return t.group;if(TIRE_TYPES.indexOf(code)>=0)return'gomme';if(code==='R'||code==='M')return'manutenzione';if(code==='T')return'tasse';if(code==='A')return'accessori';return'altro'}
+const FUEL_TYPES=['C'];
+const FUEL_TYPE_KEY={Benzina:'benzina',Diesel:'diesel',GPL:'gpl',Metano:'metano',Ibrido:'ibrido',Elettrico:'elettrico'};
+const FUEL_UNITS={benzina:'L',diesel:'L',gpl:'L',metano:'kg',ibrido:'L',elettrico:'kWh'};
+const FUEL_PRICES_DEFAULT={benzina:1.789,diesel:1.689,gpl:0.739,metano:1.399,ibrido:1.789,elettrico:0.450};
+const TYPE_GROUPS={manutenzione:{label:'Manutenzione',color:'#4a9fe8',icon:'🔧'},tasse:{label:'Tasse',color:'#9b6fe8',icon:'📋'},carburante:{label:'Carburante',color:'#e8734a',icon:'⛽'},gomme:{label:'Gomme',color:'#e8c44a',icon:'🛞'},accessori:{label:'Accessori',color:'#4ae88a',icon:'🎨'},altro:{label:'Altro',color:'#888888',icon:'📁'}};
+function typeGroup(code){const t=S.types[code];if(t&&t.group&&TYPE_GROUPS[t.group])return t.group;if(FUEL_TYPES.indexOf(code)>=0)return'carburante';if(TIRE_TYPES.indexOf(code)>=0)return'gomme';if(code==='R'||code==='M')return'manutenzione';if(code==='T')return'tasse';if(code==='A')return'accessori';return'altro'}
 function isTireRecord(r){return TIRE_TYPES.indexOf(r.type)>=0||!!(r.tireId||r.tireEvtId)}
+function isFuelRecord(r){return r.type==='C'}
 
 // ═══ STATE ═══
-let S={vehicles:[],dealers:[],types:{},av:"",tab:"dashboard",search:"",tf:"ALL",yf:"ALL",sc:"date",sd:"desc",pf:"all",ds:"dealers",ts:"list",autoSave:true,autoSaveMin:30,lastAutoSave:0,ownerFilter:"current"},ch={};
+let S={vehicles:[],dealers:[],types:{},fuelPrices:{},av:"",tab:"dashboard",search:"",tf:"ALL",yf:"ALL",sc:"date",sd:"desc",pf:"all",ds:"dealers",ts:"list",fs:"overview",autoSave:true,autoSaveMin:30,lastAutoSave:0,ownerFilter:"current"},ch={};
 
 // ═══ HELPERS ═══
 function gid(){return Math.random().toString(36).slice(2,10)}
@@ -122,6 +127,9 @@ function tc(t){return(S.types[t]||{}).color||"#888"}
 function load(d){
   if(d){
     S.vehicles=d.vehicles||[];S.dealers=d.dealers||[];S.types=d.types||{};
+    S.fuelPrices=d.fuelPrices||Object.assign({},FUEL_PRICES_DEFAULT);
+    // Migrate: add C type if missing
+    if(!S.types.C)S.types.C={label:"Carburante",icon:"⛽",color:"#e8734a",group:"carburante"};
     // Migrate: assign group to types without one
     Object.keys(S.types).forEach(k=>{if(!S.types[k].group)S.types[k].group=typeGroup(k)});
     S.vehicles.forEach(v=>{
@@ -132,12 +140,13 @@ function load(d){
     S._loaded=true;
   } else {
     S.vehicles=[];S.dealers=[];
-    S.types={R:{label:"Ricambio",icon:"⚙️",color:"#e8734a",group:"manutenzione"},M:{label:"Manutenzione",icon:"🔧",color:"#4a9fe8",group:"manutenzione"},T:{label:"Tassa",icon:"📋",color:"#9b6fe8",group:"tasse"},A:{label:"Accessorio",icon:"🎨",color:"#4ae88a",group:"accessori"},GA:{label:"Acquisto gomme",icon:"🛞",color:"#e8c44a",group:"gomme"},GM:{label:"Montaggio gomme",icon:"🔧",color:"#4ae88a",group:"gomme"},GS:{label:"Smontaggio gomme",icon:"📦",color:"#4a9fe8",group:"gomme"},GD:{label:"Smaltimento gomme",icon:"⚠️",color:"#e84c4a",group:"gomme"},GL:{label:"Servizio gomme",icon:"🔩",color:"#9b6fe8",group:"gomme"}};
+    S.fuelPrices=Object.assign({},FUEL_PRICES_DEFAULT);
+    S.types={R:{label:"Ricambio",icon:"⚙️",color:"#e8734a",group:"manutenzione"},M:{label:"Manutenzione",icon:"🔧",color:"#4a9fe8",group:"manutenzione"},T:{label:"Tassa",icon:"📋",color:"#9b6fe8",group:"tasse"},A:{label:"Accessorio",icon:"🎨",color:"#4ae88a",group:"accessori"},C:{label:"Carburante",icon:"⛽",color:"#e8734a",group:"carburante"},GA:{label:"Acquisto gomme",icon:"🛞",color:"#e8c44a",group:"gomme"},GM:{label:"Montaggio gomme",icon:"🔧",color:"#4ae88a",group:"gomme"},GS:{label:"Smontaggio gomme",icon:"📦",color:"#4a9fe8",group:"gomme"},GD:{label:"Smaltimento gomme",icon:"⚠️",color:"#e84c4a",group:"gomme"},GL:{label:"Servizio gomme",icon:"🔩",color:"#9b6fe8",group:"gomme"}};
     S._loaded=false;
   }
 }
 function save(){S._dirty=true;updSaveBtn()}
-function getFullData(){return{version:"autodiario_v2",exportDate:new Date().toISOString(),vehicles:S.vehicles,dealers:S.dealers,types:S.types}}
+function getFullData(){return{version:"autodiario_v2",exportDate:new Date().toISOString(),vehicles:S.vehicles,dealers:S.dealers,types:S.types,fuelPrices:S.fuelPrices}}
 function downloadJSON(auto){
   const d=JSON.stringify(getFullData(),null,2);const b=new Blob([d],{type:'application/json'});const a=document.createElement('a');
   const ts=new Date().toISOString().slice(0,16).replace(/[T:]/g,'-');
@@ -193,7 +202,7 @@ function gF(){
 function gS(v,mode){
   const r=analyticsRecs(v,mode||S.ownerFilter);
   const t=r.reduce((s,x)=>s+x.total,0);
-  const byG={manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0};
+  const byG={manutenzione:0,tasse:0,carburante:0,gomme:0,accessori:0,altro:0};
   r.forEach(x=>{const g=typeGroup(x.type);byG[g]=(byG[g]||0)+x.total});
   const mkRecs=Math.max(...r.map(x=>x.km||0),0);
   const mk=Math.max(mkRecs,v.purchaseKm||0);
@@ -203,12 +212,12 @@ function gS(v,mode){
   const ds=r.map(x=>x.date).filter(Boolean).sort();
   const f=ds[0],l=ds[ds.length-1];
   const sp=f&&l?Math.max(1,(new Date(l)-new Date(f))/(365.25*864e5)):1;
-  return{tot:t,mnt:byG.manutenzione,tax:byG.tasse,gom:byG.gomme,acc:byG.accessori,altro:byG.altro,mk,driven,f,l,avg:t/sp,cnt:r.length};
+  return{tot:t,mnt:byG.manutenzione,tax:byG.tasse,carb:byG.carburante,gom:byG.gomme,acc:byG.accessori,altro:byG.altro,mk,driven,f,l,avg:t/sp,cnt:r.length};
 }
 
 function gYD(v,mode){
   const recs=analyticsRecs(v,mode||S.ownerFilter);
-  const by={};recs.forEach(r=>{const y=r.date?.slice(0,4);if(!y)return;if(!by[y])by[y]={year:y,manutenzione:0,tasse:0,gomme:0,accessori:0,altro:0,tot:0};
+  const by={};recs.forEach(r=>{const y=r.date?.slice(0,4);if(!y)return;if(!by[y])by[y]={year:y,manutenzione:0,tasse:0,carburante:0,gomme:0,accessori:0,altro:0,tot:0};
   const g=typeGroup(r.type);by[y][g]=(by[y][g]||0)+r.total;by[y].tot+=r.total});
   return Object.values(by).sort((a,b)=>a.year.localeCompare(b.year));
 }
@@ -481,7 +490,7 @@ function ownerFilterBtns(v){
 
 // ═══ RENDER ═══
 function dc(){Object.values(ch).forEach(c=>{try{c.destroy()}catch{}});ch={}}
-function render(){rVT();rNT();dc();const fn={dashboard:rDash,records:rRecs,analytics:rAna,tires:rTires,vehicle:rVeh,dealers:rDlr,archive:rArc,export:rExp}[S.tab];if(fn)fn()}
+function render(){rVT();rNT();dc();const fn={dashboard:rDash,records:rRecs,fuel:rFuel,analytics:rAna,tires:rTires,vehicle:rVeh,dealers:rDlr,archive:rArc,export:rExp}[S.tab];if(fn)fn()}
 function rVT(){document.getElementById("vt").innerHTML=actV().map(v=>'<button class="vtab '+(v.id===S.av?'active':'')+'" onclick="swV(\''+v.id+'\')">'+esc(v.name)+'</button>').join("")+(arcV().length?'<button class="vtab archived '+(S.tab==='archive'?'active':'')+'" onclick="S.tab=\'archive\';render()">🗄️ '+arcV().length+'</button>':'')+'<button class="vtab-add" onclick="showVF()" title="Aggiungi veicolo">＋</button>'}
 function rNT(){document.getElementById("nt").innerHTML=TABS.map(([k,l])=>'<button class="nav-btn '+(S.tab===k?'active':'')+'" onclick="S.tab=\''+k+'\';render()">'+l+'</button>').join("")}
 function swV(id){S.av=id;S.tab="dashboard";S._tireFilter=null;S.ownerFilter='current';render()}
@@ -508,6 +517,7 @@ function rDash(){
   if(purchasePrice>0)html+='<div class="card stat-card"><div class="stat-label">🏷️ Acquisto auto</div><div class="stat-value" style="color:var(--text2)">€'+fmt(purchasePrice)+'</div></div>';
   html+='<div class="card stat-card"><div class="stat-label">💰 Spesa totale</div><div class="stat-value" style="color:var(--accent)">€'+fmt(ds.tot)+'</div><div class="stat-sub">'+ds.cnt+' operazioni</div></div>';
   html+='<div class="card stat-card"><div class="stat-label">⚙️ Ricambi+Manut.</div><div class="stat-value" style="color:var(--blue)">€'+fmt(ds.mnt)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">⛽ Carburante</div><div class="stat-value" style="color:var(--accent)">€'+fmt(ds.carb)+'</div></div>';
   html+='<div class="card stat-card"><div class="stat-label">🛞 Gomme</div><div class="stat-value" style="color:var(--yellow)">€'+fmt(ds.gom)+'</div></div>';
   html+='<div class="card stat-card"><div class="stat-label">📋 Tasse</div><div class="stat-value" style="color:var(--purple)">€'+fmt(ds.tax)+'</div></div>';
   html+='<div class="card stat-card"><div class="stat-label">📅 Media annua</div><div class="stat-value" style="color:var(--text2)">€'+fmt(ds.avg)+'</div><div class="stat-sub">'+(ds.f?fd(ds.f):'—')+' → '+(ds.l?fd(ds.l):'—')+'</div></div>';
@@ -520,7 +530,7 @@ function rDash(){
   document.getElementById("C").innerHTML=html;
 
   const yd=gYD(v,S.ownerFilter);
-  ch.y=new Chart(document.getElementById("yc"),{type:"bar",data:{labels:yd.map(y=>y.year),datasets:[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),backgroundColor:"#4a9fe8",borderRadius:4},{label:"Gomme",data:yd.map(y=>y.gomme),backgroundColor:"#e8c44a"},{label:"Tasse",data:yd.map(y=>y.tasse),backgroundColor:"#9b6fe8"},{label:"Accessori",data:yd.map(y=>y.accessori),backgroundColor:"#4ae88a",borderRadius:4},{label:"Altro",data:yd.map(y=>y.altro),backgroundColor:"#888888"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:"#6a6a88"}},y:{stacked:true,grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
+  ch.y=new Chart(document.getElementById("yc"),{type:"bar",data:{labels:yd.map(y=>y.year),datasets:[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),backgroundColor:"#4a9fe8",borderRadius:4},{label:"Carburante",data:yd.map(y=>y.carburante),backgroundColor:"#e8734a"},{label:"Gomme",data:yd.map(y=>y.gomme),backgroundColor:"#e8c44a"},{label:"Tasse",data:yd.map(y=>y.tasse),backgroundColor:"#9b6fe8"},{label:"Accessori",data:yd.map(y=>y.accessori),backgroundColor:"#4ae88a",borderRadius:4},{label:"Altro",data:yd.map(y=>y.altro),backgroundColor:"#888888"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false},ticks:{color:"#6a6a88"}},y:{stacked:true,grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
 
   const recs=filterByOwner(v,S.ownerFilter);
   const tb={};recs.forEach(r=>{const t=r.type;if(!tb[t])tb[t]={n:tl(t),v:0,t};tb[t].v+=r.total});
@@ -587,7 +597,7 @@ function rAna(){
   const vehicleCost=purchP>0?purchP-saleP:0; // costo netto veicolo (acquisto - vendita)
   const inclVehicle=S._anaInclVehicle||false;
   const grandTot=s.tot+(inclVehicle?vehicleCost:0);
-  const cpk=s.driven>0?grandTot/s.driven:0;const mpk=s.driven>0?s.mnt/s.driven:0;const gpk=s.driven>0?s.gom/s.driven:0;
+  const cpk=s.driven>0?grandTot/s.driven:0;const mpk=s.driven>0?s.mnt/s.driven:0;const fpk=s.driven>0?s.carb/s.driven:0;const gpk=s.driven>0?s.gom/s.driven:0;
   const km=recs.filter(r=>r.date&&r.km>0).sort((a,b)=>a.date.localeCompare(b.date));
   const sn={};const ku=km.filter(r=>{const k=r.date+r.km;if(sn[k])return false;sn[k]=true;return true});
 
@@ -614,6 +624,7 @@ function rAna(){
   html+='<div class="card"><div class="card-title">Costo per chilometro</div><div style="display:grid;gap:14px">';
   html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Costo'+(inclVehicle?' totale + veicolo':' totale')+' / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--accent)">'+eur(cpk,4)+'</div><div style="font-size:12px;color:var(--text5)">'+fmt(cpk*100)+' cent/km</div></div>';
   html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Manutenzione / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--blue)">'+eur(mpk,4)+'</div></div>';
+  html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Carburante / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--accent)">'+eur(fpk,4)+'</div></div>';
   html+='<div class="am"><div style="font-size:11px;color:var(--text4);text-transform:uppercase;font-weight:600">Gomme / km</div><div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--yellow)">'+eur(gpk,4)+'</div></div>';
   if(inclVehicle&&vehicleCost>0){
     const vkm=s.driven>0?vehicleCost/s.driven:0;
@@ -651,13 +662,227 @@ function rAna(){
   ch.k=new Chart(document.getElementById("kc"),{type:"line",data:{labels:ku.map(p=>p.date.slice(0,7)),datasets:[{label:"Km",data:ku.map(p=>p.km),borderColor:"#e8734a",backgroundColor:"rgba(232,115,74,.1)",fill:true,tension:.3,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88",maxTicksLimit:12}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88",callback:v=>(v/1000).toFixed(0)+"k"}}}}});
 
   // Trend chart - add vehicle cost line if enabled
-  const trendDS=[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),borderColor:"#4a9fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Gomme",data:yd.map(y=>y.gomme),borderColor:"#e8c44a",pointRadius:4,borderWidth:2,tension:.2},{label:"Tasse",data:yd.map(y=>y.tasse),borderColor:"#9b6fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Accessori",data:yd.map(y=>y.accessori),borderColor:"#4ae88a",pointRadius:4,borderWidth:2,tension:.2},{label:"Altro",data:yd.map(y=>y.altro),borderColor:"#888888",pointRadius:4,borderWidth:2,tension:.2},{label:"Totale",data:yd.map(y=>y.tot),borderColor:"#ccc",pointRadius:0,borderWidth:2.5,borderDash:[6,3],tension:.2}];
+  const trendDS=[{label:"Manutenzione",data:yd.map(y=>y.manutenzione),borderColor:"#4a9fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Carburante",data:yd.map(y=>y.carburante),borderColor:"#e8734a",pointRadius:4,borderWidth:2,tension:.2},{label:"Gomme",data:yd.map(y=>y.gomme),borderColor:"#e8c44a",pointRadius:4,borderWidth:2,tension:.2},{label:"Tasse",data:yd.map(y=>y.tasse),borderColor:"#9b6fe8",pointRadius:4,borderWidth:2,tension:.2},{label:"Accessori",data:yd.map(y=>y.accessori),borderColor:"#4ae88a",pointRadius:4,borderWidth:2,tension:.2},{label:"Altro",data:yd.map(y=>y.altro),borderColor:"#888888",pointRadius:4,borderWidth:2,tension:.2},{label:"Totale",data:yd.map(y=>y.tot),borderColor:"#ccc",pointRadius:0,borderWidth:2.5,borderDash:[6,3],tension:.2}];
   ch.t2=new Chart(document.getElementById("tc2"),{type:"line",data:{labels:yd.map(y=>y.year),datasets:trendDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88"}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
 
   // Pie chart
   const pieItems=GK.map((g,i)=>({l:GL[i].label,v:totRow[g],c:GL[i].color})).filter(x=>x.v>0);
   if(inclVehicle&&vehicleCost>0)pieItems.push({l:'Veicolo',v:vehicleCost,c:'#e84c4a'});
   ch.pc=new Chart(document.getElementById("pc"),{type:"doughnut",data:{labels:pieItems.map(x=>x.l),datasets:[{data:pieItems.map(x=>x.v),backgroundColor:pieItems.map(x=>x.c),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{color:"#aaa",boxWidth:12,padding:12,font:{size:12}}}}}});
+}
+
+// ═══ FUEL / CARBURANTE ═══
+function getFuelKey(v){return FUEL_TYPE_KEY[v.fuel]||'benzina'}
+function getFuelUnit(v){return FUEL_UNITS[getFuelKey(v)]||'L'}
+function getFuelPrice(v){const k=getFuelKey(v);return S.fuelPrices[k]||FUEL_PRICES_DEFAULT[k]||0}
+function getFuelRecs(v,mode){return analyticsRecs(v,mode||S.ownerFilter).filter(r=>r.type==='C').sort((a,b)=>(a.date||'').localeCompare(b.date||''))}
+
+function getFuelStats(v,mode){
+  const recs=getFuelRecs(v,mode);
+  if(!recs.length)return{cnt:0,totCost:0,totLiters:0,avgPrice:0,avgConsumption:0,lastConsumption:0,totKm:0,costPerKm:0};
+  const totCost=recs.reduce((s,r)=>s+r.total,0);
+  const totLiters=recs.reduce((s,r)=>s+(r.fuelQty||0),0);
+  const avgPrice=totLiters>0?totCost/totLiters:0;
+  // Consumo: usa record con km e litri dove possiamo calcolare distanza
+  const withKm=recs.filter(r=>r.km>0&&r.fuelQty>0);
+  let totDriven=0,totFuel=0,lastConsumption=0;
+  for(let i=1;i<withKm.length;i++){
+    const dist=withKm[i].km-withKm[i-1].km;
+    if(dist>0){totDriven+=dist;totFuel+=withKm[i].fuelQty;lastConsumption=dist>0?(withKm[i].fuelQty/dist*100):0}
+  }
+  const avgConsumption=totDriven>0?(totFuel/totDriven*100):0;
+  const costPerKm=totDriven>0?recs.slice(1).reduce((s,r)=>s+r.total,0)/totDriven:0;
+  return{cnt:recs.length,totCost,totLiters,avgPrice,avgConsumption,lastConsumption,totKm:totDriven,costPerKm};
+}
+
+function rFuel(){
+  const v=V();if(!v)return;
+  const sub=S.fs||'overview';
+  let html='<div class="fi">';
+  html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">';
+  html+='<h2 style="font-size:18px">⛽ Carburante – '+esc(v.name)+' <span style="font-size:13px;color:var(--text4);font-weight:400">'+esc(v.fuel)+'</span></h2>';
+  html+='<button class="btn btn-p" onclick="showFuelForm()">＋ Nuovo rifornimento</button>';
+  html+='</div>';
+  html+=ownerFilterBtns(v);
+  html+='<div class="tp" style="margin-bottom:20px">';
+  html+='<button class="tpl '+(sub==='overview'?'active':'')+'" onclick="S.fs=\'overview\';rFuel()">📊 Panoramica</button>';
+  html+='<button class="tpl '+(sub==='history'?'active':'')+'" onclick="S.fs=\'history\';rFuel()">📋 Storico</button>';
+  html+='<button class="tpl '+(sub==='prices'?'active':'')+'" onclick="S.fs=\'prices\';rFuel()">💶 Prezzi</button>';
+  html+='</div><div id="fuelContent"></div></div>';
+  document.getElementById("C").innerHTML=html;
+  if(sub==='overview')rFuelOverview(v);else if(sub==='history')rFuelHistory(v);else rFuelPrices(v);
+}
+
+function rFuelOverview(v){
+  const fs=getFuelStats(v,S.ownerFilter);
+  const unit=getFuelUnit(v);
+  const recs=getFuelRecs(v,S.ownerFilter);
+  let html='<div class="stat-cards">';
+  html+='<div class="card stat-card"><div class="stat-label">⛽ Rifornimenti</div><div class="stat-value" style="color:var(--accent)">'+fs.cnt+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">💰 Spesa totale</div><div class="stat-value" style="color:var(--accent)">'+eur(fs.totCost)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">🛢️ Totale '+unit+'</div><div class="stat-value" style="color:var(--blue)">'+fmt(fs.totLiters)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">💶 Prezzo medio/'+unit+'</div><div class="stat-value" style="color:var(--yellow)">'+eur(fs.avgPrice,3)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">📊 Consumo medio</div><div class="stat-value" style="color:var(--green)">'+(fs.avgConsumption>0?fmt(fs.avgConsumption):'—')+'</div><div class="stat-sub">'+unit+'/100km</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">🔄 Ultimo consumo</div><div class="stat-value" style="color:var(--purple)">'+(fs.lastConsumption>0?fmt(fs.lastConsumption):'—')+'</div><div class="stat-sub">'+unit+'/100km</div></div>';
+  html+='</div>';
+
+  if(recs.length>=2){
+    // Chart: consumo e costo nel tempo
+    const withKm=recs.filter(r=>r.km>0&&r.fuelQty>0);
+    const consumptions=[];const prices=[];const labels=[];
+    for(let i=1;i<withKm.length;i++){
+      const dist=withKm[i].km-withKm[i-1].km;
+      if(dist>0){
+        consumptions.push(+(withKm[i].fuelQty/dist*100).toFixed(2));
+        prices.push(+(withKm[i].total/withKm[i].fuelQty).toFixed(3));
+        labels.push(withKm[i].date?withKm[i].date.slice(0,10):'');
+      }
+    }
+    html+='<div class="grid-2" style="margin-bottom:20px">';
+    html+='<div class="card"><div class="card-title">Consumo '+unit+'/100km</div><div class="cb"><canvas id="fuelConsChart"></canvas></div></div>';
+    html+='<div class="card"><div class="card-title">Prezzo medio €/'+unit+'</div><div class="cb"><canvas id="fuelPriceChart"></canvas></div></div>';
+    html+='</div>';
+
+    // Chart: spesa mensile
+    const byMonth={};
+    recs.forEach(r=>{const m=r.date?r.date.slice(0,7):'';if(!m)return;if(!byMonth[m])byMonth[m]={cost:0,qty:0};byMonth[m].cost+=r.total;byMonth[m].qty+=(r.fuelQty||0)});
+    const months=Object.keys(byMonth).sort();
+    html+='<div class="card"><div class="card-title">Spesa mensile carburante</div><div class="cb" style="height:280px"><canvas id="fuelMonthChart"></canvas></div></div>';
+
+    document.getElementById("fuelContent").innerHTML=html;
+
+    // Render charts
+    if(consumptions.length){
+      ch.fc=new Chart(document.getElementById("fuelConsChart"),{type:"line",data:{labels:labels,datasets:[{label:unit+"/100km",data:consumptions,borderColor:"#4ae88a",backgroundColor:"rgba(74,232,138,.1)",fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88",maxTicksLimit:10}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88"}}}}});
+      ch.fp=new Chart(document.getElementById("fuelPriceChart"),{type:"line",data:{labels:labels,datasets:[{label:"€/"+unit,data:prices,borderColor:"#e8c44a",backgroundColor:"rgba(232,196,74,.1)",fill:true,tension:.3,pointRadius:3,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88",maxTicksLimit:10}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88",callback:v=>"€"+v.toFixed(3)}}}}});
+    }
+    if(months.length){
+      ch.fm=new Chart(document.getElementById("fuelMonthChart"),{type:"bar",data:{labels:months,datasets:[{label:"Spesa €",data:months.map(m=>byMonth[m].cost),backgroundColor:"#e8734a99",borderColor:"#e8734a",borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>"€"+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88"}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88",callback:v=>"€"+v.toFixed(0)}}}}});
+    }
+  } else {
+    html+='<div class="card" style="text-align:center;padding:40px;color:var(--text4)"><p style="font-size:42px;margin-bottom:8px">⛽</p><p>Inserisci almeno 2 rifornimenti per vedere i grafici del consumo</p></div>';
+    document.getElementById("fuelContent").innerHTML=html;
+  }
+}
+
+function rFuelHistory(v){
+  const recs=getFuelRecs(v,S.ownerFilter).slice().reverse();
+  const unit=getFuelUnit(v);
+  let html='';
+  if(recs.length){
+    html+='<div class="table-wrap"><table><thead><tr>';
+    html+='<th class="ns">Data</th><th class="ns tr">Km</th><th class="ns tr">'+unit+'</th><th class="ns tr">€/'+unit+'</th><th class="ns tr">Totale</th><th class="ns">Tipo</th><th class="ns">Stazione</th><th class="ns" style="width:70px"></th>';
+    html+='</tr></thead><tbody>';
+    // Compute consumption on the fly
+    const sorted=recs.slice().reverse();// chronological
+    const consMap={};
+    for(let i=1;i<sorted.length;i++){
+      if(sorted[i].km>0&&sorted[i-1].km>0&&sorted[i].fuelQty>0){
+        const dist=sorted[i].km-sorted[i-1].km;
+        if(dist>0)consMap[sorted[i].id]=(sorted[i].fuelQty/dist*100).toFixed(1);
+      }
+    }
+    recs.forEach(r=>{
+      html+='<tr>';
+      html+='<td class="nw">'+fd(r.date)+'</td>';
+      html+='<td class="tr mono">'+(r.km?fk(r.km):'')+'</td>';
+      html+='<td class="tr mono">'+(r.fuelQty?fmt(r.fuelQty):'')+'</td>';
+      html+='<td class="tr mono" style="color:var(--yellow)">'+(r.fuelQty>0?eur(r.total/r.fuelQty,3):'')+'</td>';
+      html+='<td class="tr mono" style="font-weight:600">'+eur(r.total)+'</td>';
+      html+='<td class="nw" style="font-size:12px;color:var(--text3)">'+(r.fuelFull?'Pieno':'Parziale')+'</td>';
+      html+='<td class="nw" style="color:var(--text3)">'+esc(r.dealer||'')+'</td>';
+      html+='<td class="nw"><button class="btn-i" onclick="showFuelForm(\''+r.id+'\')">✏️</button><button class="btn-i" onclick="cDel(\''+r.id+'\')">🗑️</button></td>';
+      html+='</tr>';
+      if(consMap[r.id])html+='<tr><td colspan="8" style="padding:0 14px 6px;font-size:11px;color:var(--green);border:none">↳ Consumo: '+consMap[r.id]+' '+unit+'/100km</td></tr>';
+    });
+    html+='</tbody></table></div>';
+    html+='<div style="margin-top:12px;color:var(--text5);font-size:12px">'+recs.length+' rifornimenti · Totale: '+eur(recs.reduce((s,r)=>s+r.total,0))+'</div>';
+  } else {
+    html='<div class="card" style="text-align:center;padding:40px;color:var(--text4)"><p style="font-size:42px;margin-bottom:8px">⛽</p><p>Nessun rifornimento registrato</p></div>';
+  }
+  document.getElementById("fuelContent").innerHTML=html;
+}
+
+function rFuelPrices(v){
+  const fk2=getFuelKey(v);
+  let html='<div class="card" style="margin-bottom:20px"><div class="card-title">💶 Prezzi carburante di riferimento</div>';
+  html+='<p style="font-size:12px;color:var(--text4);margin-bottom:16px">Prezzi usati come riferimento per il calcolo automatico del totale. Modifica i valori e clicca Salva.</p>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Tipo</th><th class="ns">Unità</th><th class="ns tr">Prezzo €</th><th class="ns tc">Veicolo attivo</th></tr></thead><tbody>';
+  Object.entries(FUEL_TYPE_KEY).forEach(([label,key])=>{
+    const price=S.fuelPrices[key]||FUEL_PRICES_DEFAULT[key]||0;
+    const isActive=key===fk2;
+    html+='<tr'+(isActive?' style="background:rgba(232,115,74,.06)"':'')+'>';
+    html+='<td style="font-weight:600">'+esc(label)+'</td>';
+    html+='<td class="mono">'+(FUEL_UNITS[key]||'L')+'</td>';
+    html+='<td class="tr"><input class="input" type="number" step="0.001" id="fp_'+key+'" value="'+price.toFixed(3)+'" style="width:120px;text-align:right;display:inline-block"></td>';
+    html+='<td class="tc">'+(isActive?'<span style="color:var(--accent);font-weight:700">● In uso</span>':'')+'</td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  html+='<div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-end">';
+  html+='<button class="btn btn-s" onclick="resetFuelPrices()">🔄 Ripristina default</button>';
+  html+='<button class="btn btn-p" onclick="saveFuelPrices()">💾 Salva prezzi</button>';
+  html+='</div></div>';
+  document.getElementById("fuelContent").innerHTML=html;
+}
+
+function saveFuelPrices(){
+  Object.values(FUEL_TYPE_KEY).forEach(key=>{
+    const el=document.getElementById('fp_'+key);
+    if(el)S.fuelPrices[key]=parseFloat(el.value)||0;
+  });
+  save();showToast('💾 Prezzi aggiornati');
+}
+function resetFuelPrices(){
+  S.fuelPrices=Object.assign({},FUEL_PRICES_DEFAULT);
+  save();rFuel();showToast('🔄 Prezzi ripristinati ai valori di default');
+}
+
+function showFuelForm(id){
+  const v=V();const r=id?aR(v).find(x=>x.id===id):null;const e=!!r;
+  const fuelKey=getFuelKey(v);const unit=getFuelUnit(v);const defPrice=getFuelPrice(v);
+  const d=r||{date:new Date().toISOString().slice(0,10),km:'',fuelQty:'',fuelFull:true,cost:defPrice,total:'',dealer:'',description:'Rifornimento '+v.fuel,type:'C',ownerId:'current'};
+  const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join('');
+  const hasOwners=v.owners&&v.owners.length>0;
+  const oOpts='<option value="current" '+((!d.ownerId||d.ownerId==='current')?'selected':'')+'">Proprietario attuale</option>'+(v.owners||[]).map(o=>'<option value="'+o.id+'" '+(d.ownerId===o.id?'selected':'')+'>'+esc(o.name)+'</option>').join('');
+  let h='<div class="fg">';
+  h+='<div><label class="label">Data</label><input class="input" type="date" id="fcD" value="'+(d.date||'')+'"></div>';
+  h+='<div><label class="label">Chilometri auto</label><input class="input" type="number" id="fcK" value="'+(d.km||'')+'" placeholder="0"></div>';
+  h+='<div><label class="label">Quantità ('+unit+')</label><input class="input" type="number" step="0.01" id="fcQ" value="'+(d.fuelQty||'')+'" placeholder="0.00" oninput="calcFuelTotal()"></div>';
+  h+='<div><label class="label">Prezzo unitario (€/'+unit+')</label><input class="input" type="number" step="0.001" id="fcP" value="'+(d.cost||defPrice)+'" oninput="calcFuelTotal()"></div>';
+  h+='<div><label class="label">Totale (€)</label><input class="input" type="number" step="0.01" id="fcT" value="'+(d.total||'')+'"></div>';
+  h+='<div><label class="label">Tipo rifornimento</label><select class="input" id="fcFull"><option value="1" '+(d.fuelFull!==false?'selected':'')+'>⛽ Pieno</option><option value="0" '+(d.fuelFull===false?'selected':'')+'>💧 Parziale</option></select></div>';
+  h+='<div><label class="label">Stazione / Rivenditore</label><input class="input" id="fcDl" list="fcdll" value="'+esc(d.dealer||'')+'"><datalist id="fcdll">'+dl+'</datalist></div>';
+  h+='<div><label class="label">Descrizione</label><input class="input" id="fcDe" value="'+esc(d.description||'')+'"></div>';
+  if(hasOwners)h+='<div><label class="label">👤 Proprietario</label><select class="input" id="fcO">'+oOpts+'</select></div>';
+  h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svFuelRec(\''+(id||'')+'\')">💾 Salva</button></div>';
+  h+='</div>';
+  openModal(e?'✏️ Modifica rifornimento':'⛽ Nuovo rifornimento',h);
+}
+
+function calcFuelTotal(){
+  const q=parseFloat(document.getElementById('fcQ').value)||0;
+  const p=parseFloat(document.getElementById('fcP').value)||0;
+  if(q>0&&p>0)document.getElementById('fcT').value=(q*p).toFixed(2);
+}
+
+function svFuelRec(eid){
+  const v=V();
+  const date=document.getElementById('fcD').value;
+  const km=parseInt(document.getElementById('fcK').value)||0;
+  const fuelQty=parseFloat(document.getElementById('fcQ').value)||0;
+  const cost=parseFloat(document.getElementById('fcP').value)||0;
+  const total=parseFloat(document.getElementById('fcT').value)||0;
+  const fuelFull=document.getElementById('fcFull').value==='1';
+  const dealer=document.getElementById('fcDl').value;
+  const description=document.getElementById('fcDe').value||('Rifornimento '+v.fuel);
+  const ownerId=document.getElementById('fcO')?document.getElementById('fcO').value:'current';
+  if(!date)return showToast('❌ Data obbligatoria','err');
+  ensureDealer(dealer);
+  const r={id:eid||gid(),date:date,km:km,lot:'',description:description,dealer:dealer,type:'C',qty:1,cost:cost,total:total,fuelQty:fuelQty,fuelFull:fuelFull,ownerId:ownerId,tireId:'',tireEvtId:''};
+  if(eid)v.records=v.records.map(x=>x.id===eid?Object.assign(x,r):x);else v.records.push(r);
+  save();closeModal();render();
+  showToast(eid?'✏️ Rifornimento aggiornato':'⛽ Rifornimento registrato');
 }
 
 // ═══ TIRES MANAGEMENT (ONLY FROM HERE) ═══
@@ -1320,7 +1545,7 @@ function rTL(){
   // Tipi operazioni normali raggruppati
   html+='<div style="margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text3)">⚙️ Operazioni veicolo</div>';
   html+='<div class="table-wrap"><table><thead><tr><th class="ns">Codice</th><th class="ns">Etichetta</th><th class="ns">Gruppo</th><th class="ns">Icona</th><th class="ns">Colore</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
-  Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0).forEach(([k,t])=>{
+  Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0&&FUEL_TYPES.indexOf(k)<0).forEach(([k,t])=>{
     const inUse=usedTypes.has(k);const g=typeGroup(k);const gi=TYPE_GROUPS[g]||TYPE_GROUPS.altro;
     html+='<tr><td class="mono" style="font-weight:600">'+esc(k)+'</td><td>'+esc(t.label)+'</td><td><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:'+gi.color+'18;color:'+gi.color+';font-weight:600">'+gi.icon+' '+gi.label+'</span></td><td style="font-size:18px">'+t.icon+'</td><td><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+t.color+';vertical-align:middle"></span> <span class="mono" style="color:var(--text3)">'+t.color+'</span></td><td class="nw"><button class="btn-i" onclick="showTF(\''+k+'\')">✏️</button>'+(inUse?'<span style="font-size:10px;color:var(--text5)" title="In uso nel registro">🔒</span>':'<button class="btn-i" onclick="dTyp(\''+k+'\')">🗑️</button>')+'</td></tr>';
   });
@@ -1329,6 +1554,11 @@ function rTL(){
   html+='<div style="margin-top:20px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text3)">🛞 Operazioni gomme</div>';
   html+='<div class="table-wrap"><table><thead><tr><th class="ns">Codice</th><th class="ns">Etichetta</th><th class="ns">Icona</th><th class="ns">Colore</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
   Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)>=0).forEach(([k,t])=>{html+='<tr><td class="mono" style="font-weight:600">'+esc(k)+'</td><td>'+esc(t.label)+'</td><td style="font-size:18px">'+t.icon+'</td><td><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+t.color+';vertical-align:middle"></span> <span class="mono" style="color:var(--text3)">'+t.color+'</span></td><td class="nw"><button class="btn-i" onclick="showTF(\''+k+'\')">✏️</button><span style="font-size:10px;color:var(--text5)" title="Tipo di sistema">🔒</span></td></tr>'});
+  html+='</tbody></table></div>';
+  // Tipi carburante
+  html+='<div style="margin-top:20px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text3)">⛽ Carburante</div>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Codice</th><th class="ns">Etichetta</th><th class="ns">Icona</th><th class="ns">Colore</th><th class="ns" style="width:80px"></th></tr></thead><tbody>';
+  Object.entries(S.types).filter(([k])=>FUEL_TYPES.indexOf(k)>=0).forEach(([k,t])=>{html+='<tr><td class="mono" style="font-weight:600">'+esc(k)+'</td><td>'+esc(t.label)+'</td><td style="font-size:18px">'+t.icon+'</td><td><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:'+t.color+';vertical-align:middle"></span> <span class="mono" style="color:var(--text3)">'+t.color+'</span></td><td class="nw"><button class="btn-i" onclick="showTF(\''+k+'\')">✏️</button><span style="font-size:10px;color:var(--text5)" title="Tipo di sistema">🔒</span></td></tr>'});
   html+='</tbody></table></div>';
   document.getElementById("rc").innerHTML=html;
 }
@@ -1372,6 +1602,7 @@ function closeModal(){document.getElementById("MO").style.display="none"}
 function showRF(id){
   const v=V();const r=id?aR(v).find(x=>x.id===id):null;const e=!!r;
   if(e&&isTireRecord(r)){showTireRecordForm(id);return}
+  if(e&&isFuelRecord(r)){showFuelForm(id);return}
   const d=r||{date:new Date().toISOString().slice(0,10),km:"",lot:"",description:"",dealer:"",type:"R",qty:1,cost:"",total:"",ownerId:'current',tireId:""};
   const dl=S.dealers.map(x=>'<option value="'+esc(x.name)+'">').join("");
   const oOpts='<option value="current" '+((!d.ownerId||d.ownerId==='current')?'selected':'')+'">Proprietario attuale</option>'+(v.owners||[]).map(o=>'<option value="'+o.id+'" '+(d.ownerId===o.id?'selected':'')+'>'+esc(o.name)+'</option>').join('');
@@ -1381,7 +1612,7 @@ function showRF(id){
   h+='<div><label class="label">Chilometri</label><input class="input" type="number" id="fK" value="'+(d.km||'')+'" placeholder="0"></div>';
   h+='<div class="ff"><label class="label">Descrizione</label><input class="input" id="fDe" value="'+esc(d.description||'')+'"></div>';
   h+='<div><label class="label">Rivenditore</label><input class="input" id="fDl" list="dll" value="'+esc(d.dealer||'')+'"><datalist id="dll">'+dl+'</datalist></div>';
-  h+='<div><label class="label">Tipo</label><select class="input" id="fT">'+Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0).map(([k,t])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+t.icon+' '+t.label+'</option>').join("")+'</select></div>';
+  h+='<div><label class="label">Tipo</label><select class="input" id="fT">'+Object.entries(S.types).filter(([k])=>TIRE_TYPES.indexOf(k)<0&&FUEL_TYPES.indexOf(k)<0).map(([k,t])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+t.icon+' '+t.label+'</option>').join("")+'</select></div>';
   h+='<div><label class="label">Lotto</label><input class="input" id="fL" value="'+esc(d.lot||'')+'"></div>';
   h+='<div><label class="label">Quantità</label><input class="input" type="number" id="fQ" value="'+(d.qty||1)+'" min="1" oninput="cT()"></div>';
   h+='<div><label class="label">Costo unit. (€)</label><input class="input" type="number" step="0.01" id="fC" value="'+(d.cost||'')+'" oninput="cT()"></div>';
@@ -1582,11 +1813,13 @@ function dDlr(id){S.dealers=S.dealers.filter(x=>x.id!==id);save();render()}
 function showTF(code){
   const t=code?S.types[code]:null;const d=t||{label:"",icon:"",color:"#e8734a",group:"altro"};
   const isTire=code&&TIRE_TYPES.indexOf(code)>=0;
-  const grpOpts=Object.entries(TYPE_GROUPS).filter(([k])=>isTire?k==='gomme':k!=='gomme').map(([k,g])=>'<option value="'+k+'" '+((d.group||'altro')===k?'selected':'')+'>'+g.icon+' '+g.label+'</option>').join('');
+  const isFuel=code&&FUEL_TYPES.indexOf(code)>=0;
+  const isSystem=isTire||isFuel;
+  const grpOpts=Object.entries(TYPE_GROUPS).filter(([k])=>isTire?k==='gomme':isFuel?k==='carburante':k!=='gomme'&&k!=='carburante').map(([k,g])=>'<option value="'+k+'" '+((d.group||'altro')===k?'selected':'')+'>'+g.icon+' '+g.label+'</option>').join('');
   let h='<div class="fg">';
   h+='<div><label class="label">Codice (1-3 lettere)</label><input class="input" id="tK" value="'+esc(code||'')+'" '+(code?'disabled':'')+' maxlength="3" style="text-transform:uppercase"></div>';
   h+='<div><label class="label">Etichetta</label><input class="input" id="tL" value="'+esc(d.label)+'"></div>';
-  h+='<div><label class="label">Gruppo analisi</label><select class="input" id="tG"'+(isTire?' disabled':'')+'>'+grpOpts+'</select></div>';
+  h+='<div><label class="label">Gruppo analisi</label><select class="input" id="tG"'+(isSystem?' disabled':'')+'>'+grpOpts+'</select></div>';
   h+='<div><label class="label">Icona (emoji)</label><input class="input" id="tI" value="'+d.icon+'"></div>';
   h+='<div><label class="label">Colore</label><input class="input" type="color" id="tC" value="'+d.color+'" style="height:42px;padding:4px"></div>';
   h+='<div class="fa"><button class="btn btn-s" onclick="closeModal()">Annulla</button><button class="btn btn-p" onclick="svTyp(\''+(code||'')+'\')">💾 Salva</button></div>';
@@ -1678,7 +1911,7 @@ function buildPDFContent(v,opts){
   p+='<h2>Riepilogo generale</h2>';
   p+='<div class="grid">'+box('Km totali',fk(s.mk)+' km')+box('Spesa gestione',eur(s.tot))+box('Costo/km gestione',s.driven>0?eur(s.tot/s.driven,4):'—')+box('Voci registrate',String(s.cnt))+'</div>';
   p+='<div class="grid">';
-  GK.forEach((g,i)=>{const key=g==='manutenzione'?'mnt':g==='tasse'?'tax':g==='gomme'?'gom':g==='accessori'?'acc':'altro';p+=box(GL[i].label,eur(s[key]),GL[i].color)});
+  GK.forEach((g,i)=>{const key=g==='manutenzione'?'mnt':g==='tasse'?'tax':g==='carburante'?'carb':g==='gomme'?'gom':g==='accessori'?'acc':'altro';p+=box(GL[i].label,eur(s[key]),GL[i].color)});
   p+='</div>';
 
   // Costo veicolo
