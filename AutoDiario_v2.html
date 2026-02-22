@@ -101,16 +101,16 @@ const POS_LABELS=["ASx","ADx","PSx","PDx","Sc1","Sc2","Sc3","Sc4"];
 const TIRE_TYPES=['GA','GM','GS','GD','GL'];
 const NORMAL_TYPES=['R','M','T','A'];
 const FUEL_TYPES=['C'];
-const FUEL_TYPE_KEY={Benzina:'benzina',Diesel:'diesel',GPL:'gpl',Metano:'metano',Ibrido:'ibrido',Elettrico:'elettrico'};
-const FUEL_UNITS={benzina:'L',diesel:'L',gpl:'L',metano:'kg',ibrido:'L',elettrico:'kWh'};
-const FUEL_PRICES_DEFAULT={benzina:1.789,diesel:1.689,gpl:0.739,metano:1.399,ibrido:1.789,elettrico:0.450};
+const FUEL_TYPE_KEY={Benzina:'benzina',Diesel:'gasolio',GPL:'gpl',Metano:'metano',Ibrido:'benzina',Elettrico:'elettrico'};
+const FUEL_UNITS={benzina:'L',gasolio:'L',gpl:'L',metano:'kg',ibrido:'L',elettrico:'kWh'};
+const FUEL_PRICES_DEFAULT={benzina:1.789,gasolio:1.689,gpl:0.739,metano:1.399,elettrico:0.450};
 const TYPE_GROUPS={manutenzione:{label:'Manutenzione',color:'#4a9fe8',icon:'🔧'},tasse:{label:'Tasse',color:'#9b6fe8',icon:'📋'},carburante:{label:'Carburante',color:'#e8734a',icon:'⛽'},gomme:{label:'Gomme',color:'#e8c44a',icon:'🛞'},accessori:{label:'Accessori',color:'#4ae88a',icon:'🎨'},altro:{label:'Altro',color:'#888888',icon:'📁'}};
 function typeGroup(code){const t=S.types[code];if(t&&t.group&&TYPE_GROUPS[t.group])return t.group;if(FUEL_TYPES.indexOf(code)>=0)return'carburante';if(TIRE_TYPES.indexOf(code)>=0)return'gomme';if(code==='R'||code==='M')return'manutenzione';if(code==='T')return'tasse';if(code==='A')return'accessori';return'altro'}
 function isTireRecord(r){return TIRE_TYPES.indexOf(r.type)>=0||!!(r.tireId||r.tireEvtId)}
 function isFuelRecord(r){return r.type==='C'}
 
 // ═══ STATE ═══
-let S={vehicles:[],dealers:[],types:{},fuelPrices:{},av:"",tab:"dashboard",search:"",tf:"ALL",yf:"ALL",sc:"date",sd:"desc",pf:"all",ds:"dealers",ts:"list",fs:"overview",autoSave:true,autoSaveMin:30,lastAutoSave:0,ownerFilter:"current"},ch={};
+let S={vehicles:[],dealers:[],types:{},fuelPrices:{},fuelPricesData:null,av:"",tab:"dashboard",search:"",tf:"ALL",yf:"ALL",sc:"date",sd:"desc",pf:"all",ds:"dealers",ts:"list",fs:"overview",autoSave:true,autoSaveMin:30,lastAutoSave:0,ownerFilter:"current"},ch={};
 
 // ═══ HELPERS ═══
 function gid(){return Math.random().toString(36).slice(2,10)}
@@ -656,6 +656,27 @@ function rAna(){
 
   // Ripartizione spese (pie chart)
   html+='<div class="card"><div class="card-title">Ripartizione spese'+(inclVehicle?' (incluso veicolo)':'')+'</div><div class="cb" style="height:280px"><canvas id="pc"></canvas></div></div>';
+
+  // Fuel estimation summary
+  const fEst=getFuelEstimation(v,S.ownerFilter);
+  if(fEst){
+    const fCpk=fEst.totKm>0?fEst.totCost/fEst.totKm:0;
+    html+='<div class="card"><div class="card-title">🧮 Stima carburante ('+fEst.fuelKey+' · '+fmt(fEst.consumption)+' '+fEst.unit+'/100km)</div>';
+    html+='<div class="ig">';
+    html+='<div class="ii"><div class="l3">Costo stimato totale</div><div class="vl" style="color:var(--accent)">'+eur(fEst.totCost)+'</div></div>';
+    html+='<div class="ii"><div class="l3">'+fEst.unit+' stimati totali</div><div class="vl" style="color:var(--blue)">'+fmt(fEst.totLiters)+'</div></div>';
+    html+='<div class="ii"><div class="l3">Media mensile</div><div class="vl" style="color:var(--yellow)">'+eur(fEst.avgMonthlyCost)+'</div></div>';
+    html+='<div class="ii"><div class="l3">Costo/km carburante</div><div class="vl" style="color:var(--green)">'+eur(fCpk,4)+'</div></div>';
+    html+='</div>';
+    if(fEst.years.length){
+      html+='<div style="margin-top:12px;max-height:200px;overflow-y:auto"><table style="font-size:12px"><thead><tr><th class="ns">Anno</th><th class="ns tr">Km</th><th class="ns tr">'+fEst.unit+'</th><th class="ns tr">Costo stimato</th></tr></thead><tbody>';
+      fEst.years.forEach(y=>{html+='<tr><td class="b">'+y.year+'</td><td class="tr mono">'+fk(Math.round(y.km))+'</td><td class="tr mono" style="color:var(--blue)">'+fmt(y.liters)+'</td><td class="tr mono b" style="color:var(--accent)">'+eur(y.cost)+'</td></tr>'});
+      html+='</tbody></table></div>';
+    }
+    html+='<div style="margin-top:8px;font-size:11px;color:var(--text5)">Stima basata su consumo dichiarato e prezzi medi italiani · <a href="#" onclick="S.tab=\'fuel\';S.fs=\'estimate\';render();return false" style="color:var(--accent)">Dettaglio completo →</a></div>';
+    html+='</div>';
+  }
+
   html+='</div>';
   document.getElementById("C").innerHTML=html;
 
@@ -707,10 +728,11 @@ function rFuel(){
   html+='<div class="tp" style="margin-bottom:20px">';
   html+='<button class="tpl '+(sub==='overview'?'active':'')+'" onclick="S.fs=\'overview\';rFuel()">📊 Panoramica</button>';
   html+='<button class="tpl '+(sub==='history'?'active':'')+'" onclick="S.fs=\'history\';rFuel()">📋 Storico</button>';
+  html+='<button class="tpl '+(sub==='estimate'?'active':'')+'" onclick="S.fs=\'estimate\';rFuel()">🧮 Stima costi</button>';
   html+='<button class="tpl '+(sub==='prices'?'active':'')+'" onclick="S.fs=\'prices\';rFuel()">💶 Prezzi</button>';
   html+='</div><div id="fuelContent"></div></div>';
   document.getElementById("C").innerHTML=html;
-  if(sub==='overview')rFuelOverview(v);else if(sub==='history')rFuelHistory(v);else rFuelPrices(v);
+  if(sub==='overview')rFuelOverview(v);else if(sub==='history')rFuelHistory(v);else if(sub==='estimate')rFuelEstimate(v);else rFuelPrices(v);
 }
 
 function rFuelOverview(v){
@@ -826,6 +848,90 @@ function rFuelPrices(v){
   document.getElementById("fuelContent").innerHTML=html;
 }
 
+function rFuelEstimate(v){
+  const est=getFuelEstimation(v,S.ownerFilter);
+  let html='';
+  if(!est){
+    const missing=[];
+    if(!parseFloat(v.fuelConsumption))missing.push('consumo medio (L/100km) nella scheda Veicolo');
+    const recs=analyticsRecs(v,S.ownerFilter).filter(r=>r.date&&r.km>0);
+    if(recs.length<2)missing.push('almeno 2 registrazioni con data e km');
+    html='<div class="card" style="text-align:center;padding:40px;color:var(--text4)">';
+    html+='<p style="font-size:42px;margin-bottom:8px">🧮</p>';
+    html+='<p style="font-size:15px;margin-bottom:12px">Stima costi carburante non disponibile</p>';
+    html+='<p style="font-size:13px">Per calcolare la stima servono:</p><ul style="list-style:none;margin-top:8px">';
+    missing.forEach(m=>{html+='<li style="color:var(--accent);margin:4px 0">⚠️ '+m+'</li>'});
+    html+='</ul></div>';
+    document.getElementById("fuelContent").innerHTML=html;
+    return;
+  }
+  const unit=est.unit;
+  const costPerKm=est.totKm>0?est.totCost/est.totKm:0;
+  // Header stats
+  html+='<div class="stat-cards">';
+  html+='<div class="card stat-card"><div class="stat-label">🧮 Costo stimato totale</div><div class="stat-value" style="color:var(--accent)">'+eur(est.totCost)+'</div><div class="stat-sub">basato su '+fmt(est.consumption)+' '+unit+'/100km</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">🛢️ '+unit+' stimati totali</div><div class="stat-value" style="color:var(--blue)">'+fmt(est.totLiters)+'</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">📊 Media mensile</div><div class="stat-value" style="color:var(--yellow)">'+eur(est.avgMonthlyCost)+'</div><div class="stat-sub">~'+fk(est.avgMonthlyKm)+' km/mese</div></div>';
+  html+='<div class="card stat-card"><div class="stat-label">💰 Costo/km stimato</div><div class="stat-value" style="color:var(--green)">'+eur(costPerKm,4)+'</div><div class="stat-sub">'+fmt(costPerKm*100)+' cent/km</div></div>';
+  html+='</div>';
+
+  // Info box
+  html+='<div class="card" style="margin-bottom:20px;padding:14px 18px;border-color:var(--accent);border-style:dashed">';
+  html+='<div style="font-size:12px;color:var(--text3)">ℹ️ Questa stima è calcolata interpolando i km percorsi mensilmente dai record registrati, usando il consumo medio dichiarato di <b>'+fmt(est.consumption)+' '+unit+'/100km</b> e i prezzi medi italiani del carburante (<b>'+est.fuelKey+'</b>) per ciascun mese. I prezzi storici sono aggiornati fino a febbraio 2026.</div>';
+  html+='</div>';
+
+  // Yearly breakdown chart
+  if(est.years.length>1){
+    html+='<div class="grid-2" style="margin-bottom:20px">';
+    html+='<div class="card"><div class="card-title">Costo stimato annuale</div><div class="cb" style="height:280px"><canvas id="estYearChart"></canvas></div></div>';
+    html+='<div class="card"><div class="card-title">Km e consumo mensile</div><div class="cb" style="height:280px"><canvas id="estMonthChart"></canvas></div></div>';
+    html+='</div>';
+  }
+
+  // Yearly summary table
+  html+='<div class="card" style="margin-bottom:20px"><div class="card-title">Riepilogo annuale stima carburante</div>';
+  html+='<div class="table-wrap"><table><thead><tr><th class="ns">Anno</th><th class="ns tr">Km stimati</th><th class="ns tr">'+unit+' stimati</th><th class="ns tr">Costo medio/'+unit+'</th><th class="ns tr">Costo stimato</th><th class="ns tr">Media/mese</th></tr></thead><tbody>';
+  est.years.forEach(y=>{
+    const avgP=y.liters>0?y.cost/y.liters:0;
+    const avgM=y.months>0?y.cost/y.months:0;
+    html+='<tr><td style="font-weight:600">'+y.year+'</td>';
+    html+='<td class="tr mono">'+fk(Math.round(y.km))+'</td>';
+    html+='<td class="tr mono" style="color:var(--blue)">'+fmt(y.liters)+'</td>';
+    html+='<td class="tr mono" style="color:var(--yellow)">'+eur(avgP,3)+'</td>';
+    html+='<td class="tr mono" style="font-weight:600;color:var(--accent)">'+eur(y.cost)+'</td>';
+    html+='<td class="tr mono" style="color:var(--text3)">'+eur(avgM)+'</td></tr>';
+  });
+  // Totals row
+  const totAvgP=est.totLiters>0?est.totCost/est.totLiters:0;
+  html+='<tr style="border-top:2px solid var(--border2);font-weight:700"><td>TOTALE</td>';
+  html+='<td class="tr mono">'+fk(est.totKm)+'</td>';
+  html+='<td class="tr mono" style="color:var(--blue)">'+fmt(est.totLiters)+'</td>';
+  html+='<td class="tr mono" style="color:var(--yellow)">'+eur(totAvgP,3)+'</td>';
+  html+='<td class="tr mono" style="color:var(--accent)">'+eur(est.totCost)+'</td>';
+  html+='<td class="tr mono" style="color:var(--text3)">'+eur(est.avgMonthlyCost)+'</td></tr>';
+  html+='</tbody></table></div></div>';
+
+  // Monthly detail (collapsible)
+  html+='<div class="card"><div class="card-title" style="cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">📅 Dettaglio mensile ▸</div>';
+  html+='<div style="display:none;max-height:400px;overflow-y:auto"><table style="font-size:12px"><thead><tr><th class="ns">Mese</th><th class="ns tr">Km</th><th class="ns tr">'+unit+'</th><th class="ns tr">€/'+unit+'</th><th class="ns tr">Costo</th></tr></thead><tbody>';
+  est.rows.slice().reverse().forEach(r=>{
+    html+='<tr><td class="nw">'+r.month+'</td><td class="tr mono">'+fk(r.km)+'</td><td class="tr mono">'+fmt(r.liters)+'</td>';
+    html+='<td class="tr mono" style="color:var(--yellow)">'+eur(r.price,3)+'</td>';
+    html+='<td class="tr mono" style="font-weight:600">'+eur(r.cost)+'</td></tr>';
+  });
+  html+='</tbody></table></div></div>';
+
+  document.getElementById("fuelContent").innerHTML=html;
+
+  // Render charts
+  if(est.years.length>1){
+    ch.ey=new Chart(document.getElementById("estYearChart"),{type:"bar",data:{labels:est.years.map(y=>y.year),datasets:[{label:"Costo stimato €",data:est.years.map(y=>y.cost),backgroundColor:"#e8734a99",borderColor:"#e8734a",borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>"€"+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88"}},y:{grid:{color:"#1e1e30"},ticks:{color:"#6a6a88",callback:v=>"€"+v.toFixed(0)}}}}});
+    // Monthly chart - last 24 months
+    const last24=est.rows.slice(-24);
+    ch.em=new Chart(document.getElementById("estMonthChart"),{type:"line",data:{labels:last24.map(r=>r.month),datasets:[{label:"Km",data:last24.map(r=>r.km),borderColor:"#4a9fe8",pointRadius:2,borderWidth:2,tension:.3,yAxisID:'y'},{label:"€",data:last24.map(r=>r.cost),borderColor:"#e8734a",pointRadius:2,borderWidth:2,tension:.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{color:"#888",boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{color:"#6a6a88",maxTicksLimit:12}},y:{position:'left',grid:{color:"#1e1e30"},ticks:{color:"#4a9fe8"}},y1:{position:'right',grid:{display:false},ticks:{color:"#e8734a",callback:v=>"€"+v.toFixed(0)}}}}});
+  }
+}
+
 function saveFuelPrices(){
   Object.values(FUEL_TYPE_KEY).forEach(key=>{
     const el=document.getElementById('fp_'+key);
@@ -836,6 +942,74 @@ function saveFuelPrices(){
 function resetFuelPrices(){
   S.fuelPrices=Object.assign({},FUEL_PRICES_DEFAULT);
   save();rFuel();showToast('🔄 Prezzi ripristinati ai valori di default');
+}
+
+// ═══ FUEL ESTIMATION ENGINE ═══
+function getMonthlyKm(v,mode){
+  // Get all records with both date and km, sorted chronologically
+  const recs=analyticsRecs(v,mode||S.ownerFilter).filter(r=>r.date&&r.km>0).sort((a,b)=>a.date.localeCompare(b.date));
+  if(recs.length<2)return[];
+  // Deduplicate same date+km
+  const pts=[];const seen={};
+  recs.forEach(r=>{const k=r.date.slice(0,10)+'|'+r.km;if(!seen[k]){seen[k]=1;pts.push({date:r.date.slice(0,10),km:r.km})}});
+  if(pts.length<2)return[];
+  // Distribute km between data points across months
+  const result={};
+  for(let i=1;i<pts.length;i++){
+    const d0=new Date(pts[i-1].date),d1=new Date(pts[i].date);
+    const km0=pts[i-1].km,km1=pts[i].km;
+    const dist=km1-km0;if(dist<=0)continue;
+    const totalDays=(d1-d0)/(864e5);if(totalDays<=0)continue;
+    // Walk through months between d0 and d1
+    let cur=new Date(d0);
+    while(cur<d1){
+      const y=cur.getFullYear(),m=cur.getMonth();
+      const mKey=y+'-'+String(m+1).padStart(2,'0');
+      const monthEnd=new Date(y,m+1,1);// first day of next month
+      const segStart=cur<d0?d0:cur;
+      const segEnd=monthEnd>d1?d1:monthEnd;
+      const segDays=(segEnd-segStart)/(864e5);
+      if(segDays>0){
+        const segKm=dist*(segDays/totalDays);
+        if(!result[mKey])result[mKey]={month:mKey,km:0};
+        result[mKey].km+=segKm;
+      }
+      cur=monthEnd;
+    }
+  }
+  return Object.values(result).sort((a,b)=>a.month.localeCompare(b.month));
+}
+
+function getFuelEstimation(v,mode){
+  const consumption=parseFloat(v.fuelConsumption)||0;
+  if(!consumption)return null;
+  const fuelKey=getFuelKey(v);
+  const unit=getFuelUnit(v);
+  const monthly=getMonthlyKm(v,mode);
+  if(!monthly.length)return null;
+  const prices=S.fuelPricesData;
+  const rows=monthly.map(m=>{
+    const [yStr,mStr]=m.month.split('-');
+    const y=parseInt(yStr),mi=parseInt(mStr)-1;
+    // Get price: from historical data, or default
+    let price=FUEL_PRICES_DEFAULT[fuelKey]||0;
+    if(prices&&prices[fuelKey]&&prices[fuelKey][yStr]&&prices[fuelKey][yStr][mi]!=null){
+      price=prices[fuelKey][yStr][mi];
+    }
+    const liters=m.km*consumption/100;
+    const cost=liters*price;
+    return{month:m.month,km:Math.round(m.km),liters:+liters.toFixed(1),price:+price.toFixed(3),cost:+cost.toFixed(2)};
+  });
+  // Aggregate by year
+  const byYear={};
+  rows.forEach(r=>{const y=r.month.slice(0,4);if(!byYear[y])byYear[y]={year:y,km:0,liters:0,cost:0,months:0};byYear[y].km+=r.km;byYear[y].liters+=r.liters;byYear[y].cost+=r.cost;byYear[y].months++});
+  const years=Object.values(byYear).sort((a,b)=>a.year.localeCompare(b.year));
+  const totKm=rows.reduce((s,r)=>s+r.km,0);
+  const totLiters=rows.reduce((s,r)=>s+r.liters,0);
+  const totCost=rows.reduce((s,r)=>s+r.cost,0);
+  const avgMonthlyKm=rows.length>0?totKm/rows.length:0;
+  const avgMonthlyCost=rows.length>0?totCost/rows.length:0;
+  return{rows,years,totKm:Math.round(totKm),totLiters:+totLiters.toFixed(1),totCost:+totCost.toFixed(2),avgMonthlyKm:Math.round(avgMonthlyKm),avgMonthlyCost:+avgMonthlyCost.toFixed(2),consumption,fuelKey,unit};
 }
 
 function showFuelForm(id){
@@ -1451,7 +1625,7 @@ function rVeh(){
   html+='</div></div>';
 
   // Vehicle data
-  const fields=[["Nome",v.name],["Marca",v.brand],["Modello",v.model],["Anno",v.year],["Targa",v.plate],["Alimentazione",v.fuel],["Motorizzazione",v.engine],["N° Telaio",v.vin],["Data acquisto",v.purchaseDate?fd(v.purchaseDate):""],["Km acquisto",v.purchaseKm?fk(v.purchaseKm)+" km":""],["Prezzo acquisto",v.purchasePrice?"€"+fmt(v.purchasePrice):""]];
+  const fields=[["Nome",v.name],["Marca",v.brand],["Modello",v.model],["Anno",v.year],["Targa",v.plate],["Alimentazione",v.fuel],["Consumo medio",v.fuelConsumption?v.fuelConsumption+" L/100km":""],["Motorizzazione",v.engine],["N° Telaio",v.vin],["Data acquisto",v.purchaseDate?fd(v.purchaseDate):""],["Km acquisto",v.purchaseKm?fk(v.purchaseKm)+" km":""],["Prezzo acquisto",v.purchasePrice?"€"+fmt(v.purchasePrice):""]];
   html+='<div class="card" style="margin-bottom:20px"><div class="card-title">Dati veicolo</div><div class="ig">';
   fields.forEach(([l,val])=>{html+='<div class="ii"><div class="l3">'+l+'</div><div class="vl">'+esc(String(val||'—'))+'</div></div>'});
   html+='</div>';
@@ -1748,6 +1922,7 @@ function showVF(id){
   h+='<div><label class="label">Targa</label><input class="input" id="vP" value="'+esc(d.plate||'')+'"></div>';
   h+='<div><label class="label">Anno</label><input class="input" type="number" id="vY" value="'+(d.year||'')+'"></div>';
   h+='<div><label class="label">Alimentazione</label><select class="input" id="vF"><option>Benzina</option><option>Diesel</option><option>GPL</option><option>Metano</option><option>Ibrido</option><option>Elettrico</option></select></div>';
+  h+='<div><label class="label">Consumo medio (L/100km)</label><input class="input" type="number" step="0.1" id="vFC" value="'+(d.fuelConsumption||'')+'" placeholder="es. 5.8"></div>';
   h+='<div><label class="label">Motorizzazione</label><input class="input" id="vE" value="'+esc(d.engine||'')+'"></div>';
   h+='<div><label class="label">N° Telaio (VIN)</label><input class="input" id="vV" value="'+esc(d.vin||'')+'"></div>';
   h+='<div class="fs"><div class="fst">💰 Acquisto</div></div>';
@@ -1763,7 +1938,7 @@ function showVF(id){
 
 function svV(eid){
   const n=document.getElementById("vN").value;if(!n)return;
-  const data={name:n,brand:document.getElementById("vB").value,model:document.getElementById("vM").value,plate:document.getElementById("vP").value,year:parseInt(document.getElementById("vY").value)||0,fuel:document.getElementById("vF").value,engine:document.getElementById("vE").value,vin:document.getElementById("vV").value,purchaseDate:document.getElementById("vPD").value,purchaseKm:parseInt(document.getElementById("vPK").value)||0,purchasePrice:parseFloat(document.getElementById("vPP").value)||0,notes:document.getElementById("vNo").value};
+  const data={name:n,brand:document.getElementById("vB").value,model:document.getElementById("vM").value,plate:document.getElementById("vP").value,year:parseInt(document.getElementById("vY").value)||0,fuel:document.getElementById("vF").value,fuelConsumption:parseFloat(document.getElementById("vFC").value)||0,engine:document.getElementById("vE").value,vin:document.getElementById("vV").value,purchaseDate:document.getElementById("vPD").value,purchaseKm:parseInt(document.getElementById("vPK").value)||0,purchasePrice:parseFloat(document.getElementById("vPP").value)||0,notes:document.getElementById("vNo").value};
   if(eid){const v=S.vehicles.find(x=>x.id===eid);if(v)Object.assign(v,data)}
   else{const nv={id:gid(),status:"active",archiveDate:"",archiveReason:"",archiveKm:0,archivePrice:0,archiveNotes:"",records:[],tires:[],owners:[],...data};S.vehicles.push(nv);S.av=nv.id}
   save();closeModal();render();
@@ -1974,6 +2149,20 @@ function buildPDFContent(v,opts){
     p+='</tbody></table>';
   }
 
+  // Stima carburante
+  const fEstPdf=getFuelEstimation(v,'current');
+  if(fEstPdf){
+    p+='<h2>Stima costi carburante</h2>';
+    p+='<div style="font-size:9px;color:#666;margin-bottom:6px">Basata su consumo dichiarato '+fmt(fEstPdf.consumption)+' '+fEstPdf.unit+'/100km · Carburante: '+fEstPdf.fuelKey+' · Prezzi medi italiani</div>';
+    const fCpkPdf=fEstPdf.totKm>0?fEstPdf.totCost/fEstPdf.totKm:0;
+    p+='<div class="grid">'+box('Costo stimato totale',eur(fEstPdf.totCost),'#e8734a')+box(fEstPdf.unit+' totali stimati',fmt(fEstPdf.totLiters))+box('Media mensile',eur(fEstPdf.avgMonthlyCost))+box('Costo/km carburante',eur(fCpkPdf,4))+'</div>';
+    if(fEstPdf.years.length){
+      p+='<table><thead><tr><th>Anno</th><th class="tr">Km</th><th class="tr">'+fEstPdf.unit+'</th><th class="tr">Costo stimato</th><th class="tr">Media/mese</th></tr></thead><tbody>';
+      fEstPdf.years.forEach(y=>{const avgM=y.months>0?y.cost/y.months:0;p+='<tr><td class="b">'+y.year+'</td><td class="tr mono">'+fk(Math.round(y.km))+'</td><td class="tr mono">'+fmt(y.liters)+'</td><td class="tr mono b">'+eur(y.cost)+'</td><td class="tr mono">'+eur(avgM)+'</td></tr>'});
+      p+='</tbody></table>';
+    }
+  }
+
   // Registro completo (opzionale)
   if(inclReg){
     p+='<h2 style="page-break-before:always">Registro completo ('+recs.length+' voci)</h2>';
@@ -2031,8 +2220,11 @@ function showWelcome(){
 }
 function startEmpty(){load(null);S._loaded=true;S.tab='dashboard';render();showToast('✨ Nuovo archivio creato')}
 
+async function loadFuelPrices(){
+  try{const r=await fetch('fuel_prices_italy.json');if(r.ok){S.fuelPricesData=await r.json()}}catch{}
+}
 async function init(){
-  try{const r=await fetch('autodiario_data.json');if(r.ok){const d=await r.json();if(d.vehicles){load(d);S.av=S.vehicles.filter(v=>v.status==='active')[0]?.id||S.vehicles[0]?.id||'';S.tab='dashboard';initAutoSave();render();return}}}catch{}
+  try{const r=await fetch('autodiario_data.json');if(r.ok){const d=await r.json();if(d.vehicles){load(d);S.av=S.vehicles.filter(v=>v.status==='active')[0]?.id||S.vehicles[0]?.id||'';S.tab='dashboard';await loadFuelPrices();initAutoSave();render();return}}}catch{}
   load(null);showWelcome();
 }
 init();
